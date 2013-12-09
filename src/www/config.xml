@@ -1,14 +1,15 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="one" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>WebWorks Application</name>
+<widget id="webworks.default" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>ONE</name>
     <description>
-        A sample Apache Cordova application that responds to the deviceready event.
+        ONE Unofficial App.
     </description>
-    <author email="dev@cordova.apache.org" href="http://cordova.io">
-        Apache Cordova Team
+    <author email="anphorea@gmail.com" href="http://about.me/anpho">
+        anpho
     </author>
     <content src="index.html" />
     <access origin="*" />
+    <access uri="http://211.152.49.184:7001" subdomains="true" />
     <preference name="fullscreen" value="true" />
     <preference name="webviewbounce" value="true" />
 </widget>
