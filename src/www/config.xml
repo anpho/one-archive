@@ -9,7 +9,6 @@
     </author>
     <content src="index.html" />
     <access origin="*" />
-    <access uri="http://211.152.49.184:7001" subdomains="true" />
     <preference name="fullscreen" value="true" />
     <preference name="webviewbounce" value="true" />
 </widget>

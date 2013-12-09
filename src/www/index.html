@@ -28,10 +28,21 @@
         <script type="text/javascript" src="js/bbui-min.js"></script>
         <script type="text/javascript" src="js/app.js"></script>
         <script type="text/javascript" src="js/one.js"></script>
-        <script type="text/javascript" src="js/jquery-2.0.3.min.js"></script>
         <script type="text/javascript">
+        	webworksreadyFired = false;
+			debug=false;
+			darkColoring = true;
+			darkScreenColor = 'black';
+
+			//load theme settings
+			theme = localStorage.getItem("theme");
+			if (debug) console.log('Saved Dark Theme Settings:[theme]=' + theme);
+			if (null == theme || 'true' == theme) {
+				darkColoring = true;
+			} else {
+				darkColoring = false;
+			}
             app.initialize();
         </script>
-        <div id="cp"></div>
     </body>
 </html>
