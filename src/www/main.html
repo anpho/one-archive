@@ -1,21 +1,48 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN">
 <div data-bb-type="screen">
-	<div data-bb-type="round-panel" id="appcontent">
-
+	<div data-bb-type="round-panel" id="home" style="display: block;">
+		<a name="h-top"></a>
+		<div data-bb-type="panel-header" id="home-title">2013-12-10</div>
+		<div style="width:90%;text-align: center;">
+			<img id="home-img" src="http://pic.yupoo.com/hanapp/Dmeih9fA/yusAo.jpg">
+			<div style="clear:both"></div>
+			<div style="float:left" id="home-vol">VOL.429</div>
+			<div style="float:right;text-align: right" id="home-img-by">你说这尘世
+				<br/>摄影/一匹马赛克</div>
+		</div>
+		<div style="clear:both"></div>
+		<div style="width:90%;text-align: right;background-color: gray;" id="home-content">以后还有很漫长很漫长的路途，都要一个人走完。都要靠自己。凭借自己的能力去完成，而不是依靠谁。
+			<br>from 《千与千寻》</div>
 	</div>
-
-	
+	<div data-bb-type="round-panel" id="content" style="display:none">
+		<a name="c-top"></a>
+		<div data-bb-type="panel-header" id="c-brief">而那一条没有风，没有人的街，就像我们如今的心。它曾经人来人往过，热闹过，可是每当夜晚来临，它却只是一个人卧在黑暗里，静静地想，什么时候，只要有一盏路灯亮，一盏，就好了。</div>
+		<div style="font-size:150%" id="c-title">九月十三</div>
+		<div style="font-size:120%" id="c-author">作者/七堇年</div>
+		<div style="font-size:120%;font-style: italic;" id="c-author-intro">年</div>
+		<div id="c-content">今天是9月13号么？
+			<br>……是啊，怎么了。
+			<br>八年了吧，得有。
+			<br>什么八年？
+			<br>我俩认识八年了——2005年9月13号到今天，刚好八年了。 嗯。</div>
+	</div>
+	<div data-bb-type="round-panel" id="ask" style="display:none">
+		<a name="q-top"></a>
+		<div data-bb-type="panel-header" id="q-brief">无论你是谁。无论你是一个普通人，还是一个普通人，甚至是一个普通人。你都可以向任何人提问，提任何的问题。我们负责为你搜集问题的答案。</div>
+		<div style="font-size:150%" id="q-title">沐浴阳光的sunshine问：</div>
+		<div id="q-content">男生会介意女朋友卸妆前后差别很大吗……因为我是出门一定会化妆的女生，而且妆后明显搭讪率高很多。但搭讪不等于长期恋爱啊！！求解答！！</div>
+		<div style="font-size:150%" id="a-title">沐浴阳光的sunshine</div>
+		<div id="a-content">不错，她长相完全是我的菜，我的大菜。那会儿没感觉她的妆有多重，觉得可能只是稍稍画了一下。直到后来有一次我俩一起去西安玩，刚确定关系嘛，第一次住在一起，晚上她比我睡得晚，宾馆灯暗，也看不太清，她在卫生间洗洗涮涮一通后才睡。第二天一觉醒来，我睁眼看见她，心中万千感受汇成一句话：靠，大梦一场啊。 当时我的心情就像一个家庭主妇，第一次从电视购物上买东西，收到货后发现和电视上展示的完全是两种东西。说她判若两人是有点夸张了，但基本眼睛和皮肤不再是我熟悉的模样了。作为一个纯爷们儿，我第一次感受到了化妆艺术的魅力。</div>
+	</div>
 	<div data-bb-type="action-bar">
-		<div data-bb-type="action" data-bb-style="tab" data-bb-selected="true" data-bb-img="img/ic_view_image.png" onclick="showTab('tab_pic')">一图</div>
-		<div data-bb-type="action" data-bb-style="tab" data-bb-img="img/ic_notes.png" onclick="showTab('tab_one')">一文</div>
-		<div data-bb-type="action" data-bb-style="tab" data-bb-img="img/ic_help.png" onclick="showTab('tab_ask')">一问</div>
-		
-		<div data-bb-type="action" data-bb-style="button" data-bb-overflow="true" data-bb-img="img/ic_email.png">给我写邮件</div>
-		<div data-bb-type="action" data-bb-style="button" data-bb-overflow="true" data-bb-img="img/ic_browser.png" >为本应用评级</div>
+		<div data-bb-type="action" data-bb-style="tab" data-bb-selected="true" data-bb-img="img/ic_view_image.png" onclick="showTab('home')">首页</div>
+		<div data-bb-type="action" data-bb-style="tab" data-bb-img="img/ic_notes.png" onclick="showTab('content')">内容</div>
+		<div data-bb-type="action" data-bb-style="tab" data-bb-img="img/ic_help.png" onclick="showTab('question')">问题</div>
 	</div>
-	
 	<div data-bb-type="menu">
 		<div data-bb-type="menu-item" data-bb-img="img/ic_info.png">关于</div>
-		<div data-bb-type="menu-item" data-bb-img="img/ic_settings.png" data-bb-pin="right" >设置</div>
+		<div data-bb-type="menu-item" data-bb-img="img/ic_email.png">联系我</div>
+		<div data-bb-type="menu-item" data-bb-img="img/ic_browser.png">评分</div>
+		<div data-bb-type="menu-item" data-bb-img="img/ic_settings.png" data-bb-pin="right">设置</div>
 	</div>
 </div>

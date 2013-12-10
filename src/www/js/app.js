@@ -71,19 +71,21 @@ var app = {
 
 		// Handle styling of the screen before it is displayed
 		config.onscreenready = function(element, id) {
+			console.log('Pushing: '+id);
 			if (darkColoring) {
 				var screen = element.querySelector('[data-bb-type=screen]');
 				if (screen) {
 					screen.style['background-color'] = darkScreenColor;
 				}
 			}
+			if (id == 'menu') {
+				loadContent(element, id);
+			}
 		};
 
 		// Handle styling of the screen after it is displayed
 		config.ondomready = function(element, id, params) {
-			if (id == 'menu') {
-				loadContent(element, id);
-			}
+
 		};
 
 		bb.init(config);
@@ -102,20 +104,44 @@ function getJSON(URL){
 function loadContent(element, id){
 	var d=new Date();
 	var strdate=d.format('yyyy-MM-dd');
-
-	setTimeout(loadpic(element,strdate),1);
+	loadAll(element,strdate);
 
 }
-var _pic,_one,_ask;
-function loadpic(element,strdate){
+function g(id){
+	return document.getElementById(id);
+}
+function gg(doc,id){
+	return doc.getElementById(id);
+}
+
+function loadAll(element,strdate){
+	loadhome(element,strdate);
+	loadOne(element,strdate);
+	loadQuestion(element,strdate);
+}
+
+function loadhome(element,strdate){
 	var data=one.getHomePage(strdate)["hpEntity"];
-	_pic="<div><a name='pic'></a><img src='"+data['strOriginalImgUrl']+"' width=100% ><h3>"+data["strHpTitle"]+" -- "+data['strAuthor']+"</h3> <h3>"+data['strContent']+"</h3></div>";
+	gg(element,'home-title').innerHTML=strdate;
+	gg(element,'home-img').innerHTML=data['strOriginalImgUrl'];
+	gg(element,'home-vol').innerHTML=data['strHpTitle'];
+	gg(element,'home-img-by').innerHTML=data['strAuthor'];
+	gg(element,'home-content').innerHTML=data['strContent'];
+}
+function loadOne(e,strdate){
 	var content=one.getOneContentInfo(strdate)["contentEntity"];
-	_one="<div><a name='one'></a><h3>"+content["strContTitle"]+"</h3><h3><i>"+content["strContAuthorIntroduce"]+"</i> "+content["strContAuthor"]+"</h3><div>"+content["strContent"]+"</div></div>";
+	gg(e,'c-brief').innerHTML=content['sGW'];
+	gg(e,'c-title').innerHTML=content['strContTitle'];
+	gg(e,'c-author-intro').innerHTML=content['strContAuthorIntroduce'];
+	gg(e,'c-author').innerHTML=content['strContAuthor'];
+	gg(e,'c-content').innerHTML=content['strContent'];
+}
+function loadQuestion(e,strdate){
 	var ask=one.getOneQuestionInfo(strdate)['questionAdEntity'];
-	_ask="<div><a name='ask'></a><h3>"+ask['strQuestionTitle']+"</h3><div>"+ask['strQuestionContent']+"</div><h3>"+ask['strAnswerTitle']+"</h3><div>"+ask["strAnswerContent"]+"</div></div>";
-		
-	element.getElementById('appcontent').innerHTML=_pic+_one+_ask;
+	gg(e,'q-title').innerHTML=ask['strQuestionTitle'];
+	gg(e,'q-content').innerHTML=ask['strQuestionContent'];
+	gg(e,'a-title').innerHTML=ask['strAnswerTitle'];
+	gg(e,'a-content').innerHTML=ask['strAnswerContent'];
 }
 
 Date.prototype.format = function(format)
@@ -140,11 +166,20 @@ Date.prototype.format = function(format)
 
 function showTab(id) {
 	// switch between tabs.
-	if (id == 'tab_pic') {
-		document.location.hash="#pic";
-	} else if (id == 'tab_one') {
-		document.location.hash="#one";
+	if (id == 'home') {
+		g('home').style.display="block";
+		g('content').style.display="none";
+		g('ask').style.display="none";
+		document.location.hash="#h-top";
+	} else if (id == 'content') {
+		g('home').style.display="none";
+		g('content').style.display="block";
+		g('ask').style.display="none";
+		document.location.hash="#c-top";
 	} else {
-		document.location.hash="#ask";
+		g('home').style.display="none";
+		g('content').style.display="none";
+		g('ask').style.display="block";
+		document.location.hash="#q-top";
 	}
 }
