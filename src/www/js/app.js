@@ -71,7 +71,7 @@ var app = {
 				}
 			}
 			if (id == 'menu') {
-				loadContent(element, id);
+				if (community)loadContent(element, id);
 				//loadcp(element,id);
 			}
 		};
@@ -116,11 +116,8 @@ function gg(doc, id) {
 
 function loadAll(element, strdate) {
 	currentdisplaydate = strdate;
-	
 	loadhome(element, strdate);
-
 	loadOne(element, strdate);
-
 	loadQuestion(element, strdate);
 }
 
@@ -207,19 +204,19 @@ Date.prototype.format = function(format) {
 function showTab(id) {
 	// switch between tabs.
 	if (id == 'home') {
-		g('home').style.display = "block";
-		g('content').style.display = "none";
-		g('ask').style.display = "none";
+		g('home').style.display="block";;
+		g('content').style.display="none";
+		g('ask').style.display="none";
 		document.location.hash = "#h-top";
 	} else if (id == 'content') {
-		g('home').style.display = "none";
-		g('content').style.display = "block";
-		g('ask').style.display = "none";
+		g('home').style.display="none";
+		g('content').style.display="block";;
+		g('ask').style.display="none";
 		document.location.hash = "#c-top";
 	} else if (id == 'question') {
-		g('home').style.display = "none";
-		g('content').style.display = "none";
-		g('ask').style.display = "block";
+		g('home').style.display="none";
+		g('content').style.display="none";
+		g('ask').style.display="block";;
 		document.location.hash = "#q-top";
 	}
 }
