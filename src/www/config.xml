@@ -8,7 +8,8 @@
         anpho
     </author>
     <content src="index.html" />
+    <icon src="img/logo.png" />
     <access origin="*" />
     <preference name="fullscreen" value="true" />
-    <preference name="webviewbounce" value="true" />
+    <preference name="webviewbounce" value="false" />
 </widget>

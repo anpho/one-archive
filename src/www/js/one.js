@@ -126,7 +126,7 @@
 		}
 		*/
 		var cp = getJSON('http://211.152.49.184:7001/OneForWeb/one/getHpinfo?strDate=' + datestr)
-		return cp;
+		return cp;	
 	},
 	getOneContentInfo: function(datestr) {
 		/*

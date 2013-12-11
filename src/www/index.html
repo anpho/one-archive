@@ -30,12 +30,13 @@
         <script type="text/javascript" src="js/one.js"></script>
         <script type="text/javascript">
         	webworksreadyFired = false;
-			debug=false;
+			debug=true;
 			darkColoring = true;
 			darkScreenColor = 'black';
 
 			//load theme settings
-			theme = localStorage.getItem("theme");
+			//theme = localStorage.getItem("theme");
+			theme = false;
 			if (debug) console.log('Saved Dark Theme Settings:[theme]=' + theme);
 			if (null == theme || 'true' == theme) {
 				darkColoring = true;
