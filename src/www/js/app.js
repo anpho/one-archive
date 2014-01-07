@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -42,12 +42,12 @@ var app = {
 		app.bbuistart();
 	},
 	bbuistart: function() {
-		// This is code to ensure that if webworksready is fired multiple times we still only init() one time
+		// 确保只执行一次
 		if (webworksreadyFired) return;
 		webworksreadyFired = true;
 		var config;
 
-		// Toggle our coloring for testing 
+		// 主题配置
 		if (darkColoring) {
 			config = {
 				controlsDark: true,
@@ -61,7 +61,7 @@ var app = {
 			};
 		}
 
-		// Handle styling of the screen before it is displayed
+		// 在DOM显示之前的配置
 		config.onscreenready = function(element, id) {
 			console.log('Pushing: ' + id);
 			if (darkColoring) {
@@ -73,7 +73,7 @@ var app = {
 
 		};
 
-		// Handle styling of the screen after it is displayed
+		// 在DOM显示之后的配置
 		config.ondomready = function(element, id, params) {
 			if (id == 'menu') {
 				loadContent(element, id);
@@ -81,6 +81,8 @@ var app = {
 		};
 
 		bb.init(config);
+
+		// 因为BBUI 0.9.6本身没有对黑暗主题的支持，这里需要手动将背景设置为黑色。
 		if (darkColoring) {
 			document.body.style['background-color'] = darkScreenColor;
 			document.body.style['color'] = 'white';
@@ -90,24 +92,29 @@ var app = {
 };
 
 function getJSON(URL) {
-	//URL should be started with "http://"
+	//URL 参数要以 "http://" 开始。
 	try {
 		return JSON.parse(community.curl.get(URL));
 	} catch (e) {
-		window.alert('Can not connect to server.\n This app is only available in China.');
+		window.alert('不能连接到服务器，请重试。');
 		location.reload(true);
 	}
 }
 
 function loadContent(element, id) {
+	//载入内容，strdate是要显示的日期，此处显示当前日期。
 	var d = new Date();
 	var strdate = d.format('yyyy-MM-dd');
+	
 	loadAll(element, strdate);
+
+	//定位到HOME处。
 	showTab('home');
 }
 
 function g(id) {
-	return document.getElementById(id);
+	//因为没在用jQuery，这里简化了两个方法。
+	return gg(document,id);
 }
 
 function gg(doc, id) {
@@ -115,33 +122,47 @@ function gg(doc, id) {
 }
 
 function loadAll(element, strdate) {
+	//载入所有内容
 	currentdisplaydate = strdate;
+
+	//载入封面
 	loadhome(element, strdate);
+	
 	setTimeout(function(){
+		//1秒后载入“内容”部分
 		loadOne(element, strdate);
 		}, 100);
 	setTimeout(function(){
+		//1秒后载入“问题”部分
 		loadQuestion(element, strdate);
 		}, 100);
 	
 }
 
 function loadhome(element, strdate) {
+	//载入封面
 	var data;
 	if (localStorage[strdate + 'home']) {
+		//如果已经缓存，就从缓存中读取
 		data = JSON.parse(localStorage[strdate + 'home']);
 	} else {
+		//否则就要访问官方API获取
 		data = one.getHomePage(strdate)["hpEntity"];
 		setTimeout(function() {
+			//100MS后存入缓存，这里避免内容太大，导致存入缓存的时候时间太长，产生延迟。
 			localStorage[strdate + 'home'] = JSON.stringify(data);
 		}, 100);
 	}
+
+	//向模板中填数据
 	gg(element, 'home-title').innerHTML = strdate;
 	gg(element, 'home-img').src = data['strOriginalImgUrl'];
 	gg(element, 'home-img').lowsrc = data['strThumbnailUrl'];
 	gg(element, 'home-vol').innerHTML = data['strHpTitle'];
 	gg(element, 'home-img-by').innerHTML = data['strAuthor'].replace(/&/g, '<br/>');
 	gg(element, 'home-content').innerHTML = data['strContent'];
+
+	
 	console.log('Home Loaded.')
 }
 
@@ -181,6 +202,7 @@ function loadQuestion(e, strdate) {
 }
 
 Date.prototype.format = function(format) {
+	//对Date对象的扩展，实现日期格式化功能。
 	var o = {
 		"M+": this.getMonth() + 1,
 		"d+": this.getDate(),
@@ -196,7 +218,8 @@ Date.prototype.format = function(format) {
 }
 
 function showTab(id) {
-	document.location.hash = "";
+	//显示到指定栏目
+	document.location.hash = "";//加这句是为了防止出现在看到一半的时候又点击结果导航失效的问题。
 	// switch between tabs.
 	if (id == 'home') {
 		//g('home').style.display = "block";
@@ -216,4 +239,4 @@ function showTab(id) {
 	}
 }
 
-var currentdisplaydate;
+var currentdisplaydate;//正在显示的《一个》的发布日期。
