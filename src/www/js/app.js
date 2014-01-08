@@ -42,6 +42,7 @@ var app = {
 		app.bbuistart();
 	},
 	bbuistart: function() {
+		
 		// 确保只执行一次
 		if (webworksreadyFired) return;
 		webworksreadyFired = true;
@@ -70,7 +71,9 @@ var app = {
 					screen.style['background-color'] = darkScreenColor;
 				}
 			}
-
+			if (id == 'settings') {
+				loadSettings(element, id);
+			}
 		};
 
 		// 在DOM显示之后的配置
@@ -90,7 +93,38 @@ var app = {
 		bb.pushScreen('main.html', 'menu');
 	}
 };
-
+function loadSettings(element, id) {
+    // 读取配置数据
+    var togglebutton = element.getElementById('themeToggle');
+    var theme = localStorage.getItem("theme");
+    
+    if (null == theme || 'true' == theme) {
+	    usingDarkTheme=true;
+		togglebutton.setAttribute('data-bb-checked', 'true');
+    } else {
+	    usingDarkTheme=false;
+		togglebutton.setAttribute('data-bb-checked', 'false');
+    }
+    bb.refresh();
+};
+function saveSettings(e){
+	if (e.checked){
+		console.log(">>使用黑色主题.");
+		localStorage.setItem("theme", "true");
+	}
+	else{
+		console.log(">>使用亮色主题.");
+		localStorage.setItem("theme", "false");	
+	}
+};
+function refreshTheme(){
+	var theme = localStorage.getItem("theme");
+	if (theme==usingDarkTheme){
+		return;
+	}else{
+		window.location.reload();
+	}
+}
 function getJSON(URL) {
 	//URL 参数要以 "http://" 开始。
 	try {

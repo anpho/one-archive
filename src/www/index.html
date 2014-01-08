@@ -37,10 +37,7 @@
 			window.onerror=function(){
 				return true;
 			}
-			//load theme settings
-			//theme = localStorage.getItem("theme");
-			theme = false;
-			if (debug) console.log('Saved Dark Theme Settings:[theme]=' + theme);
+			theme = localStorage.getItem("theme");
 			if (null == theme || 'true' == theme) {
 				darkColoring = true;
 			} else {
