@@ -44,7 +44,13 @@
 		}
 		*/
 		var cp = getJSON('http://211.152.49.184:7001/OneForWeb/one/getHpAdMultiinfo');
-		return cp;
+		
+		if (cp["result"]=="SUCCESS"){
+			return cp;
+		}else{
+			return null;	
+		}
+		
 	},
 	getLateds30dayPraiseNumber: function() {
 		/*

@@ -81,6 +81,9 @@ var app = {
 			if (id == 'menu') {
 				loadContent(element, id);
 			}
+			if (id == 'showCalendar'){
+				loadAvailableMags(element,id);
+			}
 		};
 
 		bb.init(config);
@@ -119,12 +122,109 @@ function saveSettings(e){
 };
 function refreshTheme(){
 	var theme = localStorage.getItem("theme");
+	console.log(theme + " vs. " + usingDarkTheme);
 	if (theme==usingDarkTheme){
 		return;
 	}else{
 		window.location.reload();
 	}
+};
+function loadAvailableMags(element,id){
+	/*
+	 * 显示所有可看的杂志，包括缓存的和可下载的。
+	 */
+	var historylist=gg(element,"historyList");
+
+	var cached=findCachedMags();
+	var available=findAvailableMags();
+	/*
+	 * 数据格式： {title:328,strdate:2013-01-01}
+	 */
+	var data = removeDuplicatesInPlace(cached.concat(available)).sort();
+	var items=[];
+	var item;
+
+	for (var i = 0; i < data.length ; i++) {
+     item = document.createElement('div');
+     item.setAttribute('data-bb-type','item');
+     item.setAttribute('data-bb-title',data[i]["title"]);
+     item.setAttribute('data-mrk-date',data[i]["strdate"]);
+     item.innerHTML = data[i]["strdate"];
+     item.onclick = function() {displaySelected()};
+     items.push(item);
+   }
+
+	historylist.refresh(items);
+};
+function findCachedMags(){
+	/*
+	 * 查找已缓存的杂志，根据本地存储中的2222-22-22title判断。
+	 * 返回数据格式： {title:328,strdate:2013-01-01}
+	 * 本地存储数据格式： 2014-01-08ask / 2014-01-18one / 2014-01-18home / 2014-01-18pic / 2014-01-18title
+	 */
+
+	var data=[];
+	var itemkey;
+	var reg=/^\d{4}-\d{2}-\d{2}title$/i;
+	
+	
+	for (var i=0;i<localStorage.length;i++){
+		itemkey= localStorage.key(i);
+		if (reg.test(itemkey)){
+			var itemdata={};
+			itemdata["title"]=localStorage.getItem(itemkey);
+			itemdata["strdate"]=itemkey.substr(0,10);
+			data.push(itemdata);
+		}
+	}
+	return data;
 }
+function findAvailableMags(){
+	/*
+	 * 查找可下载的杂志
+	 */
+	var result=[];
+	
+	var data = one.getHpAdMultiinfo();
+	if (data && data["result"]=="SUCCESS"){
+		var hplist=data["hpAdMulitEntity"]["lstEntHp"];
+		for (var i=0;i<hplist.length;i++){
+			var dataitem={};
+			dataitem["title"]=hplist[i]["strHpTitle"];
+			dataitem["strdate"]=hplist[i]["strMarketTime"];
+			result.push(dataitem);
+		}
+	}
+	return result;
+}
+function displaySelected(){
+	/*
+	 * 往期刊物栏目中，单个元素被点击后的处理。
+	 */
+	var selected = g('historyList').selected;
+    console.log(selected.getAttribute("data-mrk-date"));
+	currentdisplaydate=selected.getAttribute("data-mrk-date");
+	bb.popScreen();
+}
+var removeDuplicatesInPlace = function(arr) {
+	/*
+	 * 删除数组中的重复元素
+	 */	
+	console.log("RemoveDuplicates in : " + arr);
+    var i, j, cur;
+    for (i = arr.length - 1; i >= 0; i--) {
+	cur = arr[i];
+	for (j = i - 1; j >= 0; j--) {
+	    if (cur["strdate"] === arr[j]["strdate"]) {
+		if (i !== j) {
+		    arr.splice(i, 1);
+		}
+	    }
+	}
+    }
+    return arr;
+};
+
 function getJSON(URL) {
 	//URL 参数要以 "http://" 开始。
 	try {
@@ -137,10 +237,13 @@ function getJSON(URL) {
 
 function loadContent(element, id) {
 	//载入内容，strdate是要显示的日期，此处显示当前日期。
-	var d = new Date();
-	var strdate = d.format('yyyy-MM-dd');
+	if (!currentdisplaydate){
+		var d = new Date();
+		currentdisplaydate = d.format('yyyy-MM-dd');	
+	}
 	
-	loadAll(element, strdate);
+	
+	loadAll(element, currentdisplaydate);
 
 	//定位到HOME处。
 	showTab('home');
@@ -157,7 +260,6 @@ function gg(doc, id) {
 
 function loadAll(element, strdate) {
 	//载入所有内容
-	currentdisplaydate = strdate;
 
 	//载入封面
 	loadhome(element, strdate);
@@ -185,6 +287,7 @@ function loadhome(element, strdate) {
 		setTimeout(function() {
 			//100MS后存入缓存，这里避免内容太大，导致存入缓存的时候时间太长，产生延迟。
 			localStorage[strdate + 'home'] = JSON.stringify(data);
+			localStorage[strdate + 'title'] =data['strHpTitle'];
 		}, 100);
 	}
 
