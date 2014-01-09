@@ -12,4 +12,7 @@
     <access origin="*" />
     <preference name="fullscreen" value="true" />
     <preference name="webviewbounce" value="false" />
+	<rim:splash src="img/splash-1280x768.png"/>
+    <rim:splash src="img/splash-1280x720.png"/>    
+    <rim:splash src="img/splash-720x720.png"/>
 </widget>
