@@ -1,8 +1,6 @@
 《一个》app for BlackBerry 10
 ===
 
->一个人的精力终归有限，所以准备将火种放归草原。
-
 自2014年1月起，这个app将 **全面开源，保持免费** ，并**由众多黑莓爱好者共同开发**。
 
 最新版本请由 [这里](https://github.com/anpho/one/tree/master/dist) 下载（选择版本后点选RAW），自行安装。
@@ -14,10 +12,6 @@ BlackBerry World 以及程序”关于“页面中的作者、贡献者信息，
 要加入一起开发，您可以直接FORK本项目修改后提交PULL REQUEST，也可以[写邮件告诉我](anphorea@gmail.com) 你的github账号和你的基本技能，我来把你加入Team。（包括美工、前端工程师等）
 
 测试人员请直接提交Issue。
-
-对于既未提交代码，也未提交ISSUE，也未编辑WIKI的，将不会出现在APP”关于“页面内。
-
-对于长期不参与项目开发的人员和非开发人员，将移出Team。
 
 <hr>
 
