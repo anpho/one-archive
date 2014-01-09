@@ -230,8 +230,8 @@ function getJSON(URL) {
 	try {
 		return JSON.parse(community.curl.get(URL));
 	} catch (e) {
-		window.alert('不能连接到服务器，请重试。');
-		location.reload(true);
+		Toast.regular("不能连接到服务器。");
+		return null;
 	}
 }
 
