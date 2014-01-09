@@ -140,7 +140,12 @@ function loadAvailableMags(element,id){
 	/*
 	 * 数据格式： {title:328,strdate:2013-01-01}
 	 */
-	var data = removeDuplicatesInPlace(cached.concat(available)).sort();
+	var data;
+	if (available){
+		data = removeDuplicatesInPlace(cached.concat(available)).sort(function(a,b){return a["strdate"]>b["strdate"];});
+	}else{
+		data=cached;
+	}
 	var items=[];
 	var item;
 
@@ -300,7 +305,7 @@ function loadhome(element, strdate) {
 	gg(element, 'home-content').innerHTML = data['strContent'];
 
 	
-	console.log('Home Loaded.')
+	console.log('主页已载入。')
 }
 
 function loadOne(e, strdate) {
@@ -318,7 +323,7 @@ function loadOne(e, strdate) {
 	gg(e, 'c-author-intro').innerHTML = content['strContAuthorIntroduce'];
 	gg(e, 'c-author').innerHTML = content['strContAuthor'];
 	gg(e, 'c-content').innerHTML = "<p>" + content['strContent'].replace(/<br>/g, "</p><p>") + "</p>";
-	console.log('Content Loaded.');
+	console.log('文章已载入。');
 }
 
 function loadQuestion(e, strdate) {
@@ -335,7 +340,7 @@ function loadQuestion(e, strdate) {
 	gg(e, 'q-content').innerHTML = ask['strQuestionContent'];
 	gg(e, 'a-title').innerHTML = ask['strAnswerTitle'];
 	gg(e, 'a-content').innerHTML = ask['strAnswerContent'];
-	console.log('Question Loaded.')
+	console.log('问题已载入。')
 }
 
 Date.prototype.format = function(format) {
