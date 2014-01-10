@@ -364,3 +364,9 @@ function showTab(id) {
 }
 
 var currentdisplaydate;//正在显示的《一个》的发布日期。
+
+function clearCache(){
+	var _theme=localStorage.getItem("theme");
+	localStorage.clear();
+	localStorage.setItem("theme",_theme);
+}
