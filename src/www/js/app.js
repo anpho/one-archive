@@ -56,9 +56,7 @@ var app = {
 			if (id == 'settings') {
 				loadSettings(element, id);
 			}
-			if (id == 'showCalendar') {
-				loadAvailableMags(element, id);//看能否解决ActionBar卡顿的问题。
-			}
+
 		};
 
 		// 在DOM显示之后的配置
@@ -66,7 +64,9 @@ var app = {
 			if (id == 'menu') {
 				loadContent(element, id);
 			}
-			
+			if (id == 'showCalendar') {
+				loadAvailableMags(element, id);
+			}
 		};
 
 		bb.init(config);
@@ -120,6 +120,7 @@ function loadAvailableMags(element, id) {
 	 * 显示所有可看的杂志，包括缓存的和可下载的。
 	 */
 	var historylist = gg(element, "historyList");
+	historylist.clear();
 
 	var cached = findCachedMags();
 	var available = findAvailableMags();
@@ -129,27 +130,33 @@ function loadAvailableMags(element, id) {
 	var data;
 	if (available) {
 		data = removeDuplicatesInPlace(cached.concat(available)).sort(function(a, b) {
-			return a["strdate"] > b["strdate"];
+			if (a["strdate"] > b["strdate"]) {
+				return -1;
+			} else if (a["strdate"] == b["strdate"]) {
+				return 0;
+			} else {
+				return 1;
+			}
 		});
 	} else {
 		data = cached;
 	}
+	console.log(data);
 	var items = [];
 	var item;
 
 	for (var i = 0; i < data.length; i++) {
 		item = document.createElement('div');
 		item.setAttribute('data-bb-type', 'item');
-		item.setAttribute('data-bb-title',  data[i]["strdate"]+" : "+data[i]["title"]);
+		item.setAttribute('data-bb-title', data[i]["strdate"] + " : " + data[i]["title"]);
 		item.setAttribute('data-mrk-date', data[i]["strdate"]);
 		item.innerHTML = data[i]["status"];
 		item.onclick = function() {
-			displaySelected()
+			displaySelected();
 		};
 		items.push(item);
 	}
-	setTimeout(
-	historylist.refresh(items),500);
+	historylist.refresh(items);
 };
 
 function findCachedMags() {
@@ -184,7 +191,7 @@ function findAvailableMags() {
 	var result = [];
 
 	var data = one.getHpAdMultiinfo();
-	if (data && data["result"] == "SUCCESS") {
+	if (data && (data["result"] == "SUCCESS")) {
 		var hplist = data["hpAdMulitEntity"]["lstEntHp"];
 		for (var i = 0; i < hplist.length; i++) {
 			var dataitem = {};
@@ -228,9 +235,11 @@ var removeDuplicatesInPlace = function(arr) {
 function getJSON(URL) {
 	//URL 参数要以 "http://" 开始。
 	try {
-		return JSON.parse(community.curl.get(URL));
+		var result = community.curl.get(URL);
+		return JSON.parse(result);
 	} catch (e) {
-		Toast.regular("不能连接到服务器。");
+		Toast.regular("不能连接到服务器。", 1000);
+		console.log(e);
 		return null;
 	}
 }
