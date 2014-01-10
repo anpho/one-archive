@@ -1,6 +1,8 @@
 《一个》app for BlackBerry 10
 ===
 
+<img src="https://github.com/anpho/one/raw/master/src/www/img/welcome.png" />
+
 自2014年1月起，这个app将 **全面开源，保持免费** ，并**由众多黑莓爱好者共同开发**。
 
 最新版本请由 [这里](https://github.com/anpho/one/tree/master/dist) 下载（选择版本后点选RAW），自行安装。
