@@ -120,7 +120,6 @@ function loadAvailableMags(element, id) {
 	 * 显示所有可看的杂志，包括缓存的和可下载的。
 	 */
 	var historylist = gg(element, "historyList");
-	historylist.clear();
 
 	var cached = findCachedMags();
 	var available = findAvailableMags();
@@ -141,10 +140,8 @@ function loadAvailableMags(element, id) {
 	} else {
 		data = cached;
 	}
-	console.log(data);
 	var items = [];
 	var item;
-
 	for (var i = 0; i < data.length; i++) {
 		item = document.createElement('div');
 		item.setAttribute('data-bb-type', 'item');

@@ -1,7 +1,11 @@
 ﻿var one = {
 	getCopyRightInfo: function() {
-		var cp = getJSON('http://211.152.49.184:7001/OneForWeb/onest/getCrInf');
-		return cp["entCr"]["strCR"];
+		try {
+			var cp = getJSON('http://211.152.49.184:7001/OneForWeb/onest/getCrInf');
+			return cp["entCr"]["strCR"];
+		} catch (e) {
+			return null;
+		}
 	},
 	getHpAdMultiinfo: function() {
 		//获取5天的广告与首页数据
@@ -43,14 +47,15 @@
 		    }
 		}
 		*/
-		var cp = getJSON('http://211.152.49.184:7001/OneForWeb/one/getHpAdMultiinfo');
-		
-		if (cp["result"]=="SUCCESS"){
-			return cp;
-		}else{
-			return null;	
+		var cp;
+		try {
+			cp = getJSON('http://211.152.49.184:7001/OneForWeb/one/getHpAdMultiinfo');
+			if (cp["result"] == "SUCCESS") {
+				return cp;
+			}
+		} catch (e) {
+			return null;
 		}
-		
 	},
 	getLateds30dayPraiseNumber: function() {
 		/*
@@ -80,8 +85,12 @@
 				]
 		}
 		*/
-		var cp = getJSON('http://211.152.49.184:7001/OneForWeb/one/getLateds30dayPraiseNumber');
-		return cp;
+		try {
+			var cp = getJSON('http://211.152.49.184:7001/OneForWeb/one/getLateds30dayPraiseNumber');
+			return cp;
+		} catch (e) {
+			return null;
+		}
 	},
 	getMobileDispDays: function() {
 		/*
@@ -90,8 +99,12 @@
 			"mobileDispCtrlDays":"10"
 		}
 		*/
-		var cp = getJSON('http://211.152.49.184:7001/OneForWeb/one/getMobileDispDays');
-		return cp;
+		try {
+			var cp = getJSON('http://211.152.49.184:7001/OneForWeb/one/getMobileDispDays');
+			return cp;
+		} catch (e) {
+			return null;
+		}
 	},
 	getTPage: function() {
 		/*
@@ -108,8 +121,12 @@
 				}
 		}
 		*/
-		var cp = getJSON('http://211.152.49.184:7001/OneForWeb/one/getTPage');
-		return cp;
+		try {
+			var cp = getJSON('http://211.152.49.184:7001/OneForWeb/one/getTPage');
+			return cp;
+		} catch (e) {
+			return null;
+		}
 	},
 	getHomePage: function(datestr) {
 		/*
@@ -131,8 +148,12 @@
 		    }
 		}
 		*/
-		var cp = getJSON('http://211.152.49.184:7001/OneForWeb/one/getHpinfo?strDate=' + datestr)
-		return cp;	
+		try {
+			var cp = getJSON('http://211.152.49.184:7001/OneForWeb/one/getHpinfo?strDate=' + datestr)
+			return cp;
+		} catch (e) {
+			return null;
+		}
 	},
 	getOneContentInfo: function(datestr) {
 		/*
@@ -158,8 +179,12 @@
 		    }
 		}
 		*/
-		var cp = getJSON('http://211.152.49.184:7001/OneForWeb/one/getOneContentInfo?strDate=' + datestr);
-		return cp;
+		try {
+			var cp = getJSON('http://211.152.49.184:7001/OneForWeb/one/getOneContentInfo?strDate=' + datestr);
+			return cp;
+		} catch (e) {
+			return null;
+		}
 	},
 	getOneQuestionInfo: function(datestr) {
 		/*
@@ -185,7 +210,11 @@
 		    }
 		}
 		*/
-		var cp = getJSON('http://211.152.49.184:7001/OneForWeb/one/getOneQuestionInfo?strDate=' + datestr);
-		return cp;
+		try {
+			var cp = getJSON('http://211.152.49.184:7001/OneForWeb/one/getOneQuestionInfo?strDate=' + datestr);
+			return cp;
+		} catch (e) {
+			return null;
+		}
 	}
 };
