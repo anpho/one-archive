@@ -24,7 +24,7 @@ var app = {
 		app.bbuistart();
 	},
 	bbuistart: function() {
-		
+
 		// 确保只执行一次
 		if (webworksreadyFired) return;
 		webworksreadyFired = true;
@@ -63,8 +63,8 @@ var app = {
 			if (id == 'menu') {
 				loadContent(element, id);
 			}
-			if (id == 'showCalendar'){
-				loadAvailableMags(element,id);
+			if (id == 'showCalendar') {
+				loadAvailableMags(element, id);
 			}
 		};
 
@@ -78,139 +78,151 @@ var app = {
 		bb.pushScreen('main.html', 'menu');
 	}
 };
+
 function loadSettings(element, id) {
-    // 读取配置数据
-    var togglebutton = element.getElementById('themeToggle');
-    var theme = localStorage.getItem("theme");
-    
-    if (null == theme || 'true' == theme) {
-	    usingDarkTheme=true;
+	// 读取配置数据
+	var togglebutton = element.getElementById('themeToggle');
+	var theme = localStorage.getItem("theme");
+
+	if (null == theme || 'true' == theme) {
+		usingDarkTheme = true;
 		togglebutton.setAttribute('data-bb-checked', 'true');
-    } else {
-	    usingDarkTheme=false;
+	} else {
+		usingDarkTheme = false;
 		togglebutton.setAttribute('data-bb-checked', 'false');
-    }
-    bb.refresh();
+	}
+	bb.refresh();
 };
-function saveSettings(e){
-	if (e.checked){
+
+function saveSettings(e) {
+	if (e.checked) {
 		console.log(">>使用黑色主题.");
 		localStorage.setItem("theme", "true");
-	}
-	else{
+	} else {
 		console.log(">>使用亮色主题.");
-		localStorage.setItem("theme", "false");	
+		localStorage.setItem("theme", "false");
 	}
 };
-function refreshTheme(){
+
+function refreshTheme() {
 	var theme = localStorage.getItem("theme");
 	console.log(theme + " vs. " + usingDarkTheme);
-	if (theme==usingDarkTheme){
+	if (theme == usingDarkTheme) {
 		return;
-	}else{
+	} else {
 		window.location.reload();
 	}
 };
-function loadAvailableMags(element,id){
+
+function loadAvailableMags(element, id) {
 	/*
 	 * 显示所有可看的杂志，包括缓存的和可下载的。
 	 */
-	var historylist=gg(element,"historyList");
+	var historylist = gg(element, "historyList");
 
-	var cached=findCachedMags();
-	var available=findAvailableMags();
+	var cached = findCachedMags();
+	var available = findAvailableMags();
 	/*
 	 * 数据格式： {title:328,strdate:2013-01-01}
 	 */
 	var data;
-	if (available){
-		data = removeDuplicatesInPlace(cached.concat(available)).sort(function(a,b){return a["strdate"]>b["strdate"];});
-	}else{
-		data=cached;
+	if (available) {
+		data = removeDuplicatesInPlace(cached.concat(available)).sort(function(a, b) {
+			return a["strdate"] > b["strdate"];
+		});
+	} else {
+		data = cached;
 	}
-	var items=[];
+	var items = [];
 	var item;
 
-	for (var i = 0; i < data.length ; i++) {
-     item = document.createElement('div');
-     item.setAttribute('data-bb-type','item');
-     item.setAttribute('data-bb-title',data[i]["title"]);
-     item.setAttribute('data-mrk-date',data[i]["strdate"]);
-     item.innerHTML = data[i]["strdate"];
-     item.onclick = function() {displaySelected()};
-     items.push(item);
-   }
-
-	historylist.refresh(items);
+	for (var i = 0; i < data.length; i++) {
+		item = document.createElement('div');
+		item.setAttribute('data-bb-type', 'item');
+		item.setAttribute('data-bb-title',  data[i]["strdate"]+" : "+data[i]["title"]);
+		item.setAttribute('data-mrk-date', data[i]["strdate"]);
+		item.innerHTML = data[i]["status"];
+		item.onclick = function() {
+			displaySelected()
+		};
+		items.push(item);
+	}
+	setTimeout(
+	historylist.refresh(items),500);
 };
-function findCachedMags(){
+
+function findCachedMags() {
 	/*
 	 * 查找已缓存的杂志，根据本地存储中的2222-22-22title判断。
 	 * 返回数据格式： {title:328,strdate:2013-01-01}
 	 * 本地存储数据格式： 2014-01-08ask / 2014-01-18one / 2014-01-18home / 2014-01-18pic / 2014-01-18title
 	 */
 
-	var data=[];
+	var data = [];
 	var itemkey;
-	var reg=/^\d{4}-\d{2}-\d{2}title$/i;
-	
-	
-	for (var i=0;i<localStorage.length;i++){
-		itemkey= localStorage.key(i);
-		if (reg.test(itemkey)){
-			var itemdata={};
-			itemdata["title"]=localStorage.getItem(itemkey);
-			itemdata["strdate"]=itemkey.substr(0,10);
+	var reg = /^\d{4}-\d{2}-\d{2}title$/i;
+
+
+	for (var i = 0; i < localStorage.length; i++) {
+		itemkey = localStorage.key(i);
+		if (reg.test(itemkey)) {
+			var itemdata = {};
+			itemdata["title"] = localStorage.getItem(itemkey);
+			itemdata["strdate"] = itemkey.substr(0, 10);
+			itemdata["status"] = "已缓存";
 			data.push(itemdata);
 		}
 	}
 	return data;
 }
-function findAvailableMags(){
+
+function findAvailableMags() {
 	/*
 	 * 查找可下载的杂志
 	 */
-	var result=[];
-	
+	var result = [];
+
 	var data = one.getHpAdMultiinfo();
-	if (data && data["result"]=="SUCCESS"){
-		var hplist=data["hpAdMulitEntity"]["lstEntHp"];
-		for (var i=0;i<hplist.length;i++){
-			var dataitem={};
-			dataitem["title"]=hplist[i]["strHpTitle"];
-			dataitem["strdate"]=hplist[i]["strMarketTime"];
+	if (data && data["result"] == "SUCCESS") {
+		var hplist = data["hpAdMulitEntity"]["lstEntHp"];
+		for (var i = 0; i < hplist.length; i++) {
+			var dataitem = {};
+			dataitem["title"] = hplist[i]["strHpTitle"];
+			dataitem["strdate"] = hplist[i]["strMarketTime"];
+			dataitem["status"] = "可下载";
 			result.push(dataitem);
 		}
 	}
 	return result;
 }
-function displaySelected(){
+
+function displaySelected() {
 	/*
 	 * 往期刊物栏目中，单个元素被点击后的处理。
 	 */
 	var selected = g('historyList').selected;
-    console.log(selected.getAttribute("data-mrk-date"));
-	currentdisplaydate=selected.getAttribute("data-mrk-date");
+	console.log(selected.getAttribute("data-mrk-date"));
+	currentdisplaydate = selected.getAttribute("data-mrk-date");
 	bb.popScreen();
 }
 var removeDuplicatesInPlace = function(arr) {
-	/*
+		/*
 	 * 删除数组中的重复元素
-	 */	
-	console.log("RemoveDuplicates in : " + arr);
-    var i, j, cur;
-    for (i = arr.length - 1; i >= 0; i--) {
-	cur = arr[i];
-	for (j = i - 1; j >= 0; j--) {
-	    if (cur["strdate"] === arr[j]["strdate"]) {
-		if (i !== j) {
-		    arr.splice(i, 1);
+	 */
+		console.log("RemoveDuplicates in : " + arr);
+		var i, j, cur;
+		for (i = arr.length - 1; i >= 0; i--) {
+			cur = arr[i];
+			for (j = i - 1; j >= 0; j--) {
+				if (cur["strdate"] === arr[j]["strdate"]) {
+					if (i !== j) {
+						arr.splice(i, 1);
+					}
+				}
+			}
 		}
-	    }
-	}
-    }
-    return arr;
-};
+		return arr;
+	};
 
 function getJSON(URL) {
 	//URL 参数要以 "http://" 开始。
@@ -224,12 +236,12 @@ function getJSON(URL) {
 
 function loadContent(element, id) {
 	//载入内容，strdate是要显示的日期，此处显示当前日期。
-	if (!currentdisplaydate){
+	if (!currentdisplaydate) {
 		var d = new Date();
-		currentdisplaydate = d.format('yyyy-MM-dd');	
+		currentdisplaydate = d.format('yyyy-MM-dd');
 	}
-	
-	
+
+
 	loadAll(element, currentdisplaydate);
 
 	//定位到HOME处。
@@ -238,7 +250,7 @@ function loadContent(element, id) {
 
 function g(id) {
 	//因为没在用jQuery，这里简化了两个方法。
-	return gg(document,id);
+	return gg(document, id);
 }
 
 function gg(doc, id) {
@@ -250,16 +262,16 @@ function loadAll(element, strdate) {
 
 	//载入封面
 	loadhome(element, strdate);
-	
-	setTimeout(function(){
+
+	setTimeout(function() {
 		//1秒后载入“内容”部分
 		loadOne(element, strdate);
-		}, 100);
-	setTimeout(function(){
+	}, 100);
+	setTimeout(function() {
 		//1秒后载入“问题”部分
 		loadQuestion(element, strdate);
-		}, 100);
-	
+	}, 100);
+
 }
 
 function loadhome(element, strdate) {
@@ -274,7 +286,7 @@ function loadhome(element, strdate) {
 		setTimeout(function() {
 			//100MS后存入缓存，这里避免内容太大，导致存入缓存的时候时间太长，产生延迟。
 			localStorage[strdate + 'home'] = JSON.stringify(data);
-			localStorage[strdate + 'title'] =data['strHpTitle'];
+			localStorage[strdate + 'title'] = data['strHpTitle'];
 		}, 100);
 	}
 
@@ -286,7 +298,7 @@ function loadhome(element, strdate) {
 	gg(element, 'home-img-by').innerHTML = data['strAuthor'].replace(/&/g, '<br/>');
 	gg(element, 'home-content').innerHTML = data['strContent'];
 
-	
+
 	console.log('主页已载入。')
 }
 
@@ -343,7 +355,7 @@ Date.prototype.format = function(format) {
 
 function showTab(id) {
 	//显示到指定栏目
-	document.location.hash = "";//加这句是为了防止出现在看到一半的时候又点击结果导航失效的问题。
+	document.location.hash = ""; //加这句是为了防止出现在看到一半的时候又点击结果导航失效的问题。
 	// switch between tabs.
 	if (id == 'home') {
 		//g('home').style.display = "block";
@@ -363,10 +375,10 @@ function showTab(id) {
 	}
 }
 
-var currentdisplaydate;//正在显示的《一个》的发布日期。
+var currentdisplaydate; //正在显示的《一个》的发布日期。
 
-function clearCache(){
-	var _theme=localStorage.getItem("theme");
+function clearCache() {
+	var _theme = localStorage.getItem("theme");
 	localStorage.clear();
-	localStorage.setItem("theme",_theme);
+	localStorage.setItem("theme", _theme);
 }

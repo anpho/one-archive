@@ -43,15 +43,10 @@
 		<div data-bb-type="action" data-bb-style="tab" data-bb-img="img/ic_notes.png" onclick="showTab('content')">内容</div>
 		<div data-bb-type="action" data-bb-style="tab" data-bb-img="img/ic_help.png" onclick="showTab('question')">问题</div>
 		<div data-bb-type="action" data-bb-style="button" data-bb-img="img/ic_history.png" onclick="bb.pushScreen('calendar.html','showCalendar')">往期内容</div>
-		<div data-bb-type="action" data-bb-style="button" data-bb-overflow="true" data-bb-img="img/ic_info.png"  onclick="bb.pushScreen('about.html', 'about');">关于</div>
-		<div data-bb-type="action" data-bb-style="button" data-bb-overflow="true" data-bb-img="img/ic_email.png">联系作者</div>
-		<div data-bb-type="action" data-bb-style="button" data-bb-overflow="true" data-bb-img="img/ic_browser.png">去评分</div>
-		<div data-bb-type="action" data-bb-style="button" data-bb-overflow="true" data-bb-img="img/ic_settings.png" onclick="bb.pushScreen('settings.html','settings')">设置</div>
-		<div data-bb-type="action" data-bb-style="button" data-bb-overflow="true" data-bb-img="img/ic_delete.png" data-bb-pin="true">清除缓存</div>
 	</div>
 	<div data-bb-type="menu">
 		<div data-bb-type="menu-item" data-bb-img="img/ic_info.png" onclick="bb.pushScreen('about.html','about')">关于</div>
-		<div data-bb-type="menu-item" data-bb-img="img/ic_email.png">联系作者</div>
+		<div data-bb-type="menu-item" data-bb-img="img/ic_feedback.png" onclick="blackberry.invoke.invoke({uri: "https://github.com/anpho/one/issues"}, null, null);">反馈问题</div>
 		<div data-bb-type="menu-item" data-bb-img="img/ic_browser.png">去评分</div>
 		<div data-bb-type="menu-item" data-bb-img="img/ic_settings.png" data-bb-pin="right" onclick="bb.pushScreen('settings.html','settings')">设置</div>
 	</div>
