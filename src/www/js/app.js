@@ -56,6 +56,9 @@ var app = {
 			if (id == 'settings') {
 				loadSettings(element, id);
 			}
+			if (id == 'showCalendar') {
+				loadAvailableMags(element, id);//看能否解决ActionBar卡顿的问题。
+			}
 		};
 
 		// 在DOM显示之后的配置
@@ -63,9 +66,7 @@ var app = {
 			if (id == 'menu') {
 				loadContent(element, id);
 			}
-			if (id == 'showCalendar') {
-				loadAvailableMags(element, id);
-			}
+			
 		};
 
 		bb.init(config);
