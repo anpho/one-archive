@@ -1,54 +1,22 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN">
-<div data-bb-type="screen" id="wrap" >
-	<div data-bb-type="round-panel" id="home" >
-		<a name="h-top"></a>
-		<div data-bb-type="panel-header" id="home-title"></div>
-		<div style="width:100%;text-align: center;">
-			<img id="home-img" style="width:100%">
-			<div style="clear:both"></div>
-			<br/>
-			<div style="float:left;font-size: 120%;" id="home-vol"></div>
-			<div style="float:right;text-align: right" id="home-img-by"></div>
-			<div style="clear:both"></div>
-			<br/>
-		</div>
-		<div style="width:100%;text-align: right;" id="home-content"></div>
-	</div>
-	<div style="height:50px"></div>
-	<div data-bb-type="round-panel" id="content" >
-		<a name="c-top"></a>
-		<div data-bb-type="panel-header" style="font-size: 120%;" id="c-title">请稍候</div>
-		<div style="clear:both"></div>
-		<div style="font-size:100%;float:left" id="c-author"></div>
-		<div style="font-size:80%;font-style: italic; float:right;" id="c-author-intro"></div>
-		<div style="clear:both"></div>
-		<br/>
-		<div style="font-size:80%" id="c-brief"></div>
-		<hr/>
-		<div style='text-indent:2em' id="c-content"></div>
-	</div>
-	<div style="height:50px"></div>
-	<div data-bb-type="round-panel" id="ask">
-		<a name="q-top"></a>
-		<div data-bb-type="panel-header" style="font-size: 120%;" id="q-title">请稍候</div>
-		<br/>
-		<div id="q-content"></div>
-		<br/>
-		<div data-bb-type="panel-header" id="a-title"></div>
-		<br/>
-		<div id="a-content"></div>
-	</div>
-	<div data-bb-type="action-bar">
-		<div data-bb-type="action" data-bb-style="tab" data-bb-img="img/ic_view_image.png" data-bb-selected = "true"  onclick="showTab('home')">首页</div>
-		<div data-bb-type="action" data-bb-style="tab" data-bb-img="img/ic_notes.png" onclick="showTab('content')">内容</div>
-		<div data-bb-type="action" data-bb-style="tab" data-bb-img="img/ic_help.png" onclick="showTab('question')">问题</div>
-		<div data-bb-type="action" data-bb-style="button" data-bb-img="img/ic_history.png" onclick="bb.pushScreen('calendar.html','showCalendar')">往期内容</div>
-	</div>
-	<div data-bb-type="menu">
-		<div data-bb-type="menu-item" data-bb-img="img/ic_info.png" onclick="bb.pushScreen('about.html','about')">关于</div>
-		<div data-bb-type="menu-item" data-bb-img="img/ic_feedback.png" onclick="blackberry.invoke.invoke({uri: 'https://github.com/anpho/one/issues'}, null, null)">反馈问题</div>
-		<div data-bb-type="menu-item" data-bb-img="img/ic_browser.png">去评分</div>
-		<div data-bb-type="menu-item" data-bb-img="img/ic_settings.png" data-bb-pin="right" onclick="bb.pushScreen('settings.html','settings')">设置</div>
-	</div>
+<div data-bb-type="screen" id="wrap" data-bb-indicator="true">
+    <div data-bb-type="round-panel" id="home" >
+    </div>
+    <div data-bb-type="round-panel" id="content" >
+    </div>
+    <div data-bb-type="round-panel" id="ask">
+    </div>
+    <div data-bb-type="action-bar">
+        <div data-bb-type="action" data-bb-style="tab" data-bb-img="img/ic_view_image.png" data-bb-selected = "true"  onclick="showTab('home')">首页</div>
+        <div data-bb-type="action" data-bb-style="tab" data-bb-img="img/ic_notes.png" onclick="showTab('content')">内容</div>
+        <div data-bb-type="action" data-bb-style="tab" data-bb-img="img/ic_help.png" onclick="showTab('question')">问题</div>
+        <div data-bb-type="action" data-bb-style="button" data-bb-img="img/ic_history.png" onclick="bb.pushScreen('calendar.html', 'showCalendar')">往期内容</div>
+    </div>
+    <div data-bb-type="menu">
+        <div data-bb-type="menu-item" data-bb-img="img/ic_info.png" onclick="bb.pushScreen('about.html', 'about')">关于</div>
+        <div data-bb-type="menu-item" data-bb-img="img/ic_feedback.png" onclick="blackberry.invoke.invoke({uri: 'https://github.com/anpho/one/issues'}, null, null)">反馈问题</div>
+        <div data-bb-type="menu-item" data-bb-img="img/ic_browser.png">去评分</div>
+        <div data-bb-type="menu-item" data-bb-img="img/ic_settings.png" data-bb-pin="right" onclick="bb.pushScreen('settings.html', 'settings')">设置</div>
+    </div>
 
 </div>
