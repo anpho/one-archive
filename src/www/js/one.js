@@ -50,7 +50,7 @@
 		var cp;
 		try {
 			cp = getJSON('http://211.152.49.184:7001/OneForWeb/one/getHpAdMultiinfo');
-			if (cp["result"] == "SUCCESS") {
+			if (cp["result"] === "SUCCESS") {
 				return cp;
 			}
 		} catch (e) {
@@ -149,7 +149,7 @@
 		}
 		*/
 		try {
-			var cp = getJSON('http://211.152.49.184:7001/OneForWeb/one/getHpinfo?strDate=' + datestr)
+			var cp = getJSON('http://211.152.49.184:7001/OneForWeb/one/getHpinfo?strDate=' + datestr);
 			return cp;
 		} catch (e) {
 			return null;

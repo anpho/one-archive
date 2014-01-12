@@ -53,19 +53,18 @@ var app = {
 					screen.style['background-color'] = darkScreenColor;
 				}
 			}
-			if (id == 'settings') {
+			if (id === 'settings') {
 				loadSettings(element, id);
 			}
-
+			if (id === 'showCalendar') {
+				loadAvailableMags(element, id);
+			}
 		};
 
 		// 在DOM显示之后的配置
 		config.ondomready = function(element, id, params) {
-			if (id == 'menu') {
+			if (id === 'menu') {
 				loadContent(element, id);
-			}
-			if (id == 'showCalendar') {
-				loadAvailableMags(element, id);
 			}
 		};
 
@@ -85,7 +84,7 @@ function loadSettings(element, id) {
 	var togglebutton = element.getElementById('themeToggle');
 	var theme = localStorage.getItem("theme");
 
-	if (null == theme || 'true' == theme) {
+	if (null === theme || 'true' === theme) {
 		usingDarkTheme = true;
 		togglebutton.setAttribute('data-bb-checked', 'true');
 	} else {
@@ -108,7 +107,7 @@ function saveSettings(e) {
 function refreshTheme() {
 	var theme = localStorage.getItem("theme");
 	console.log(theme + " vs. " + usingDarkTheme);
-	if (theme == usingDarkTheme) {
+	if (theme === usingDarkTheme) {
 		return;
 	} else {
 		window.location.reload();
@@ -131,7 +130,7 @@ function loadAvailableMags(element, id) {
 		data = removeDuplicatesInPlace(cached.concat(available)).sort(function(a, b) {
 			if (a["strdate"] > b["strdate"]) {
 				return -1;
-			} else if (a["strdate"] == b["strdate"]) {
+			} else if (a["strdate"] === b["strdate"]) {
 				return 0;
 			} else {
 				return 1;
@@ -188,7 +187,7 @@ function findAvailableMags() {
 	var result = [];
 
 	var data = one.getHpAdMultiinfo();
-	if (data && (data["result"] == "SUCCESS")) {
+	if (data && (data["result"] === "SUCCESS")) {
 		var hplist = data["hpAdMulitEntity"]["lstEntHp"];
 		for (var i = 0; i < hplist.length; i++) {
 			var dataitem = {};
@@ -306,7 +305,7 @@ function loadhome(element, strdate) {
 	gg(element, 'home-content').innerHTML = data['strContent'];
 
 
-	console.log('主页已载入。')
+	console.log('主页已载入。');
 }
 
 function loadOne(e, strdate) {
@@ -341,7 +340,7 @@ function loadQuestion(e, strdate) {
 	gg(e, 'q-content').innerHTML = ask['strQuestionContent'];
 	gg(e, 'a-title').innerHTML = ask['strAnswerTitle'];
 	gg(e, 'a-content').innerHTML = ask['strAnswerContent'];
-	console.log('问题已载入。')
+	console.log('问题已载入。');
 }
 
 Date.prototype.format = function(format) {
@@ -354,27 +353,27 @@ Date.prototype.format = function(format) {
 		"s+": this.getSeconds(),
 		"q+": Math.floor((this.getMonth() + 3) / 3),
 		"S": this.getMilliseconds()
-	}
+	};
 	if (/(y+)/.test(format)) format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-	for (var k in o) if (new RegExp("(" + k + ")").test(format)) format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));
+	for (var k in o) if (new RegExp("(" + k + ")").test(format)) format = format.replace(RegExp.$1, RegExp.$1.length === 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));
 	return format;
-}
+};
 
 function showTab(id) {
 	//显示到指定栏目
 	document.location.hash = ""; //加这句是为了防止出现在看到一半的时候又点击结果导航失效的问题。
 	// switch between tabs.
-	if (id == 'home') {
+	if (id === 'home') {
 		//g('home').style.display = "block";
 		//g('content').style.display = "none";
 		//g('ask').style.display = "none";
 		document.location.hash = "#h-top";
-	} else if (id == 'content') {
+	} else if (id === 'content') {
 		//g('content').style.display = "block";
 		//g('home').style.display = "none";
 		//g('ask').style.display = "none";
 		document.location.hash = "#c-top";
-	} else if (id == 'question') {
+	} else if (id === 'question') {
 		//g('ask').style.display = "block";
 		//g('home').style.display = "none";
 		//g('content').style.display = "none";
