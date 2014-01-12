@@ -270,13 +270,13 @@ function loadAll(element, strdate) {
 	loadhome(element, strdate);
 
 	setTimeout(function() {
-		//1秒后载入“内容”部分
+		//载入“内容”部分
 		loadOne(element, strdate);
-	}, 100);
+	}, 300);
 	setTimeout(function() {
-		//1秒后载入“问题”部分
+		//载入“问题”部分
 		loadQuestion(element, strdate);
-	}, 100);
+	}, 300);
 
 }
 
@@ -290,10 +290,10 @@ function loadhome(element, strdate) {
 		//否则就要访问官方API获取
 		data = one.getHomePage(strdate)["hpEntity"];
 		setTimeout(function() {
-			//100MS后存入缓存，这里避免内容太大，导致存入缓存的时候时间太长，产生延迟。
+			//1000MS后存入缓存，这里避免内容太大，导致存入缓存的时候时间太长，产生延迟。
 			localStorage[strdate + 'home'] = JSON.stringify(data);
 			localStorage[strdate + 'title'] = data['strHpTitle'];
-		}, 100);
+		}, 1000);
 	}
 
 	//向模板中填数据
@@ -316,7 +316,7 @@ function loadOne(e, strdate) {
 		content = one.getOneContentInfo(strdate)["contentEntity"];
 		setTimeout(function() {
 			localStorage[strdate + 'one'] = JSON.stringify(content);
-		}, 100);
+		}, 1000);
 	}
 	gg(e, 'c-brief').innerHTML = content['sGW'];
 	gg(e, 'c-title').innerHTML = content['strContTitle'];
