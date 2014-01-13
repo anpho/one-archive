@@ -87,7 +87,7 @@ function loadSettings(element, id) {
     var togglebutton = element.getElementById('themeToggle');
     var theme = localStorage.getItem("theme");
 
-    if (null === theme || 'true' === theme) {
+    if ('true' === theme) {
         usingDarkTheme = true;
         togglebutton.setAttribute('data-bb-checked', 'true');
     } else {
@@ -244,7 +244,7 @@ function getJSON(URL) {
         var result = community.curl.get(URL);
         return JSON.parse(result);
     } catch (e) {
-        Toast.regular("不能连接到服务器。", 1000);
+        Toast.regular("网络不可用，请重试", 1000);
         console.log(e);
         return null;
     }
