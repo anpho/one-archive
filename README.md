@@ -11,7 +11,9 @@
 
 BlackBerry World 以及程序”关于“页面中的作者、贡献者信息，将根据实际贡献度大致排序。
 
-要加入一起开发，您可以直接FORK本项目修改后提交PULL REQUEST，也可以[写邮件告诉我](anphorea@gmail.com) 你的github账号和你的基本技能，我来把你加入Team。（包括美工、前端工程师等）
+要加入一起开发，您可以直接FORK本项目修改后提交PULL REQUEST，也可以[写邮件告诉我](anphorea@gmail.com) 你的github账号和你的基本技能，我来把你加入Team。（包括美工、前端工程师等）。
+
+Team成员在上传代码前请先通过QQ群与其他成员沟通，并保证本地测试通过（模拟器或真机）
 
 测试人员请直接提交Issue。
 
