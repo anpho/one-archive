@@ -272,9 +272,6 @@ function loadContent(element, id) {
 
 
     loadAll(element, currentdisplaydate);
-
-    //定位到HOME处。
-    //showTab('home');
 }
 
 function g(id) {
@@ -509,13 +506,10 @@ Date.prototype.format = function(format) {
 function showTab(id) {
     //显示到指定栏目 var homeloaded,oneloaded,qloaded;
     if (id === 'home') {
-
-        g('wrap').scrollTo(0, 0);
+        goTo('home');
     } else if (id === 'content') {
-
         goTo('content');
     } else if (id === 'question') {
-
         goTo('ask');
     }
 }
@@ -532,4 +526,6 @@ function clearCache() {
     var _theme = localStorage.getItem("theme");
     localStorage.clear();
     localStorage.setItem("theme", _theme);
+    Toast.regular("缓存已清除", 1000);
+    loadAvailableMags(document, 'reload');
 }
