@@ -66,8 +66,13 @@ var app = {
         // 在DOM显示之后的配置
         config.ondomready = function(element, id, params) {
             if (id === 'showCalendar') {
-                setTimeout(
-                        loadAvailableMags(element, id), 300);
+                loadAvailableMags(element, id);
+            }
+            if (id === 'menu') {
+                cache.get(imgurl, currentdisplaydate, function(u) {
+                    console.log("设置图片：" + u);
+                    g('hppic').src = u;
+                });
             }
         };
 
@@ -328,9 +333,9 @@ function loadhome(element, strdate) {
     picdiv.style.textAlign = "center";
     var pic = document.createElement("img");
     pic.style.width = "100%";
-    pic.src = data['strOriginalImgUrl'];
-    pic.lowsrc = data['strThumbnailUrl'];
+    pic.id = 'hppic';
     picdiv.appendChild(pic);
+    imgurl = data['strOriginalImgUrl'];
     var clearnode = document.createElement("div");
     clearnode.style.clear = "both";
     clearnode.style.height = "20px";
@@ -353,14 +358,11 @@ function loadhome(element, strdate) {
     home_content.style["textAlign"] = "right";
     home_content.innerHTML = data['strContent'];
     ofragment.appendChild(home_content);
-
     gg(element, "home").appendChild(ofragment);
     console.log('主页已载入。');
     homeloaded = true;
-    bb.refresh();
-    //gg(element,"wrap").refresh();
 }
-var homeloaded, oneloaded, qloaded;
+var homeloaded, oneloaded, qloaded, imgurl;
 function removeChildNodes(node) {
     var children = node.childNodes;
     for (i = 0; i < children.length; i++) {
@@ -427,8 +429,6 @@ function loadOne(e, strdate) {
     gg(e, "content").appendChild(ofr);
     console.log('标题页已载入。');
     oneloaded = true;
-    bb.refresh();
-    //gg(element,"wrap").refresh();
 }
 
 function loadQuestion(e, strdate) {
@@ -477,8 +477,6 @@ function loadQuestion(e, strdate) {
     gg(e, "ask").appendChild(ofr);
     console.log('问题已载入。');
     qloaded = true;
-    bb.refresh();
-    //gg(element,"wrap").refresh();
 }
 
 Date.prototype.format = function(format) {
