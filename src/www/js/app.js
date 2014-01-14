@@ -16,6 +16,7 @@ var app = {
     // function, we must explicity call 'app.receivedEvent(...);'
     onDeviceReady: function() {
         //app.checkPlugin();
+        navigator.splashscreen.show();
         app.receivedEvent('deviceready');
     },
     // Update DOM on a Received Event
@@ -83,6 +84,7 @@ var app = {
             document.body.style['background-color'] = darkScreenColor;
             document.body.style['color'] = 'white';
         }
+        navigator.splashscreen.hide();
         bb.pushScreen('main.html', 'menu');
     }
 };
