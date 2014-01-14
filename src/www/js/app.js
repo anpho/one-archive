@@ -221,6 +221,7 @@ function displaySelected() {
     var selected = g('historyList').selected;
     console.log(selected.getAttribute("data-mrk-date"));
     currentdisplaydate = selected.getAttribute("data-mrk-date");
+    localStorage.setItem('show', currentdisplaydate);
     oneloaded = false;
     homeloaded = false;
     qloaded = false;
@@ -260,8 +261,13 @@ function getJSON(URL) {
 function loadContent(element, id) {
     //载入内容，strdate是要显示的日期，此处显示当前日期。
     if (!currentdisplaydate) {
-        var d = new Date();
-        currentdisplaydate = d.format('yyyy-MM-dd');
+        if (localStorage.getItem('show')) {
+            currentdisplaydate = localStorage.getItem('show');
+        } else {
+            var d = new Date();
+            currentdisplaydate = d.format('yyyy-MM-dd');
+            localStorage.setItem('show', currentdisplaydate);
+        }
     }
 
 
