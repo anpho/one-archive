@@ -79,7 +79,7 @@ var app = {
         // 因为BBUI 0.9.6本身没有对黑暗主题的支持，这里需要手动将背景设置为黑色。
         if (darkColoring) {
             document.body.style['background-color'] = darkScreenColor;
-            document.body.style['color'] = 'white';
+            document.body.style['color'] = '#E6E6E6';
         }
         navigator.splashscreen.hide();
         bb.pushScreen('main.html', 'menu');
@@ -88,6 +88,21 @@ var app = {
 
 function loadSettings(element, id) {
     // 读取配置数据
+    // 读取配置数据
+    var fonts = element.getElementById('drop');
+    var size = localStorage.getItem("fontsize");
+
+    if (size == null) {
+        fonts.options[2].setAttribute('selected', 'true');
+    } else {
+        for (var i = 0; i < 5; i++) {
+            if (fonts.options[i].value == size) {
+                fonts.options[i].setAttribute('selected', 'true');
+                break;
+            }
+        }
+    }
+
     var togglebutton = element.getElementById('themeToggle');
     var theme = localStorage.getItem("theme");
 
@@ -297,11 +312,12 @@ function loadhome(element, strdate) {
         if (data === null)
             return;
         var data = da["hpEntity"];
-        localStorage.setItem(strdate+'title',data['strHpTitle']);
+        localStorage.setItem(strdate + 'title', data['strHpTitle']);
         gg(element, 'home-title').innerHTML = strdate;
         gg(element, 'home-vol').innerHTML = data['strHpTitle'];
         gg(element, 'home-img-by').innerHTML = data['strAuthor'].replace(/&/g, '<br/>');
         gg(element, 'home-content').innerHTML = data['strContent'];
+        gg(element, 'home-content').style['fontSize'] = localStorage.getItem('fontsize');
         imgurl = data['strOriginalImgUrl'];
         console.log('主页已载入。');
         homeloaded = true;
@@ -332,6 +348,7 @@ function loadOne(e, strdate) {
         gg(e, 'c-author-intro').innerHTML = content['strContAuthorIntroduce'];
         gg(e, 'c-author').innerHTML = content['strContAuthor'];
         gg(e, 'c-content').innerHTML = "<p>" + content['strContent'].replace(/<br>/g, "</p><p>") + "</p>";
+        gg(e, 'c-content').style['fontSize'] = localStorage.getItem('fontsize');
         console.log('标题页已载入。');
         gg(e, 'spinner-2').hide();
         oneloaded = true;
@@ -348,8 +365,10 @@ function loadQuestion(e, strdate) {
         var ask = a['questionAdEntity'];
         gg(e, 'q-title').innerHTML = ask['strQuestionTitle'];
         gg(e, 'q-content').innerHTML = ask['strQuestionContent'];
+        gg(e, 'q-content').style['fontSize'] = localStorage.getItem('fontsize');
         gg(e, 'a-title').innerHTML = ask['strAnswerTitle'];
         gg(e, 'a-content').innerHTML = ask['strAnswerContent'];
+        gg(e, 'a-content').style['fontSize'] = localStorage.getItem('fontsize');
         console.log('问题已载入。');
         qloaded = true;
         gg(e, 'spinner-3').hide();
@@ -402,3 +421,10 @@ function clearCache() {
     Toast.regular("缓存已清除", 1000);
     loadAvailableMags(document, 'reload');
 }
+
+function saveFont(f) {
+    //字体大小
+    var size = f.value;
+    localStorage.setItem("fontsize", size);
+}
+
