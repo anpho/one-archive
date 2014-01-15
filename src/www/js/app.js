@@ -59,9 +59,7 @@ var app = {
                 loadSettings(element, id);
             }
 
-            if (id === 'menu') {
-                loadContent(element, id);
-            }
+
         };
 
         // 在DOM显示之后的配置
@@ -70,10 +68,9 @@ var app = {
                 loadAvailableMags(element, id);
             }
             if (id === 'menu') {
-                cache.get(imgurl, currentdisplaydate, function(u) {
-                    console.log("设置图片：" + u);
-                    g('hppic').src = u;
-                });
+                loadContent(element, id);
+
+
             }
         };
 
@@ -252,7 +249,6 @@ function getJSON(URL) {
         var result = community.curl.get(URL);
         return JSON.parse(result);
     } catch (e) {
-        Toast.regular("网络不可用，请重试", 1000);
         console.log(e);
         return null;
     }
@@ -295,77 +291,58 @@ function loadAll(element, strdate) {
 
 function loadhome(element, strdate) {
     /*
-     * <div data-bb-type="panel-header" id="home-title"></div>
-     
-     <div style="width:100%;text-align: center;">
-     <img id="home-img" style="width:100%">
-     <div style="clear:both"></div>
-     <br/>
-     <div style="float:left;font-size: 120%;" id="home-vol"></div>
-     <div style="float:right;text-align: right" id="home-img-by"></div>
-     <div style="clear:both"></div>
-     <br/>
-     </div>
-     <div style="width:100%;text-align: right;" id="home-content"></div>
+     * 
      */
     //载入封面
-    var data;
-    if (localStorage[strdate + 'home']) {
-        //如果已经缓存，就从缓存中读取
-        data = JSON.parse(localStorage[strdate + 'home']);
-    } else {
-        //否则就要访问官方API获取
-        try {
-            data = one.getHomePage(strdate)["hpEntity"];
-        } catch (e) {
-            return;
-        }
-        setTimeout(function() {
-            //1000MS后存入缓存，这里避免内容太大，导致存入缓存的时候时间太长，产生延迟。
-            localStorage[strdate + 'home'] = JSON.stringify(data);
-            localStorage[strdate + 'title'] = data['strHpTitle'];
-        }, 1000);
-    }
     removeChildNodes(gg(element, "home"));
-    var ofragment = document.createDocumentFragment();
-    var home_title = document.createElement("div");
-    home_title.setAttribute("data-bb-type", "panel-header");
-    home_title.appendChild(document.createTextNode(strdate));
-    ofragment.appendChild(home_title);
+    one.getHomePageAsync(strdate, function(da) {
+        console.log(da);
+        if (data===null) return;
+        var data=da["hpEntity"];
+        var ofragment = document.createDocumentFragment();
+        var home_title = document.createElement("div");
+        home_title.setAttribute("data-bb-type", "panel-header");
+        home_title.appendChild(document.createTextNode(strdate));
+        ofragment.appendChild(home_title);
 
-    var picdiv = document.createElement("div");
-    picdiv.style.width = "100%";
-    picdiv.style.textAlign = "center";
-    var pic = document.createElement("img");
-    pic.style.width = "100%";
-    pic.id = 'hppic';
-    picdiv.appendChild(pic);
-    imgurl = data['strOriginalImgUrl'];
-    var clearnode = document.createElement("div");
-    clearnode.style.clear = "both";
-    clearnode.style.height = "20px";
-    picdiv.appendChild(clearnode);
-    var home_vol = document.createElement("div");
-    home_vol.style["float"] = "left";
-    home_vol.style["fontSize"] = "120%";
-    home_vol.appendChild(document.createTextNode(data['strHpTitle']));
-    picdiv.appendChild(home_vol);
-    var home_imgby = document.createElement("div");
-    home_imgby.style["float"] = "right";
-    home_imgby.style["textAlign"] = "right";
-    home_imgby.innerHTML = data['strAuthor'].replace(/&/g, '<br/>');
-    picdiv.appendChild(home_imgby);
-    var clearnode2 = clearnode.cloneNode();
-    picdiv.appendChild(clearnode2);
-    ofragment.appendChild(picdiv);
-    var home_content = document.createElement("div");
-    home_content.style["width"] = "100%";
-    home_content.style["textAlign"] = "right";
-    home_content.innerHTML = data['strContent'];
-    ofragment.appendChild(home_content);
-    gg(element, "home").appendChild(ofragment);
-    console.log('主页已载入。');
-    homeloaded = true;
+        var picdiv = document.createElement("div");
+        picdiv.style.width = "100%";
+        picdiv.style.textAlign = "center";
+        var pic = document.createElement("img");
+        pic.style.width = "100%";
+        pic.id = 'hppic';
+        picdiv.appendChild(pic);
+        imgurl = data['strOriginalImgUrl'];
+        var clearnode = document.createElement("div");
+        clearnode.style.clear = "both";
+        clearnode.style.height = "20px";
+        picdiv.appendChild(clearnode);
+        var home_vol = document.createElement("div");
+        home_vol.style["float"] = "left";
+        home_vol.style["fontSize"] = "120%";
+        home_vol.appendChild(document.createTextNode(data['strHpTitle']));
+        picdiv.appendChild(home_vol);
+        var home_imgby = document.createElement("div");
+        home_imgby.style["float"] = "right";
+        home_imgby.style["textAlign"] = "right";
+        home_imgby.innerHTML = data['strAuthor'].replace(/&/g, '<br/>');
+        picdiv.appendChild(home_imgby);
+        var clearnode2 = clearnode.cloneNode();
+        picdiv.appendChild(clearnode2);
+        ofragment.appendChild(picdiv);
+        var home_content = document.createElement("div");
+        home_content.style["width"] = "100%";
+        home_content.style["textAlign"] = "right";
+        home_content.innerHTML = data['strContent'];
+        ofragment.appendChild(home_content);
+        gg(element, "home").appendChild(ofragment);
+        console.log('主页已载入。');
+        homeloaded = true;
+        cache.get(imgurl, currentdisplaydate, function(u) {
+            console.log("设置图片：" + u);
+            g('hppic').src = u;
+        });
+    })
 }
 var homeloaded, oneloaded, qloaded, imgurl;
 function removeChildNodes(node) {
@@ -386,54 +363,47 @@ function loadOne(e, strdate) {
      <hr/>
      <div style='text-indent:2em' id="c-content"></div>
      */
-    var content;
-    if (localStorage[strdate + 'one']) {
-        content = JSON.parse(localStorage[strdate + 'one']);
-    } else {
-        try {
-            content = one.getOneContentInfo(strdate)["contentEntity"];
-        } catch (e) {
-            return;
-        }
-        setTimeout(function() {
-            localStorage[strdate + 'one'] = JSON.stringify(content);
-        }, 1000);
-    }
+    
     removeChildNodes(gg(e, "content"));
+    one.getOneContentInfoAsync(strdate, function(c) {
+        console.log(c);
+        if (c===null) return;
+        var content=c["contentEntity"];
+        var ofr = document.createDocumentFragment();
+        var title = document.createElement("div");
+        title.setAttribute("data-bb-type", "panel-header");
+        title.style["fontSize"] = "120%";
+        title.appendChild(document.createTextNode(content['strContTitle']));
+        ofr.appendChild(title);
+        var clearnode = document.createElement("div");
+        clearnode.style.clear = "both";
+        clearnode.style.height = "20px";
+        ofr.appendChild(clearnode);
+        var author = document.createElement("div");
+        author.style["float"] = "left";
+        author.appendChild(document.createTextNode(content['strContAuthor']));
+        ofr.appendChild(author);
+        var intro = document.createElement("div");
+        intro.style["fontSize"] = "80%";
+        intro.style["fontStyle"] = "italic";
+        intro.style["float"] = "right";
+        intro.appendChild(document.createTextNode(content['strContAuthorIntroduce']));
+        ofr.appendChild(intro);
+        ofr.appendChild(clearnode.cloneNode());
+        var brief = document.createElement("div");
+        brief.style["fontSize"] = "80%";
+        brief.appendChild(document.createTextNode(content['sGW']));
+        ofr.appendChild(brief);
+        ofr.appendChild(document.createElement("hr"));
+        var ct = document.createElement("div");
+        ct.style["textIndent"] = "2em";
+        ct.innerHTML = "<p>" + content['strContent'].replace(/<br>/g, "</p><p>") + "</p>";
+        ofr.appendChild(ct);
+        gg(e, "content").appendChild(ofr);
+        console.log('标题页已载入。');
+        oneloaded = true;
+    });
 
-    var ofr = document.createDocumentFragment();
-    var title = document.createElement("div");
-    title.setAttribute("data-bb-type", "panel-header");
-    title.style["fontSize"] = "120%";
-    title.appendChild(document.createTextNode(content['strContTitle']));
-    ofr.appendChild(title);
-    var clearnode = document.createElement("div");
-    clearnode.style.clear = "both";
-    clearnode.style.height = "20px";
-    ofr.appendChild(clearnode);
-    var author = document.createElement("div");
-    author.style["float"] = "left";
-    author.appendChild(document.createTextNode(content['strContAuthor']));
-    ofr.appendChild(author);
-    var intro = document.createElement("div");
-    intro.style["fontSize"] = "80%";
-    intro.style["fontStyle"] = "italic";
-    intro.style["float"] = "right";
-    intro.appendChild(document.createTextNode(content['strContAuthorIntroduce']));
-    ofr.appendChild(intro);
-    ofr.appendChild(clearnode.cloneNode());
-    var brief = document.createElement("div");
-    brief.style["fontSize"] = "80%";
-    brief.appendChild(document.createTextNode(content['sGW']));
-    ofr.appendChild(brief);
-    ofr.appendChild(document.createElement("hr"));
-    var ct = document.createElement("div");
-    ct.style["textIndent"] = "2em";
-    ct.innerHTML = "<p>" + content['strContent'].replace(/<br>/g, "</p><p>") + "</p>";
-    ofr.appendChild(ct);
-    gg(e, "content").appendChild(ofr);
-    console.log('标题页已载入。');
-    oneloaded = true;
 }
 
 function loadQuestion(e, strdate) {
@@ -447,41 +417,34 @@ function loadQuestion(e, strdate) {
      <div id="a-content"></div>
      */
     removeChildNodes(gg(e, "ask"));
-    var ask;
-    if (localStorage[strdate + 'ask']) {
-        ask = JSON.parse(localStorage[strdate + 'ask']);
-    } else {
-        try {
-            ask = one.getOneQuestionInfo(strdate)['questionAdEntity'];
-        } catch (e) {
-            return;
-        }
-        setTimeout(function() {
-            localStorage[strdate + 'ask'] = JSON.stringify(ask);
-        }, 1000);
-    }
-    var ofr = document.createDocumentFragment();
-    var title = document.createElement("div");
-    title.setAttribute("data-bb-type", "panel-header");
-    title.style["fontSize"] = "120%";
-    title.appendChild(document.createTextNode(ask['strQuestionTitle']));
-    ofr.appendChild(title);
-    ofr.appendChild(document.createElement("br"));
-    var content = document.createElement("div");
-    content.innerHTML = ask['strQuestionContent'];
-    ofr.appendChild(content);
-    ofr.appendChild(document.createElement("br"));
-    var atitle = document.createElement("div");
-    atitle.setAttribute("data-bb-type", "panel-header");
-    atitle.appendChild(document.createTextNode(ask['strAnswerTitle']));
-    ofr.appendChild(atitle);
-    ofr.appendChild(document.createElement("br"));
-    var acontent = document.createElement("div");
-    acontent.innerHTML = ask['strAnswerContent'];
-    ofr.appendChild(acontent);
-    gg(e, "ask").appendChild(ofr);
-    console.log('问题已载入。');
-    qloaded = true;
+    one.getOneQuestionInfoAsync(strdate, function(a) {
+        console.log(a);
+        if (a===null) return;
+        var ask=a['questionAdEntity'];
+        var ofr = document.createDocumentFragment();
+        var title = document.createElement("div");
+        title.setAttribute("data-bb-type", "panel-header");
+        title.style["fontSize"] = "120%";
+        title.appendChild(document.createTextNode(ask['strQuestionTitle']));
+        ofr.appendChild(title);
+        ofr.appendChild(document.createElement("br"));
+        var content = document.createElement("div");
+        content.innerHTML = ask['strQuestionContent'];
+        ofr.appendChild(content);
+        ofr.appendChild(document.createElement("br"));
+        var atitle = document.createElement("div");
+        atitle.setAttribute("data-bb-type", "panel-header");
+        atitle.appendChild(document.createTextNode(ask['strAnswerTitle']));
+        ofr.appendChild(atitle);
+        ofr.appendChild(document.createElement("br"));
+        var acontent = document.createElement("div");
+        acontent.innerHTML = ask['strAnswerContent'];
+        ofr.appendChild(acontent);
+        gg(e, "ask").appendChild(ofr);
+        console.log('问题已载入。');
+        qloaded = true;
+    });
+
 }
 
 Date.prototype.format = function(format) {

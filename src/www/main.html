@@ -1,6 +1,18 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN">
 <div data-bb-type="screen" id="wrap" data-bb-indicator="true">
     <div data-bb-type="round-panel" id="home" >
+        <div data-bb-type="panel-header" id="home-title"></div>
+
+        <div style="width:100%;text-align: center;">
+            <img id="home-img" style="width:100%">
+                <div style="clear:both"></div>
+                <br/>
+                <div style="float:left;font-size: 120%;" id="home-vol"></div>
+                <div style="float:right;text-align: right" id="home-img-by"></div>
+                <div style="clear:both"></div>
+                <br/>
+        </div>
+        <div style="width:100%;text-align: right;" id="home-content"></div>
     </div>
     <div data-bb-type="round-panel" id="content" >
     </div>
@@ -15,7 +27,7 @@
     <div data-bb-type="menu">
         <div data-bb-type="menu-item" data-bb-img="img/ic_info.png" onclick="bb.pushScreen('about.html', 'about')">关于</div>
         <div data-bb-type="menu-item" data-bb-img="img/ic_feedback.png" onclick="blackberry.invoke.invoke({uri: 'https://github.com/anpho/one/issues'}, null, null)">提交bug</div>
-        <div data-bb-type="menu-item" data-bb-img="img/ic_email.png" onclick="Invoke.email('anphorea@gmail.com','《一个》反馈','')">联系作者</div>
+        <div data-bb-type="menu-item" data-bb-img="img/ic_email.png" onclick="Invoke.email('anphorea@gmail.com', '《一个》反馈', '')">联系作者</div>
         <div data-bb-type="menu-item" data-bb-img="img/ic_browser.png">去评分</div>
         <div data-bb-type="menu-item" data-bb-img="img/ic_settings.png" data-bb-pin="right" onclick="bb.pushScreen('settings.html', 'settings')">设置</div>
     </div>
