@@ -170,7 +170,7 @@ function findCachedMags() {
     /*
      * 查找已缓存的杂志，根据本地存储中的2222-22-22title判断。
      * 返回数据格式： {title:328,strdate:2013-01-01}
-     * 本地存储数据格式： 2014-01-08ask / 2014-01-18one / 2014-01-18home / 2014-01-18pic / 2014-01-18title
+     * 本地存储数据格式： 2014-01-08ask / 2014-01-18one / 2014-01-18home
      */
 
     var data = [];
@@ -290,57 +290,25 @@ function loadAll(element, strdate) {
 }
 
 function loadhome(element, strdate) {
-    /*
-     * 
-     */
     //载入封面
-    removeChildNodes(gg(element, "home"));
+    //removeChildNodes(gg(element, "home"));
+    gg(element, 'spinner-1').show();
     one.getHomePageAsync(strdate, function(da) {
-        console.log(da);
-        if (data===null) return;
-        var data=da["hpEntity"];
-        var ofragment = document.createDocumentFragment();
-        var home_title = document.createElement("div");
-        home_title.setAttribute("data-bb-type", "panel-header");
-        home_title.appendChild(document.createTextNode(strdate));
-        ofragment.appendChild(home_title);
-
-        var picdiv = document.createElement("div");
-        picdiv.style.width = "100%";
-        picdiv.style.textAlign = "center";
-        var pic = document.createElement("img");
-        pic.style.width = "100%";
-        pic.id = 'hppic';
-        picdiv.appendChild(pic);
+        if (data === null)
+            return;
+        var data = da["hpEntity"];
+        localStorage.setItem(strdate+'title',data['strHpTitle']);
+        gg(element, 'home-title').innerHTML = strdate;
+        gg(element, 'home-vol').innerHTML = data['strHpTitle'];
+        gg(element, 'home-img-by').innerHTML = data['strAuthor'].replace(/&/g, '<br/>');
+        gg(element, 'home-content').innerHTML = data['strContent'];
         imgurl = data['strOriginalImgUrl'];
-        var clearnode = document.createElement("div");
-        clearnode.style.clear = "both";
-        clearnode.style.height = "20px";
-        picdiv.appendChild(clearnode);
-        var home_vol = document.createElement("div");
-        home_vol.style["float"] = "left";
-        home_vol.style["fontSize"] = "120%";
-        home_vol.appendChild(document.createTextNode(data['strHpTitle']));
-        picdiv.appendChild(home_vol);
-        var home_imgby = document.createElement("div");
-        home_imgby.style["float"] = "right";
-        home_imgby.style["textAlign"] = "right";
-        home_imgby.innerHTML = data['strAuthor'].replace(/&/g, '<br/>');
-        picdiv.appendChild(home_imgby);
-        var clearnode2 = clearnode.cloneNode();
-        picdiv.appendChild(clearnode2);
-        ofragment.appendChild(picdiv);
-        var home_content = document.createElement("div");
-        home_content.style["width"] = "100%";
-        home_content.style["textAlign"] = "right";
-        home_content.innerHTML = data['strContent'];
-        ofragment.appendChild(home_content);
-        gg(element, "home").appendChild(ofragment);
         console.log('主页已载入。');
         homeloaded = true;
+        gg(element, 'spinner-1').hide();
         cache.get(imgurl, currentdisplaydate, function(u) {
             console.log("设置图片：" + u);
-            g('hppic').src = u;
+            g('home-img').src = u;
         });
     })
 }
@@ -352,97 +320,39 @@ function removeChildNodes(node) {
     }
 }
 function loadOne(e, strdate) {
-    /*
-     * <div data-bb-type="panel-header" style="font-size: 120%;" id="c-title">请稍候</div>
-     <div style="clear:both"></div>
-     <div style="font-size:100%;float:left" id="c-author"></div>
-     <div style="font-size:80%;font-style: italic; float:right;" id="c-author-intro"></div>
-     <div style="clear:both"></div>
-     <br/>
-     <div style="font-size:80%" id="c-brief"></div>
-     <hr/>
-     <div style='text-indent:2em' id="c-content"></div>
-     */
-    
-    removeChildNodes(gg(e, "content"));
+    gg(e, 'spinner-2').show();
+    //removeChildNodes(gg(e, "content"));
     one.getOneContentInfoAsync(strdate, function(c) {
-        console.log(c);
-        if (c===null) return;
-        var content=c["contentEntity"];
-        var ofr = document.createDocumentFragment();
-        var title = document.createElement("div");
-        title.setAttribute("data-bb-type", "panel-header");
-        title.style["fontSize"] = "120%";
-        title.appendChild(document.createTextNode(content['strContTitle']));
-        ofr.appendChild(title);
-        var clearnode = document.createElement("div");
-        clearnode.style.clear = "both";
-        clearnode.style.height = "20px";
-        ofr.appendChild(clearnode);
-        var author = document.createElement("div");
-        author.style["float"] = "left";
-        author.appendChild(document.createTextNode(content['strContAuthor']));
-        ofr.appendChild(author);
-        var intro = document.createElement("div");
-        intro.style["fontSize"] = "80%";
-        intro.style["fontStyle"] = "italic";
-        intro.style["float"] = "right";
-        intro.appendChild(document.createTextNode(content['strContAuthorIntroduce']));
-        ofr.appendChild(intro);
-        ofr.appendChild(clearnode.cloneNode());
-        var brief = document.createElement("div");
-        brief.style["fontSize"] = "80%";
-        brief.appendChild(document.createTextNode(content['sGW']));
-        ofr.appendChild(brief);
-        ofr.appendChild(document.createElement("hr"));
-        var ct = document.createElement("div");
-        ct.style["textIndent"] = "2em";
-        ct.innerHTML = "<p>" + content['strContent'].replace(/<br>/g, "</p><p>") + "</p>";
-        ofr.appendChild(ct);
-        gg(e, "content").appendChild(ofr);
+
+        if (c === null)
+            return;
+        var content = c["contentEntity"];
+        gg(e, 'c-brief').innerHTML = content['sGW'];
+        gg(e, 'c-title').innerHTML = content['strContTitle'];
+        gg(e, 'c-author-intro').innerHTML = content['strContAuthorIntroduce'];
+        gg(e, 'c-author').innerHTML = content['strContAuthor'];
+        gg(e, 'c-content').innerHTML = "<p>" + content['strContent'].replace(/<br>/g, "</p><p>") + "</p>";
         console.log('标题页已载入。');
+        gg(e, 'spinner-2').hide();
         oneloaded = true;
     });
 
 }
 
 function loadQuestion(e, strdate) {
-    /*
-     <div data-bb-type="panel-header" style="font-size: 120%;" id="q-title">请稍候</div>
-     <br/>
-     <div id="q-content"></div>
-     <br/>
-     <div data-bb-type="panel-header" id="a-title"></div>
-     <br/>
-     <div id="a-content"></div>
-     */
-    removeChildNodes(gg(e, "ask"));
+    gg(e, 'spinner-3').show();
+    //removeChildNodes(gg(e, "ask"));
     one.getOneQuestionInfoAsync(strdate, function(a) {
-        console.log(a);
-        if (a===null) return;
-        var ask=a['questionAdEntity'];
-        var ofr = document.createDocumentFragment();
-        var title = document.createElement("div");
-        title.setAttribute("data-bb-type", "panel-header");
-        title.style["fontSize"] = "120%";
-        title.appendChild(document.createTextNode(ask['strQuestionTitle']));
-        ofr.appendChild(title);
-        ofr.appendChild(document.createElement("br"));
-        var content = document.createElement("div");
-        content.innerHTML = ask['strQuestionContent'];
-        ofr.appendChild(content);
-        ofr.appendChild(document.createElement("br"));
-        var atitle = document.createElement("div");
-        atitle.setAttribute("data-bb-type", "panel-header");
-        atitle.appendChild(document.createTextNode(ask['strAnswerTitle']));
-        ofr.appendChild(atitle);
-        ofr.appendChild(document.createElement("br"));
-        var acontent = document.createElement("div");
-        acontent.innerHTML = ask['strAnswerContent'];
-        ofr.appendChild(acontent);
-        gg(e, "ask").appendChild(ofr);
+        if (a === null)
+            return;
+        var ask = a['questionAdEntity'];
+        gg(e, 'q-title').innerHTML = ask['strQuestionTitle'];
+        gg(e, 'q-content').innerHTML = ask['strQuestionContent'];
+        gg(e, 'a-title').innerHTML = ask['strAnswerTitle'];
+        gg(e, 'a-content').innerHTML = ask['strAnswerContent'];
         console.log('问题已载入。');
         qloaded = true;
+        gg(e, 'spinner-3').hide();
     });
 
 }
