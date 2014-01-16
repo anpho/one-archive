@@ -2,7 +2,7 @@
 <div data-bb-type="screen" id="wrap" onscroll="tabswitcher()">
     <div data-bb-type="round-panel" id="home" >
         <div data-bb-type="panel-header" id="home-title"></div>
-        <div id="spinner-1" data-bb-type="activity-indicator" data-bb-size="medium"></div>
+        <div id="spinner-1" class="center" data-bb-type="activity-indicator" data-bb-size="medium"></div>
         <div style="width:100%;text-align: center;">
             <img id="home-img" style="width:100%">
                 <div style="clear:both"></div>
@@ -16,7 +16,7 @@
     </div>
     <div data-bb-type="round-panel" id="content" >
         <div data-bb-type="panel-header" style="font-size: 120%;" id="c-title"></div>
-        <div id="spinner-2" data-bb-type="activity-indicator" data-bb-size="medium"></div>
+        <div id="spinner-2" class="center" data-bb-type="activity-indicator" data-bb-size="medium"></div>
         <div style="clear:both"></div>
         <div style="font-size:100%;float:left" id="c-author"></div>
         <div style="font-size:80%;font-style: italic; float:right;" id="c-author-intro"></div>
@@ -28,7 +28,7 @@
     </div>
     <div data-bb-type="round-panel" id="ask">
         <div data-bb-type="panel-header" style="font-size: 120%;" id="q-title"></div>
-        <div id="spinner-3" data-bb-type="activity-indicator" data-bb-size="medium"></div>
+        <div id="spinner-3" class="center" data-bb-type="activity-indicator" data-bb-size="medium"></div>
         <br/>
         <div id="q-content"></div>
         <br/>
@@ -36,10 +36,10 @@
         <br/>
         <div id="a-content"></div>
     </div>
-    <div data-bb-type="action-bar">
-        <div data-bb-type="action" data-bb-style="tab" data-bb-img="img/ic_view_image.png" data-bb-selected = "true"  onclick="showTab('home')">首页</div>
-        <div data-bb-type="action" data-bb-style="tab" data-bb-img="img/ic_notes.png" onclick="showTab('content')">内容</div>
-        <div data-bb-type="action" data-bb-style="tab" data-bb-img="img/ic_help.png" onclick="showTab('question')">问题</div>
+    <div data-bb-type="action-bar" id="ab">
+        <div data-bb-type="action" id="a1" data-bb-style="tab" data-bb-img="img/ic_view_image.png" data-bb-selected = "true"  onclick="showTab('home')">首页</div>
+        <div data-bb-type="action" id="a2" data-bb-style="tab" data-bb-img="img/ic_notes.png" onclick="showTab('content')">内容</div>
+        <div data-bb-type="action" id="a3" data-bb-style="tab" data-bb-img="img/ic_help.png" onclick="showTab('question')">问题</div>
         <div data-bb-type="action" data-bb-style="button" data-bb-img="img/ic_history.png" onclick="bb.pushScreen('calendar.html', 'showCalendar')">往期内容</div>
     </div>
     <div data-bb-type="menu">

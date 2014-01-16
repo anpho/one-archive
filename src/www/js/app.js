@@ -16,7 +16,10 @@ var app = {
     // function, we must explicity call 'app.receivedEvent(...);'
     onDeviceReady: function() {
         //app.checkPlugin();
-        navigator.splashscreen.show();
+        try {
+            localStorage.removeItem('show');
+        } catch (e) {
+        }
         app.receivedEvent('deviceready');
     },
     // Update DOM on a Received Event
@@ -65,12 +68,10 @@ var app = {
         // 在DOM显示之后的配置
         config.ondomready = function(element, id, params) {
             if (id === 'showCalendar') {
-                loadAvailableMags(element, id);
+                loadAvailableMagsAsync(element);
             }
             if (id === 'menu') {
                 loadContent(element, id);
-
-
             }
         };
 
@@ -81,7 +82,6 @@ var app = {
             document.body.style['background-color'] = darkScreenColor;
             document.body.style['color'] = '#E6E6E6';
         }
-        navigator.splashscreen.hide();
         bb.pushScreen('main.html', 'menu');
     }
 };
@@ -137,93 +137,91 @@ function refreshTheme() {
         window.location.reload();
     }
 }
-;
 
-function loadAvailableMags(element, id) {
-    /*
-     * 显示所有可看的杂志，包括缓存的和可下载的。
-     */
-    var historylist = gg(element, "historyList");
 
-    var cached = findCachedMags();
-    var available = findAvailableMags();
-    /*
-     * 数据格式： {title:328,strdate:2013-01-01}
-     */
-    var data;
-    if (available) {
-        data = removeDuplicatesInPlace(cached.concat(available)).sort(function(a, b) {
-            if (a["strdate"] > b["strdate"]) {
-                return -1;
-            } else if (a["strdate"] === b["strdate"]) {
-                return 0;
+function loadAvailableMagsAsync(element) {
+    findCachedMagsAsync(function(cached) {
+        findAvailableMagsAsync(function(available) {
+            gg(element, 'spinner-4').hide();
+            var historylist = gg(element, "historyList");
+            var data;
+            if (available) {
+                data = removeDuplicatesInPlace(cached.concat(available)).sort(function(a, b) {
+                    if (a["strdate"] > b["strdate"]) {
+                        return -1;
+                    } else if (a["strdate"] === b["strdate"]) {
+                        return 0;
+                    } else {
+                        return 1;
+                    }
+                });
             } else {
-                return 1;
+                data = cached;
             }
+            var items = [];
+            var item;
+            for (var i = 0; i < data.length; i++) {
+                item = document.createElement('div');
+                item.setAttribute('data-bb-type', 'item');
+                item.setAttribute('data-bb-title', data[i]["strdate"] + " : " + data[i]["title"]);
+                item.setAttribute('data-mrk-date', data[i]["strdate"]);
+                item.innerHTML = data[i]["status"];
+                item.onclick = function() {
+                    displaySelected();
+                };
+                items.push(item);
+            }
+            historylist.refresh(items);
         });
-    } else {
-        data = cached;
-    }
-    var items = [];
-    var item;
-    for (var i = 0; i < data.length; i++) {
-        item = document.createElement('div');
-        item.setAttribute('data-bb-type', 'item');
-        item.setAttribute('data-bb-title', data[i]["strdate"] + " : " + data[i]["title"]);
-        item.setAttribute('data-mrk-date', data[i]["strdate"]);
-        item.innerHTML = data[i]["status"];
-        item.onclick = function() {
-            displaySelected();
-        };
-        items.push(item);
-    }
-    historylist.refresh(items);
-}
-;
+    });
 
-function findCachedMags() {
+}
+
+function findCachedMagsAsync(callback) {
     /*
      * 查找已缓存的杂志，根据本地存储中的2222-22-22title判断。
      * 返回数据格式： {title:328,strdate:2013-01-01}
      * 本地存储数据格式： 2014-01-08ask / 2014-01-18one / 2014-01-18home
      */
+    setTimeout(function() {
 
-    var data = [];
-    var itemkey;
-    var reg = /^\d{4}-\d{2}-\d{2}title$/i;
+        var data = [];
+        var itemkey;
+        var reg = /^\d{4}-\d{2}-\d{2}title$/i;
 
 
-    for (var i = 0; i < localStorage.length; i++) {
-        itemkey = localStorage.key(i);
-        if (reg.test(itemkey)) {
-            var itemdata = {};
-            itemdata["title"] = localStorage.getItem(itemkey);
-            itemdata["strdate"] = itemkey.substr(0, 10);
-            itemdata["status"] = "已缓存";
-            data.push(itemdata);
+        for (var i = 0; i < localStorage.length; i++) {
+            itemkey = localStorage.key(i);
+            if (reg.test(itemkey)) {
+                var itemdata = {};
+                itemdata["title"] = localStorage.getItem(itemkey);
+                itemdata["strdate"] = itemkey.substr(0, 10);
+                itemdata["status"] = "已缓存";
+                data.push(itemdata);
+            }
         }
-    }
-    return data;
+        callback(data);
+    }, 0);
+
 }
 
-function findAvailableMags() {
-    /*
-     * 查找可下载的杂志
-     */
-    var result = [];
+function findAvailableMagsAsync(callback) {
 
-    var data = one.getHpAdMultiinfo();
-    if (data && (data["result"] === "SUCCESS")) {
-        var hplist = data["hpAdMulitEntity"]["lstEntHp"];
-        for (var i = 0; i < hplist.length; i++) {
-            var dataitem = {};
-            dataitem["title"] = hplist[i]["strHpTitle"];
-            dataitem["strdate"] = hplist[i]["strMarketTime"];
-            dataitem["status"] = "可下载";
-            result.push(dataitem);
+    one.getHpAdMultiInfoAsync(function(data) {
+        var result = [];
+        if (data && (data["result"] === "SUCCESS")) {
+            var hplist = data["hpAdMulitEntity"]["lstEntHp"];
+            for (var i = 0; i < hplist.length; i++) {
+                var dataitem = {};
+                dataitem["title"] = hplist[i]["strHpTitle"];
+                dataitem["strdate"] = hplist[i]["strMarketTime"];
+                dataitem["status"] = "可下载";
+                result.push(dataitem);
+            }
+            callback(result);
         }
-    }
-    return result;
+    })
+
 }
 
 function displaySelected() {
@@ -233,7 +231,7 @@ function displaySelected() {
     var selected = g('historyList').selected;
     console.log(selected.getAttribute("data-mrk-date"));
     currentdisplaydate = selected.getAttribute("data-mrk-date");
-    sessionStorage.setItem('show', currentdisplaydate);
+    localStorage.setItem('show', currentdisplaydate);
     oneloaded = false;
     homeloaded = false;
     qloaded = false;
@@ -272,12 +270,12 @@ function getJSON(URL) {
 function loadContent(element, id) {
     //载入内容，strdate是要显示的日期，此处显示当前日期。
     if (!currentdisplaydate) {
-        if (sessionStorage.getItem('show')) {
+        if (localStorage.getItem('show')) {
             currentdisplaydate = localStorage.getItem('show');
         } else {
             var d = new Date();
             currentdisplaydate = d.format('yyyy-MM-dd');
-            sessionStorage.setItem('show', currentdisplaydate);
+            localStorage.setItem('show', currentdisplaydate);
         }
     }
 
@@ -326,7 +324,7 @@ function loadhome(element, strdate) {
             console.log("设置图片：" + u);
             g('home-img').src = u;
         });
-    })
+    });
 }
 var homeloaded, oneloaded, qloaded, imgurl;
 function removeChildNodes(node) {
@@ -428,6 +426,15 @@ function saveFont(f) {
     localStorage.setItem("fontsize", size);
 }
 
-function tabswitcher(){
+function tabswitcher() {
     //滚动时自动激活对应的TAB
+    var ruler = g('home').parentNode.parentNode;
+    if (ruler.scrollTop < g('content').offsetTop) {
+        bb.actionBar.highlightAction(g('a1'));
+    } else if (ruler.scrollTop < g('ask').offsetTop)
+    {
+        bb.actionBar.highlightAction(g('a2'));
+    } else {
+        bb.actionBar.highlightAction(g('a3'));
+    }
 }

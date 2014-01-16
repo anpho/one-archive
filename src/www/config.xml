@@ -13,7 +13,7 @@
     <preference name="fullscreen" value="true" />
     <preference name="webviewbounce" value="false" />
     <preference name="WebSecurity" value="disable"/>
-    <preference name="AutoHideSplashScreen" value="false" />
+    <preference name="AutoHideSplashScreen" value="true" />
 
     <rim:splash src="img/splash-1280x768.png"/>
     <rim:splash src="img/splash-1280x720.png"/>    

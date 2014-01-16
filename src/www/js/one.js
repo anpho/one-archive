@@ -18,7 +18,7 @@
             } catch (e) {
                 callback(null);
             }
-        }, 1);
+        }, 0);
     },
     getHpAdMultiinfo: function() {
         //获取5天的广告与首页数据
@@ -143,15 +143,16 @@
     },
     getHomePageAsync: function(datestr, callback) {
         //    getJSONAsync: function(strdate, type, url, callback) 
-        this.getJSONAsync(datestr, 'home', 'http://211.152.49.184:7001/OneForWeb/one/getHpinfo?strDate=' + datestr, function(u) {
-            try {
-                var cp = getJSON(u);
-                callback(cp);
-            } catch (e) {
-                console.log(e);
-                callback(null);
-            }
-        })
+        setTimeout(
+                this.getJSONAsync(datestr, 'home', 'http://211.152.49.184:7001/OneForWeb/one/getHpinfo?strDate=' + datestr, function(u) {
+                    try {
+                        var cp = getJSON(u);
+                        callback(cp);
+                    } catch (e) {
+                        console.log(e);
+                        callback(null);
+                    }
+                }), 0);
     },
     getHomePage: function(datestr) {
         /*
@@ -182,15 +183,16 @@
     },
     getOneContentInfoAsync: function(datestr, callback) {
         //    getJSONAsync: function(strdate, type, url, callback) 
-        this.getJSONAsync(datestr, 'content', 'http://211.152.49.184:7001/OneForWeb/one/getOneContentInfo?strDate=' + datestr, function(u) {
-            try {
-                var cp = getJSON(u);
-                callback(cp);
-            } catch (e) {
-                console.log(e);
-                callback(null);
-            }
-        })
+        setTimeout(
+                this.getJSONAsync(datestr, 'content', 'http://211.152.49.184:7001/OneForWeb/one/getOneContentInfo?strDate=' + datestr, function(u) {
+                    try {
+                        var cp = getJSON(u);
+                        callback(cp);
+                    } catch (e) {
+                        console.log(e);
+                        callback(null);
+                    }
+                }), 0);
     },
     getOneContentInfo: function(datestr) {
         /*
@@ -225,15 +227,16 @@
     },
     getOneQuestionInfoAsync: function(datestr, callback) {
         //    getJSONAsync: function(strdate, type, url, callback) 
-        this.getJSONAsync(datestr, 'question', 'http://211.152.49.184:7001/OneForWeb/one/getOneQuestionInfo?strDate=' + datestr, function(u) {
-            try {
-                var cp = getJSON(u);
-                callback(cp);
-            } catch (e) {
-                console.log(e);
-                callback(null);
-            }
-        })
+        setTimeout(
+                this.getJSONAsync(datestr, 'question', 'http://211.152.49.184:7001/OneForWeb/one/getOneQuestionInfo?strDate=' + datestr, function(u) {
+                    try {
+                        var cp = getJSON(u);
+                        callback(cp);
+                    } catch (e) {
+                        console.log(e);
+                        callback(null);
+                    }
+                }), 0);
     },
     getOneQuestionInfo: function(datestr) {
         /*
