@@ -9,6 +9,7 @@ var app = {
     // 'load', 'deviceready', 'offline', and 'online'.
     bindEvents: function() {
         document.addEventListener('deviceready', this.onDeviceReady, false);
+        //window.addEventListener('oncontextmenu', app.onContextMenu);
     },
     // deviceready Event Handler
     //
@@ -73,6 +74,7 @@ var app = {
             if (id === 'menu') {
                 loadContent(element, id);
             }
+
         };
 
         bb.init(config);
@@ -437,4 +439,34 @@ function tabswitcher() {
     } else {
         bb.actionBar.highlightAction(g('a3'));
     }
+}
+///////////////////////////////////////////文字选择与共享////////////////////////////////////////////////
+
+
+
+function shareText() {
+    var selectedItem = getSelText();
+    if (selectedItem) {
+        Invoke.shareText(selectedItem);
+    } else {
+        Toast.regular("您未选择要分享的内容", 1000);
+    }
+}
+
+function getSelText()
+{
+    if (window.getSelection)
+    {
+        return window.getSelection();
+    }
+    else if (document.getSelection)
+    {
+        return  document.getSelection();
+    }
+    else if (document.selection)
+    {
+        return  document.selection.createRange().text;
+    }
+    else
+        return "";
 }

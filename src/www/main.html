@@ -1,5 +1,5 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN">
-<div data-bb-type="screen" id="wrap" onscroll="tabswitcher()">
+<div data-bb-type="screen" id="wrap" onscroll="tabswitcher()" style="-webkit-user-select:auto" >
     <div data-bb-type="round-panel" id="home" >
         <div data-bb-type="panel-header" id="home-title"></div>
         <div id="spinner-1" class="center" data-bb-type="activity-indicator" data-bb-size="medium"></div>
@@ -12,7 +12,7 @@
                 <div style="clear:both"></div>
                 <br/>
         </div>
-        <div style="width:100%;text-align: right;" id="home-content">如果长时间未显示<br>请退出重试并检查网络连接。</div>
+        <div style="width:100%;text-align: right;" id="home-content" >如果长时间未显示<br>请退出重试并检查网络连接。</div>
     </div>
     <div data-bb-type="round-panel" id="content" >
         <div data-bb-type="panel-header" style="font-size: 120%;" id="c-title"></div>
@@ -26,7 +26,7 @@
         <hr/>
         <div style='text-indent:2em' id="c-content"></div>
     </div>
-    <div data-bb-type="round-panel" id="ask">
+    <div data-bb-type="round-panel" id="ask" >
         <div data-bb-type="panel-header" style="font-size: 120%;" id="q-title"></div>
         <div id="spinner-3" class="center" data-bb-type="activity-indicator" data-bb-size="medium"></div>
         <br/>
@@ -49,5 +49,4 @@
         <div data-bb-type="menu-item" data-bb-img="img/ic_browser.png" onclick="Invoke.blackberryWorld.app('45960893')">去评分</div>
         <div data-bb-type="menu-item" data-bb-img="img/ic_settings.png" data-bb-pin="right" onclick="bb.pushScreen('settings.html', 'settings')">设置</div>
     </div>
-
 </div>

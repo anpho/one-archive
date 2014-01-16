@@ -103,176 +103,188 @@ var Invoke = {
         };
 
         blackberry.invoke.card.invokeTargetPicker(request, title,
-                // success
-                        function() {
-                        },
-                        // error
-                                function(e) {
-                                });
-                    },
-            // blackberry world 
-            blackberryWorld: {
-                // vendor page
-                app: function(id) {
-                    blackberry.invoke.invoke({
-                        target: 'sys.appworld',
-                        action: 'bb.action.OPEN',
-                        uri: 'appworld://content/' + id
-                    },
-                    // success
-                    function() {
-                    },
-                            // error
-                                    function() {
-                                    });
-                        }
-            },
-            // email
-            email: function(to, subject, body) {
-                var message = to + '?subject=' + subject + '&body=' + body;
-                blackberry.invoke.invoke({
-                    target: 'sys.pim.uib.email.hybridcomposer',
-                    action: 'bb.action.OPEN, bb.action.SENDMAIL',
-                    type: 'message/rfc822',
-                    uri: 'mailto:' + message
+                function() {
+                },
+                function(e) {
                 });
-            },
-            // blackberry maps
-            maps: function(address) {
-                blackberry.invoke.invoke({
-                    action: 'bb.action.NAVIGATETO',
-                    type: 'application/vnd.blackberry.string.address',
-                    data: address
-                });
-            },
-            // nfc
-            nfc: function(uri) {
-                blackberry.invoke.invoke({
-                    target: "sys.NFCViewer",
-                    action: "bb.action.SHARE",
-                    uri: uri
-                }, function() {
-                }, function() {
-                });
-            },
-            // twitter
-            twitter: function(shareText) {
-                blackberry.invoke.invoke({
-                    target: "Twitter",
-                    action: "bb.action.SHARE",
-                    type: "text/plain",
-                    data: shareText
-                }, function() {
-                }, function() {
-                });
-            },
-            //facebook
-            facebook: function(shareText) {
-                blackberry.invoke.invoke({
-                    target: "Facebook",
-                    action: "bb.action.SHARE",
-                    type: "text/plain",
-                    data: shareText
-                }, function() {
-                }, function() {
-                });
-            },
-            utils: {
-                // filepicker
-                filePicker: function(success, cancel, failure) {
+    },
+    shareText: function(t) {
+        var title = 'Share';
+        var request = {
+            action: 'bb.action.SHARE',
+            data: t,
+            target_type: ["APPLICATION", "VIEWER", "CARD"]
+        };
 
-                    var details = {
-                        mode: blackberry.invoke.card.FILEPICKER_MODE_PICKER,
-                        viewMode: blackberry.invoke.card.FILEPICKER_VIEWER_MODE_GRID,
-                        sortBy: blackberry.invoke.card.FILEPICKER_SORT_BY_NAME,
-                        sortOrder: blackberry.invoke.card.FILEPICKER_SORT_ORDER_DESCENDING
-                    };
+        blackberry.invoke.card.invokeTargetPicker(request, title,
+                function() {
+                },
+                function(e) {
+                });
+    },
+    // blackberry world 
+    blackberryWorld: {
+        // vendor page
+        app: function(id) {
+            blackberry.invoke.invoke({
+                target: 'sys.appworld',
+                action: 'bb.action.OPEN',
+                uri: 'appworld://content/' + id
+            },
+            // success
+            function() {
+            },
+                    // error
+                            function() {
+                            });
+                }
+    },
+    // email
+    email: function(to, subject, body) {
+        var message = to + '?subject=' + subject + '&body=' + body;
+        blackberry.invoke.invoke({
+            target: 'sys.pim.uib.email.hybridcomposer',
+            action: 'bb.action.OPEN, bb.action.SENDMAIL',
+            type: 'message/rfc822',
+            uri: 'mailto:' + message
+        });
+    },
+    // blackberry maps
+    maps: function(address) {
+        blackberry.invoke.invoke({
+            action: 'bb.action.NAVIGATETO',
+            type: 'application/vnd.blackberry.string.address',
+            data: address
+        });
+    },
+    // nfc
+    nfc: function(uri) {
+        blackberry.invoke.invoke({
+            target: "sys.NFCViewer",
+            action: "bb.action.SHARE",
+            uri: uri
+        }, function() {
+        }, function() {
+        });
+    },
+    // twitter
+    twitter: function(shareText) {
+        blackberry.invoke.invoke({
+            target: "Twitter",
+            action: "bb.action.SHARE",
+            type: "text/plain",
+            data: shareText
+        }, function() {
+        }, function() {
+        });
+    },
+    //facebook
+    facebook: function(shareText) {
+        blackberry.invoke.invoke({
+            target: "Facebook",
+            action: "bb.action.SHARE",
+            type: "text/plain",
+            data: shareText
+        }, function() {
+        }, function() {
+        });
+    },
+    utils: {
+        // filepicker
+        filePicker: function(success, cancel, failure) {
 
-                    blackberry.invoke.card.invokeFilePicker(details, function(path) {
-                        success(path);
-                    },
-                            // cancel callback
-                                    function(reason) {
-                                        cancel(reason);
-                                    },
-                                    // error callback
-                                            function(error) {
-                                                if (error) {
-                                                    failure(error);
-                                                }
-                                            }
-                                    );
-                                },
-                        // camera
-                        camera: function(success, cancel, failure) {
-                            var mode = blackberry.invoke.card.CAMERA_MODE_PHOTO;
-                            blackberry.invoke.card.invokeCamera(mode, function(path) {
-                                success(path);
+            var details = {
+                mode: blackberry.invoke.card.FILEPICKER_MODE_PICKER,
+                viewMode: blackberry.invoke.card.FILEPICKER_VIEWER_MODE_GRID,
+                sortBy: blackberry.invoke.card.FILEPICKER_SORT_BY_NAME,
+                sortOrder: blackberry.invoke.card.FILEPICKER_SORT_ORDER_DESCENDING
+            };
+
+            blackberry.invoke.card.invokeFilePicker(details, function(path) {
+                success(path);
+            },
+                    // cancel callback
+                            function(reason) {
+                                cancel(reason);
                             },
-                                    function(reason) {
-                                        cancel(reason);
-                                    },
+                            // error callback
                                     function(error) {
                                         if (error) {
                                             failure(error);
                                         }
                                     }
                             );
-                        }
-                    }
-        };
-
-
-
-        /* ==============================================================================================
-         *	TOASTS - https://developer.blackberry.com/html5/apis/blackberry.ui.toast.html
-         * =========================================================================================== */
-
-        var Toast = {
-            regular: function(text, timeout) {
-                try {
-                    timeout = timeout || false;
-                    var options = {
-                        timeout: timeout
-                    };
-                    blackberry.ui.toast.show(text, options);
-                } catch (e) {
-                    console.log('toast: ' + text);
-                }
-            },
-            withButton: function(text, btnText, btnCallback, timeout) {
-                try {
-                    timeout = timeout || false;
-                    var options = {
-                        timeout: timeout,
-                        buttonText: btnText,
-                        buttonCallback: eval(btnCallback)
-                    };
-                    blackberry.ui.toast.show(text, options, timeout);
-                } catch (e) {
-                    console.log('toast: ' + text);
+                        },
+                // camera
+                camera: function(success, cancel, failure) {
+                    var mode = blackberry.invoke.card.CAMERA_MODE_PHOTO;
+                    blackberry.invoke.card.invokeCamera(mode, function(path) {
+                        success(path);
+                    },
+                            function(reason) {
+                                cancel(reason);
+                            },
+                            function(error) {
+                                if (error) {
+                                    failure(error);
+                                }
+                            }
+                    );
                 }
             }
-        };
+};
 
 
 
-        /* ===========================================================================================
-         *	SPINNERS - https://github.com/blackberry/bbUI.js/wiki/Activity-Indicator
-         * ======================================================================================== */
+/* ==============================================================================================
+ *	TOASTS - https://developer.blackberry.com/html5/apis/blackberry.ui.toast.html
+ * =========================================================================================== */
+
+var Toast = {
+    regular: function(text, timeout) {
+        try {
+            timeout = timeout || false;
+            var options = {
+                timeout: timeout
+            };
+            blackberry.ui.toast.show(text, options);
+        } catch (e) {
+            console.log('toast: ' + text);
+        }
+    },
+    withButton: function(text, btnText, btnCallback, timeout) {
+        try {
+            timeout = timeout || false;
+            var options = {
+                timeout: timeout,
+                buttonText: btnText,
+                buttonCallback: eval(btnCallback)
+            };
+            blackberry.ui.toast.show(text, options, timeout);
+        } catch (e) {
+            console.log('toast: ' + text);
+        }
+    }
+};
+
+
+
+/* ===========================================================================================
+ *	SPINNERS - https://github.com/blackberry/bbUI.js/wiki/Activity-Indicator
+ * ======================================================================================== */
 // spinner divs in spinners.html
 
-        var Spinner = {
-            'lastOn': false,
-            off: function() {
-                if (Spinner.lastOn) {
-                    var el = document.getElementById('spinner-' + Spinner.lastOn);
-                    el.style.display = 'none';
-                }
-            },
-            on: function(size) {
-                Spinner['lastOn'] = size;
-                var el = document.getElementById('spinner-' + size);
-                el.style.display = 'block';
-            }
-        };
+var Spinner = {
+    'lastOn': false,
+    off: function() {
+        if (Spinner.lastOn) {
+            var el = document.getElementById('spinner-' + Spinner.lastOn);
+            el.style.display = 'none';
+        }
+    },
+    on: function(size) {
+        Spinner['lastOn'] = size;
+        var el = document.getElementById('spinner-' + size);
+        el.style.display = 'block';
+    }
+};
