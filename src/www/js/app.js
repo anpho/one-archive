@@ -428,3 +428,6 @@ function saveFont(f) {
     localStorage.setItem("fontsize", size);
 }
 
+function tabswitcher(){
+    //滚动时自动激活对应的TAB
+}
