@@ -66,10 +66,15 @@ var app = {
         config.ondomready = function(element, id, params) {
             if (id === 'showCalendar') {
                 loadAvailableMagsAsync(element);
+                Hammer(gg(element, 'cal')).on('swiperight', function(ev) {
+                    if (ev.gesture.distance > 200) {
+                        bb.popScreen();
+                    }
+                })
             }
             if (id === 'menu') {
                 loadContent(element, id);
-                Hammer(gg(element, 'wrap')).on('swipeleft', function(ev) {
+                Hammer(gg(element, 'wrap')).on('swiperight', function(ev) {
                     console.log(ev);
                     if (ev.gesture.distance > 200) {
                         //Next Day
@@ -83,7 +88,7 @@ var app = {
                             loadContent(document, '');
                         }
                     }
-                }).on('swiperight', function(ev) {
+                }).on('swipeleft', function(ev) {
                     console.log(ev);
                     if (ev.gesture.distance > 200) {
                         //Prev Day
@@ -103,6 +108,9 @@ var app = {
             }
             if (id === 'cached') {
                 loadCachedMagsAsync(element);
+                Hammer(gg(element, 'cca')).on('swiperight', function() {
+                    bb.popScreen();
+                })
             }
 
         };
