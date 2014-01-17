@@ -70,6 +70,9 @@ var app = {
             if (id === 'menu') {
                 loadContent(element, id);
             }
+            if (id === 'cached') {
+                loadCachedMagsAsync(element);
+            }
 
         };
 
@@ -174,7 +177,43 @@ function loadAvailableMagsAsync(element) {
     });
 
 }
+function loadCachedMagsAsync(element) {
+    /*
+     * 查找并显示已缓存的内容
+     * @param {type} cached
+     */
+    setTimeout(
+            findCachedMagsAsync(function(data) {
+                var cachedmags = gg(element, "cachedmags");
+                cachedmags.clear();
+                var items = [];
+                var item;
+                for (var i = 0; i < data.length; i++) {
+                    item = document.createElement('div');
+                    item.setAttribute('data-bb-type', 'item');
+                    item.setAttribute('data-bb-title', data[i]["strdate"] + " : " + data[i]["title"]);
+                    item.setAttribute('data-mrk-date', data[i]["strdate"]);
+                    item.innerHTML = data[i]["status"];
+                    item.onbtnclick = function() {
+                        deleteSelected();
+                    };
+                    items.push(item);
+                }
+                cachedmags.refresh(items);
+            }), 0);
+}
+function deleteSelected() {
+    var selected = g('cachedmags').selected;
+    console.log('[ONE]deleting cached : ' + selected.getAttribute("data-mrk-date"));
+    var d = selected.getAttribute("data-mrk-date");
+    try {
+        localStorage.removeItem(d.concat('title'));
+        //TODO 此处需加入清除其他文件缓存的代码
+    } catch (e) {
 
+    }
+    loadCachedMagsAsync(document);
+}
 function findCachedMagsAsync(callback) {
     /*
      * 查找已缓存的杂志，根据本地存储中的2222-22-22title判断。
