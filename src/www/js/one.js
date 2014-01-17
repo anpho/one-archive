@@ -295,7 +295,8 @@
             callback(this.buildfileurl(strdate, type));
         } else {
             console.log('downloading : ' + strdate + type);
-            this.geturlAsync(url, this.buildurl(strdate, type), callback);
+            setTimeout(
+                    this.geturlAsync(url, this.buildurl(strdate, type), callback), 0);
         }
 
     },

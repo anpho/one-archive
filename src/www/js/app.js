@@ -17,10 +17,6 @@ var app = {
     // function, we must explicity call 'app.receivedEvent(...);'
     onDeviceReady: function() {
         //app.checkPlugin();
-        try {
-            localStorage.removeItem('show');
-        } catch (e) {
-        }
         app.receivedEvent('deviceready');
     },
     // Update DOM on a Received Event
@@ -233,11 +229,11 @@ function displaySelected() {
     var selected = g('historyList').selected;
     console.log(selected.getAttribute("data-mrk-date"));
     currentdisplaydate = selected.getAttribute("data-mrk-date");
-    localStorage.setItem('show', currentdisplaydate);
+    sessionStorage.setItem('show', currentdisplaydate);
     oneloaded = false;
     homeloaded = false;
     qloaded = false;
-    bb.popScreen();
+    bb.pushScreen('main.html', 'menu');
 }
 var removeDuplicatesInPlace = function(arr) {
     /*
@@ -272,12 +268,12 @@ function getJSON(URL) {
 function loadContent(element, id) {
     //载入内容，strdate是要显示的日期，此处显示当前日期。
     if (!currentdisplaydate) {
-        if (localStorage.getItem('show')) {
-            currentdisplaydate = localStorage.getItem('show');
+        if (sessionStorage.getItem('show')) {
+            currentdisplaydate = sessionStorage.getItem('show');
         } else {
             var d = new Date();
             currentdisplaydate = d.format('yyyy-MM-dd');
-            localStorage.setItem('show', currentdisplaydate);
+            sessionStorage.setItem('show', currentdisplaydate);
         }
     }
 
@@ -416,8 +412,10 @@ var currentdisplaydate; //正在显示的《一个》的发布日期。
 
 function clearCache() {
     var _theme = localStorage.getItem("theme");
+    var _fontsize = localStorage.getItem('fontsize');
     localStorage.clear();
     localStorage.setItem("theme", _theme);
+    localStorage.setItem('fontsize', _fontsize);
     Toast.regular("缓存已清除", 1000);
     loadAvailableMags(document, 'reload');
 }
@@ -427,7 +425,8 @@ function saveFont(f) {
     var size = f.value;
     localStorage.setItem("fontsize", size);
 }
-
+var lastpos = 0;
+var showActionBar = true;
 function tabswitcher() {
     //滚动时自动激活对应的TAB
     var ruler = g('home').parentNode.parentNode;
@@ -439,6 +438,28 @@ function tabswitcher() {
     } else {
         bb.actionBar.highlightAction(g('a3'));
     }
+
+    //向下滚动时隐掉ACTIONBAR，向上滚动时显示
+    if (ruler.scrollTop < 5) {
+        setTimeout(function() {
+            if (showActionBar)
+                g('ab').show();
+        }, 300);
+    } else if (ruler.scrollTop > lastpos) {
+        showActionBar = false;
+        setTimeout(function() {
+            if (!showActionBar)
+                g('ab').hide();
+        }, 300);
+    } else {
+        showActionBar = true;
+        setTimeout(function() {
+            if (showActionBar)
+                g('ab').show();
+        }, 300);
+
+    }
+    lastpos = ruler.scrollTop;
 }
 ///////////////////////////////////////////文字选择与共享////////////////////////////////////////////////
 
