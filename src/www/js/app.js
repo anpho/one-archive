@@ -69,6 +69,37 @@ var app = {
             }
             if (id === 'menu') {
                 loadContent(element, id);
+                Hammer(gg(element, 'wrap')).on('swipeleft', function(ev) {
+                    console.log(ev);
+                    if (ev.gesture.distance > 200) {
+                        //Next Day
+                        var d = new Date(currentdisplaydate);
+                        d.setDate(d.getDate() + 1);
+                        var today = new Date();
+                        if (today.format('yyyy-MM-dd') < d.format('yyyy-MM-dd')) {
+                            return;
+                        } else {
+                            currentdisplaydate = d.format('yyyy-MM-dd');
+                            loadContent(document, '');
+                        }
+                    }
+                }).on('swiperight', function(ev) {
+                    console.log(ev);
+                    if (ev.gesture.distance > 200) {
+                        //Prev Day
+                        var d = new Date(currentdisplaydate);
+                        d.setDate(d.getDate() - 1);
+                        var fday = new Date();
+                        fday.setDate(fday.getDate() - 10);
+                        if (fday.format('yyyy-MM-dd') >= d.format('yyyy-MM-dd')) {
+                            return;
+                        } else {
+                            currentdisplaydate = d.format('yyyy-MM-dd');
+                            loadContent(document, '');
+                        }
+                    }
+                });
+
             }
             if (id === 'cached') {
                 loadCachedMagsAsync(element);
@@ -164,7 +195,7 @@ function loadAvailableMagsAsync(element) {
             for (var i = 0; i < data.length; i++) {
                 item = document.createElement('div');
                 item.setAttribute('data-bb-type', 'item');
-                item.setAttribute('data-bb-title', data[i]["strdate"] + " : " + data[i]["title"]);
+                item.setAttribute('data-bb-title', data[i]["strdate"] + "  " + data[i]["title"]);
                 item.setAttribute('data-mrk-date', data[i]["strdate"]);
                 item.innerHTML = data[i]["status"];
                 item.onclick = function() {
@@ -184,6 +215,15 @@ function loadCachedMagsAsync(element) {
      */
     setTimeout(
             findCachedMagsAsync(function(data) {
+                data = data.sort(function(a, b) {
+                    if (a["strdate"] > b["strdate"]) {
+                        return -1;
+                    } else if (a["strdate"] === b["strdate"]) {
+                        return 0;
+                    } else {
+                        return 1;
+                    }
+                });
                 var cachedmags = gg(element, "cachedmags");
                 cachedmags.clear();
                 var items = [];
@@ -191,7 +231,7 @@ function loadCachedMagsAsync(element) {
                 for (var i = 0; i < data.length; i++) {
                     item = document.createElement('div');
                     item.setAttribute('data-bb-type', 'item');
-                    item.setAttribute('data-bb-title', data[i]["strdate"] + " : " + data[i]["title"]);
+                    item.setAttribute('data-bb-title', data[i]["strdate"]);
                     item.setAttribute('data-mrk-date', data[i]["strdate"]);
                     item.innerHTML = data[i]["status"];
                     item.onbtnclick = function() {
@@ -243,22 +283,33 @@ function findCachedMagsAsync(callback) {
 }
 
 function findAvailableMagsAsync(callback) {
-
-    one.getHpAdMultiInfoAsync(function(data) {
-        var result = [];
-        if (data && (data["result"] === "SUCCESS")) {
-            var hplist = data["hpAdMulitEntity"]["lstEntHp"];
-            for (var i = 0; i < hplist.length; i++) {
-                var dataitem = {};
-                dataitem["title"] = hplist[i]["strHpTitle"];
-                dataitem["strdate"] = hplist[i]["strMarketTime"];
-                dataitem["status"] = "可下载";
-                result.push(dataitem);
-            }
-            callback(result);
-        }
-    })
-
+    var result = [];
+    for (var i = 0; i < 10; i++) {
+        var d = new Date();
+        d.setDate(d.getDate() - i);
+        var dataitem = {};
+        dataitem['title'] = "";
+        dataitem['strdate'] = d.format('yyyy-MM-dd');
+        dataitem['status'] = "可下载";
+        result.push(dataitem)
+    }
+    callback(result);
+    /*
+     one.getHpAdMultiInfoAsync(function(data) {
+     var result = [];
+     if (data && (data["result"] === "SUCCESS")) {
+     var hplist = data["hpAdMulitEntity"]["lstEntHp"];
+     for (var i = 0; i < hplist.length; i++) {
+     var dataitem = {};
+     dataitem["title"] = hplist[i]["strHpTitle"];
+     dataitem["strdate"] = hplist[i]["strMarketTime"];
+     dataitem["status"] = "可下载";
+     result.push(dataitem);
+     }
+     callback(result);
+     }
+     })
+     */
 }
 
 function displaySelected() {
@@ -315,9 +366,25 @@ function loadContent(element, id) {
             sessionStorage.setItem('show', currentdisplaydate);
         }
     }
+    cleanContent(element);
 
 
     loadAll(element, currentdisplaydate);
+}
+function cleanContent(element) {
+    gg(element, 'home-img').src = "local:///img/welcome.png";
+    gg(element, 'home-vol').innerHTML = "";
+    gg(element, 'home-img-by').innerHTML = "";
+    gg(element, 'home-content').innerHTML = "如果长时间未显示<br>请退出重试并检查网络连接。";
+    gg(element, 'c-title').innerHTML = "";
+    gg(element, 'c-author').innerHTML = "";
+    gg(element, 'c-author-intro').innerHTML = "";
+    gg(element, 'c-brief').innerHTML = "";
+    gg(element, 'c-content').innerHTML = "";
+    gg(element, 'q-title').innerHTML = "";
+    gg(element, 'q-content').innerHTML = "";
+    gg(element, 'a-title').innerHTML = "";
+    gg(element, 'a-content').innerHTML = "";
 }
 
 function g(id) {
