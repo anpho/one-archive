@@ -76,32 +76,43 @@ var app = {
                 loadContent(element, id);
                 Hammer(gg(element, 'wrap')).on('swiperight', function(ev) {
                     if (ev.gesture.distance > 200) {
-                        //Next Day
-                        var d = new Date(currentdisplaydate);
-                        d.setDate(d.getDate() + 1);
-                        var today = new Date();
-                        if (today.format('yyyy-MM-dd') < d.format('yyyy-MM-dd')) {
-                            return;
-                        } else {
-                            currentdisplaydate = d.format('yyyy-MM-dd');
-                            loadContent(document, '');
-                        }
+                        goNext();
                     }
                 }).on('swipeleft', function(ev) {
                     if (ev.gesture.distance > 200) {
                         //Prev Day
-                        var d = new Date(currentdisplaydate);
-                        d.setDate(d.getDate() - 1);
-                        var fday = new Date();
-                        fday.setDate(fday.getDate() - 10);
-                        if (fday.format('yyyy-MM-dd') >= d.format('yyyy-MM-dd')) {
-                            return;
-                        } else {
-                            currentdisplaydate = d.format('yyyy-MM-dd');
-                            loadContent(document, '');
-                        }
+                        goPrev();
                     }
                 });
+                shortcut.remove("T");
+                shortcut.remove("B");
+                shortcut.remove("0");
+                shortcut.remove("P");
+                shortcut.remove("N");
+                shortcut.remove("space");
+                
+                shortcut.add("T", function() {
+                    g('wrap').scrollTo(0, 0);
+                });
+                shortcut.add("B", function() {
+                    g('wrap').scrollTo(g('ask').offsetTop + g('ask').scrollHeight, 0);
+                });
+                shortcut.add("0", function() {
+                    g('wrap').scrollTo(g('home').parentNode.parentNode.scrollTop - 700, 0);
+                });
+                shortcut.add("P", function() {
+                    //上一期
+                    goPrev();
+                });
+                shortcut.add("N", function() {
+                    //下一期
+                    goNext();
+                });
+                shortcut.add("space", function() {
+                    g('wrap').scrollTo(g('home').parentNode.parentNode.scrollTop + 700, 0);
+                });
+
+
 
             }
             if (id === 'cached') {
@@ -123,7 +134,34 @@ var app = {
         bb.pushScreen('main.html', 'menu');
     }
 };
-
+function goNext() {
+    //Next Day
+    var d = new Date(currentdisplaydate);
+    d.setDate(d.getDate() + 1);
+    var today = new Date();
+    if (today.format('yyyy-MM-dd') < d.format('yyyy-MM-dd')) {
+        Toast.regular("没有之后的内容", 1000)
+        return;
+    } else {
+        currentdisplaydate = d.format('yyyy-MM-dd');
+        //Toast.regular("正在载入" + currentdisplaydate + "的内容", 1000);
+        loadContent(document, '');
+    }
+}
+function goPrev() {
+    var d = new Date(currentdisplaydate);
+    d.setDate(d.getDate() - 1);
+    var fday = new Date();
+    fday.setDate(fday.getDate() - 10);
+    if (fday.format('yyyy-MM-dd') >= d.format('yyyy-MM-dd')) {
+        Toast.regular("没有之前的内容", 1000)
+        return;
+    } else {
+        currentdisplaydate = d.format('yyyy-MM-dd');
+        //Toast.regular("正在载入" + currentdisplaydate + "的内容", 1000);
+        loadContent(document, '');
+    }
+}
 function loadSettings(element, id) {
     // 读取配置数据
     // 读取配置数据
@@ -253,9 +291,9 @@ function deleteSelected() {
     var d = selected.getAttribute("data-mrk-date");
     try {
         localStorage.removeItem(d.concat('title'));
-        removeFile(d,'home');
-        removeFile(d,'content');
-        removeFile(d,'question');
+        removeFile(d, 'home');
+        removeFile(d, 'content');
+        removeFile(d, 'question');
     } catch (e) {
 
     }
@@ -324,7 +362,7 @@ function displaySelected() {
      * 往期刊物栏目中，单个元素被点击后的处理。
      */
     var selected = g('historyList').selected;
-    console.log(selected.getAttribute("data-mrk-date")+" 被点击，准备显示。");
+    console.log(selected.getAttribute("data-mrk-date") + " 被点击，准备显示。");
     currentdisplaydate = selected.getAttribute("data-mrk-date");
     sessionStorage.setItem('show', currentdisplaydate);
     oneloaded = false;
