@@ -200,7 +200,8 @@
                             callback(null);
                         }
                     } catch (e) {
-                        console.log("[ONE]获取内容数据失败" + e);
+                        console.log("[ONE]获取内容数据失败");
+                        console.log(e);
                         setTimeout(removeFile(datestr, 'content'), 0);
                         callback(null);
                     }
@@ -252,7 +253,7 @@
                         }
                     } catch (e) {
                         setTimeout(removeFile(datestr, 'question'), 0);
-                        console.log("[ONE]API超时或数据错误。"+e);
+                        console.log("[ONE]API超时或数据错误。" + e);
                         callback(null);
                     }
                 }), 0);
@@ -357,7 +358,7 @@ function removeFile(datestr, type) {
      * 所以，在回调后，进行检测，如果发现存下了FAIL的数据或者其他错误数据，就把这种数据删除。
      */
     var path = blackberry.io.home + "/" + datestr + type + ".json";
-    console.log('删除文件 >> '+path);
+    console.log('删除文件 >> ' + path);
     window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
     window.requestFileSystem(window.PERSISTENT, 5 * 1024 * 1024, function(fs) {
         fs.root.getFile(path, {create: false}, function(fileEntry) {
