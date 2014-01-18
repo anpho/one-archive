@@ -90,7 +90,7 @@ var app = {
                 shortcut.remove("P");
                 shortcut.remove("N");
                 shortcut.remove("space");
-                
+
                 shortcut.add("T", function() {
                     g('wrap').scrollTo(0, 0);
                 });
@@ -145,6 +145,7 @@ function goNext() {
     } else {
         currentdisplaydate = d.format('yyyy-MM-dd');
         //Toast.regular("正在载入" + currentdisplaydate + "的内容", 1000);
+        g('wrap').scrollTo(0, 0);
         loadContent(document, '');
     }
 }
@@ -158,7 +159,7 @@ function goPrev() {
         return;
     } else {
         currentdisplaydate = d.format('yyyy-MM-dd');
-        //Toast.regular("正在载入" + currentdisplaydate + "的内容", 1000);
+        g('wrap').scrollTo(0, 0);
         loadContent(document, '');
     }
 }
