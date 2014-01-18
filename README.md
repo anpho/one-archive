@@ -7,6 +7,8 @@
 
 最新版本请由 [这里](https://github.com/anpho/one/tree/master/dist) 下载（选择版本后点选RAW），自行安装。
 
+可由 [BlackBerry World](https://appworld.blackberry.com/webstore/content/45960893) 直接下载安装。
+
 <hr>
 
 BlackBerry World 以及程序”关于“页面中的作者、贡献者信息，将根据实际贡献度大致排序。
