@@ -147,9 +147,15 @@
                 this.getJSONAsync(datestr, 'home', 'http://211.152.49.184:7001/OneForWeb/one/getHpinfo?strDate=' + datestr, function(u) {
                     try {
                         var cp = getJSON(u);
-                        callback(cp);
+                        if (cp['result'] === "SUCCESS") {
+                            callback(cp);
+                        } else {
+                            setTimeout(removeFile(datestr, 'home'), 0);
+                            callback(null);
+                        }
                     } catch (e) {
-                        console.log(e);
+                        console.log("[ONE]获取首页数据出错" + e);
+                        setTimeout(removeFile(datestr, 'home'), 0);
                         callback(null);
                     }
                 }), 0);
@@ -187,9 +193,15 @@
                 this.getJSONAsync(datestr, 'content', 'http://211.152.49.184:7001/OneForWeb/one/getOneContentInfo?strDate=' + datestr, function(u) {
                     try {
                         var cp = getJSON(u);
-                        callback(cp);
+                        if (cp['result'] === "SUCCESS") {
+                            callback(cp);
+                        } else {
+                            setTimeout(removeFile(datestr, 'content'), 0);
+                            callback(null);
+                        }
                     } catch (e) {
-                        console.log(e);
+                        console.log("[ONE]获取内容数据失败" + e);
+                        setTimeout(removeFile(datestr, 'content'), 0);
                         callback(null);
                     }
                 }), 0);
@@ -231,9 +243,16 @@
                 this.getJSONAsync(datestr, 'question', 'http://211.152.49.184:7001/OneForWeb/one/getOneQuestionInfo?strDate=' + datestr, function(u) {
                     try {
                         var cp = getJSON(u);
-                        callback(cp);
+                        if (cp['result'] === "SUCCESS") {
+                            callback(cp);
+                        } else {
+                            console.log('[ONE]获取问题的API返回了FAIL，删除下载错误的文件。');
+                            setTimeout(removeFile(datestr, 'question'), 0);
+                            callback(null);
+                        }
                     } catch (e) {
-                        console.log(e);
+                        setTimeout(removeFile(datestr, 'question'), 0);
+                        console.log("[ONE]API超时或数据错误。"+e);
                         callback(null);
                     }
                 }), 0);
@@ -274,11 +293,11 @@
          * 确定是否已缓存
          */
         var url = this.buildfileurl(strdate, type);
-        console.log("Checking: " + url);
+        console.log("检查是否已缓存 : " + url);
         var http = new XMLHttpRequest();
         http.open('HEAD', url, false);
         http.send(null);
-        console.log("Check Status CODE is : " + http.status);
+        console.log("状态码为 : " + http.status);
         if (http.status == 0)
             return false;
         return true;
@@ -294,7 +313,7 @@
         if (this.isCached(strdate, type)) {
             callback(this.buildfileurl(strdate, type));
         } else {
-            console.log('downloading : ' + strdate + type);
+            console.log('正在下载 : ' + strdate + type);
             setTimeout(
                     this.geturlAsync(url, this.buildurl(strdate, type), callback), 0);
         }
@@ -311,11 +330,11 @@
                     url,
                     path,
                     function(result) {
-                        console.log("file downloaded,fullPath: " + result.fullPath);
+                        console.log("下载成功: " + result.fullPath);
                         callback("file://" + result.fullPath);
                     },
                     function(result) {
-                        console.log("Download failed");
+                        console.log("下载失败。");
                         console.log("Error code: " + result.code);
                         console.log("HTTP status: " + result.http_status);
                         console.log("Source: " + result.source);
@@ -329,3 +348,29 @@
         }
     }
 };
+
+function removeFile(datestr, type) {
+    /*
+     * 删除下载到错误数据的文件。
+     * 解释：
+     * 由于使用的是filetransfer api，该API会直接将数据写入存储，有时会将RESULT=FAIL的也一起写进去。
+     * 所以，在回调后，进行检测，如果发现存下了FAIL的数据或者其他错误数据，就把这种数据删除。
+     */
+    var path = blackberry.io.home + "/" + datestr + type + ".json";
+    console.log('删除文件 >> '+path);
+    window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
+    window.requestFileSystem(window.PERSISTENT, 5 * 1024 * 1024, function(fs) {
+        fs.root.getFile(path, {create: false}, function(fileEntry) {
+            fileEntry.remove(function() {
+                console.log('文件已删除。');
+            }, function(ex) {
+                console.log(ex);
+            });
+        }, function(ex) {
+            console.log(ex);
+        });
+    }, function(f) {
+        console.log(f);
+    });
+
+}

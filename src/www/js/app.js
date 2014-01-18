@@ -21,7 +21,7 @@ var app = {
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
-        console.log('Received Event: ' + id);
+        console.log('收到事件: ' + id);
         app.bbuistart();
     },
     bbuistart: function() {
@@ -48,7 +48,7 @@ var app = {
 
         // 在DOM显示之前的配置
         config.onscreenready = function(element, id) {
-            console.log('Pushing: ' + id);
+            console.log('载入页面: ' + id);
             if (darkColoring) {
                 var screen = element.querySelector('[data-bb-type=screen]');
                 if (screen) {
@@ -75,7 +75,6 @@ var app = {
             if (id === 'menu') {
                 loadContent(element, id);
                 Hammer(gg(element, 'wrap')).on('swiperight', function(ev) {
-                    console.log(ev);
                     if (ev.gesture.distance > 200) {
                         //Next Day
                         var d = new Date(currentdisplaydate);
@@ -89,7 +88,6 @@ var app = {
                         }
                     }
                 }).on('swipeleft', function(ev) {
-                    console.log(ev);
                     if (ev.gesture.distance > 200) {
                         //Prev Day
                         var d = new Date(currentdisplaydate);
@@ -170,7 +168,6 @@ function saveSettings(e) {
 
 function refreshTheme() {
     var theme = localStorage.getItem("theme");
-    console.log(theme + " vs. " + usingDarkTheme);
     if (theme === usingDarkTheme) {
         return;
     } else {
@@ -252,11 +249,13 @@ function loadCachedMagsAsync(element) {
 }
 function deleteSelected() {
     var selected = g('cachedmags').selected;
-    console.log('[ONE]deleting cached : ' + selected.getAttribute("data-mrk-date"));
+    console.log('[ONE]删除已缓存的内容 : ' + selected.getAttribute("data-mrk-date"));
     var d = selected.getAttribute("data-mrk-date");
     try {
         localStorage.removeItem(d.concat('title'));
-        //TODO 此处需加入清除其他文件缓存的代码
+        removeFile(d,'home');
+        removeFile(d,'content');
+        removeFile(d,'question');
     } catch (e) {
 
     }
@@ -325,7 +324,7 @@ function displaySelected() {
      * 往期刊物栏目中，单个元素被点击后的处理。
      */
     var selected = g('historyList').selected;
-    console.log(selected.getAttribute("data-mrk-date"));
+    console.log(selected.getAttribute("data-mrk-date")+" 被点击，准备显示。");
     currentdisplaydate = selected.getAttribute("data-mrk-date");
     sessionStorage.setItem('show', currentdisplaydate);
     oneloaded = false;
@@ -337,7 +336,6 @@ var removeDuplicatesInPlace = function(arr) {
     /*
      * 删除数组中的重复元素
      */
-    console.log("RemoveDuplicates in : " + arr);
     var i, j, cur;
     for (i = arr.length - 1; i >= 0; i--) {
         cur = arr[i];
@@ -358,7 +356,7 @@ function getJSON(URL) {
         var result = community.curl.get(URL);
         return JSON.parse(result);
     } catch (e) {
-        console.log(e);
+        console.log('获取数据出错，将返回NULL并删除下载错误的文件。');
         return null;
     }
 }
@@ -459,7 +457,7 @@ function loadOne(e, strdate) {
         gg(e, 'c-author').innerHTML = content['strContAuthor'];
         gg(e, 'c-content').innerHTML = "<p>" + content['strContent'].replace(/<br>/g, "</p><p>") + "</p>";
         gg(e, 'c-content').style['fontSize'] = localStorage.getItem('fontsize');
-        console.log('标题页已载入。');
+        console.log('内容已载入。');
         gg(e, 'spinner-2').hide();
         oneloaded = true;
     });
