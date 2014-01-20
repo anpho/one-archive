@@ -9,6 +9,10 @@
 
 可由 [BlackBerry World](https://appworld.blackberry.com/webstore/content/45960893) 直接下载安装。
 
+目前《一个》已经上升到热门免费下载榜第2位（2014年1月20日），发布三天内下载量1000余次。
+
+<img src="https://github.com/anpho/one/raw/master/screenshot/RANK20140120.png" />
+
 <hr>
 
 BlackBerry World 以及程序”关于“页面中的作者、贡献者信息，将根据实际贡献度大致排序。
@@ -32,4 +36,4 @@ Team成员在上传代码前请先通过QQ群与其他成员沟通，并保证�
 
 ### 关于我
 
-在BlackBerry World里，我是anpho，你可以叫我Merrick Zhang。如果有任何问题，请直接写邮件给我。我的邮件地址是 [anphorea@gmail.com](anphorea@gmail.com) 。
+在BlackBerry World里，我是anpho，你可以叫我Merrick Zhang。商业合作请直接写邮件给我。我的邮件地址是 [anphorea@gmail.com](anphorea@gmail.com) 。
