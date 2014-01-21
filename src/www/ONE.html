@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<head>
+	<meta charset="utf-8" />
+	<title>New Document</title>
+	<link type="text/css" href="idangerous.swiper.css" rel="stylesheet" />
+	<script type="text/javascript" src="idangerous.swiper-2.4.2.min.js"></script>
+	<style>
+		.heri {
+			
+		}
+		.veti {
+			
+		}
+	</style>
+</head>
+<body>
+	<div class="swiper-container veti">
+		<div class="swiper-wrapper">
+			<!--First Slide-->
+			<div class="swiper-slide">
+				<!-- Any HTML content of the first slide goes here -->
+				<div class="swiper-container heri">
+					<div class="swiper-wrapper">
+						<!--First Slide-->
+						<div class="swiper-slide">
+							<!-- Any HTML content of the first slide goes here -->asdf</div>
+						<!--Second Slide-->
+						<div class="swiper-slide">
+							<!-- Any HTML content of the second slide goes here -->wef</div>
+						<!--Third Slide-->
+						<div class="swiper-slide">
+							<!-- Any HTML content of the third slide goes here -->asfd</div>
+						<!--Etc..-->
+					</div>
+				</div>
+			</div>
+			<!--Second Slide-->
+			<div class="swiper-slide">
+				<!-- Any HTML content of the second slide goes here -->
+				<img src="custom.jpg" width="768" height="576" border="0" alt="">
+			</div>
+			<!--Third Slide-->
+			<div class="swiper-slide">
+				<!-- Any HTML content of the third slide goes here -->
+				<img src="custom.jpg" width="768" height="576" border="0" alt="">
+			</div>
+			<!--Etc..-->
+		</div>
+	</div>
+	<script type="text/javascript">
+		window.onload = function() {
+		  var mySwiper = new Swiper('.veti',{
+		    //Your options here:
+		    mode:'vertical',
+		    loop: false
+		    //etc..
+		  });  
+		  		  var mySwiper2 = new Swiper('.heri',{
+		    //Your options here:
+		    mode:'horizontal',
+		    loop: false
+		    //etc..
+		  });  
+		}
+	</script>
+</body>
+
+</html>
