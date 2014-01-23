@@ -11,7 +11,7 @@
 
 目前《一个》已经上升到热门免费下载榜第2位（2014年1月20日），发布三天内下载量1000余次。
 
-<img src="https://github.com/anpho/one/raw/master/screenshot/RANK20140120.png" />
+<img src="https://github.com/anpho/one/raw/master/screenshot/RANK20140121.png"/>
 
 <hr>
 
