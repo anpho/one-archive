@@ -1,6 +1,8 @@
 《一个》app for BlackBerry 10
 ====
 
+### 注意：目前的代码存在问题，因命令操作失误，我把开发中的2.0版本代码合并到了主分支，请勿下载编译。
+
 <img src="https://github.com/anpho/one/raw/master/src/www/img/welcome.png" />
 
 自2014年1月起，这个app将 **全面开源，保持免费** ，并**由众多黑莓爱好者共同开发**。
@@ -8,8 +10,6 @@
 最新版本请由 [这里](https://github.com/anpho/one/tree/master/dist) 下载（选择版本后点选RAW），自行安装。
 
 可由 [BlackBerry World](https://appworld.blackberry.com/webstore/content/45960893) 直接下载安装。
-
-目前《一个》已经上升到热门免费下载榜第2位（2014年1月20日），发布三天内下载量1000余次。
 
 <img src="https://github.com/anpho/one/raw/master/screenshot/RANK20140121.png"/>
 
