@@ -375,3 +375,49 @@ function removeFile(datestr, type) {
     });
 
 }
+
+function removeByDate(datestr) {
+    var path = blackberry.io.home + "/" + datestr;
+    console.log('删除文件 >> ' + path);
+    window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
+    window.requestFileSystem(window.PERSISTENT, 5 * 1024 * 1024, function(fs) {
+        fs.root.getFile(path + "home.json", {create: false}, function(fileEntry) {
+            fileEntry.remove(function() {
+                console.log(path + 'home.json文件已删除。');
+            }, function(ex) {
+                console.log(ex);
+            });
+        }, function(ex) {
+            console.log(ex);
+        });
+        fs.root.getFile(path + "content.json", {create: false}, function(fileEntry) {
+            fileEntry.remove(function() {
+                console.log(path + 'content.json文件已删除。');
+            }, function(ex) {
+                console.log(ex);
+            });
+        }, function(ex) {
+            console.log(ex);
+        });
+        fs.root.getFile(path + "question.json", {create: false}, function(fileEntry) {
+            fileEntry.remove(function() {
+                console.log(path + 'question.json文件已删除。');
+            }, function(ex) {
+                console.log(ex);
+            });
+        }, function(ex) {
+            console.log(ex);
+        });
+        fs.root.getFile(path + ".jpg", {create: false}, function(fileEntry) {
+            fileEntry.remove(function() {
+                console.log(path + '.jpg 文件已删除。');
+            }, function(ex) {
+                console.log(ex);
+            });
+        }, function(ex) {
+            console.log(ex);
+        });
+    }, function(f) {
+        console.log(f);
+    });
+}

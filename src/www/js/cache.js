@@ -41,11 +41,11 @@ var cache = {
          * 确定是否已缓存
          */
         var url = this.buildfileurl(strdate);
-        console.log("Checking: " + url);
+        
         var http = new XMLHttpRequest();
         http.open('HEAD', url, false);
         http.send(null);
-        console.log(http.status);
+        console.log("Checking: " + url + ' # ' +http.status);
         if (http.status == 0) return false;
         return true;
     },

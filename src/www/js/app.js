@@ -292,11 +292,9 @@ function deleteSelected() {
     var d = selected.getAttribute("data-mrk-date");
     try {
         localStorage.removeItem(d.concat('title'));
-        removeFile(d, 'home');
-        removeFile(d, 'content');
-        removeFile(d, 'question');
+        removeByDate(d);
     } catch (e) {
-
+        console.log(e);
     }
     loadCachedMagsAsync(document);
 }
@@ -417,7 +415,7 @@ function loadContent(element, id) {
     loadAll(element, currentdisplaydate);
 }
 function cleanContent(element) {
-    gg(element, 'home-img').src = "local:///img/welcome.png";
+    gg(element, 'home-img').src = "";
     gg(element, 'home-vol').innerHTML = "";
     gg(element, 'home-img-by').innerHTML = "";
     gg(element, 'home-content').innerHTML = "如果长时间未显示<br>请退出重试并检查网络连接。";
@@ -468,10 +466,10 @@ function loadhome(element, strdate) {
         imgurl = data['strOriginalImgUrl'];
         console.log('主页已载入。');
         homeloaded = true;
-        gg(element, 'spinner-1').hide();
         cache.get(imgurl, currentdisplaydate, function(u) {
             console.log("设置图片：" + u);
             g('home-img').src = u;
+            gg(element, 'spinner-1').hide();
         });
     });
 }
