@@ -1,0 +1,7 @@
+{
+    "version": "1.0.0",
+    "name": "com.blackberry.ui.contextmenu",
+    "description": "BlackBerry 10 Context Menu APIs",
+    "license": "Apache 2.0",
+    "engines": []
+}

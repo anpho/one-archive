@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="one" version="1.1.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:rim="http://www.blackberry.com/ns/widgets">
+    <feature name="com.blackberry.app" value="com.blackberry.app" />
+    <feature name="com.blackberry.invoke" value="com.blackberry.invoke" />
+    <feature name="com.blackberry.invoke.card" value="com.blackberry.invoke.card" />
+    <feature name="com.blackberry.io" value="com.blackberry.io" />
+    <feature name="com.blackberry.io.filetransfer" value="com.blackberry.io.filetransfer" />
+    <feature name="com.blackberry.ui.contextmenu" value="com.blackberry.ui.contextmenu" />
+    <feature name="com.blackberry.ui.toast" value="com.blackberry.ui.toast" />
+    <feature name="com.blackberry.utils" />
+    <feature name="community.curl" value="community.curl" />
+    <name>ONE</name>
+    <description>
+        ONE Unofficial App.
+    </description>
+    <author email="anphorea@gmail.com" href="http://about.me/anpho">
+        anpho
+    </author>
+    <content src="index.html" />
+    <icon src="img/logo.png" />
+    <access origin="*" />
+    <preference name="fullscreen" value="true" />
+    <preference name="webviewbounce" value="false" />
+    <preference name="WebSecurity" value="disable" />
+    <preference name="AutoHideSplashScreen" value="true" />
+    <rim:splash src="img/splash-1280x768.png" />
+    <rim:splash src="img/splash-1280x720.png" />
+    <rim:splash src="img/splash-720x720.png" />
+</widget>

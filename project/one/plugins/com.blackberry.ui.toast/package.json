@@ -1,0 +1,7 @@
+{
+    "version": "1.0.0",
+    "name": "com.blackberry.ui.toast",
+    "description": "BlackBerry 10 Toast APIs",
+    "license": "Apache 2.0",
+    "engines": []
+}
