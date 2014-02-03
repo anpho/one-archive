@@ -70,7 +70,7 @@ var app = {
                     if (ev.gesture.distance > 200) {
                         bb.popScreen();
                     }
-                })
+                });
             }
             if (id === 'menu') {
                 loadContent(element, id);
@@ -415,7 +415,7 @@ function loadContent(element, id) {
     loadAll(element, currentdisplaydate);
 }
 function cleanContent(element) {
-    gg(element, 'home-img').src = "";
+    gg(element, 'home-img').style.display = "none";
     gg(element, 'home-vol').innerHTML = "";
     gg(element, 'home-img-by').innerHTML = "";
     gg(element, 'home-content').innerHTML = "如果长时间未显示<br>请退出重试并检查网络连接。";
@@ -454,8 +454,11 @@ function loadhome(element, strdate) {
     //removeChildNodes(gg(element, "home"));
     gg(element, 'spinner-1').show();
     one.getHomePageAsync(strdate, function(da) {
-        if (data === null)
+        if (data === null) {
+            Toast.regular("载入首页数据失败，请检查网络连接后重试。", 1000);
+            gg(element, 'spinner-1').hide();
             return;
+        }
         var data = da["hpEntity"];
         localStorage.setItem(strdate + 'title', data['strHpTitle']);
         gg(element, 'home-title').innerHTML = strdate;
@@ -469,6 +472,7 @@ function loadhome(element, strdate) {
         cache.get(imgurl, currentdisplaydate, function(u) {
             console.log("设置图片：" + u);
             g('home-img').src = u;
+            g('home-img').style.display = "block";
             gg(element, 'spinner-1').hide();
         });
     });
@@ -485,8 +489,11 @@ function loadOne(e, strdate) {
     //removeChildNodes(gg(e, "content"));
     one.getOneContentInfoAsync(strdate, function(c) {
 
-        if (c === null)
+        if (c === null) {
+            Toast.regular("载入文章内容失败，请检查网络连接后重试。", 1000);
+            gg(element, 'spinner-2').hide();
             return;
+        }
         var content = c["contentEntity"];
         gg(e, 'c-brief').innerHTML = content['sGW'];
         gg(e, 'c-title').innerHTML = content['strContTitle'];
@@ -505,8 +512,11 @@ function loadQuestion(e, strdate) {
     gg(e, 'spinner-3').show();
     //removeChildNodes(gg(e, "ask"));
     one.getOneQuestionInfoAsync(strdate, function(a) {
-        if (a === null)
+        if (a === null) {
+            Toast.regular("载入文章内容失败，请检查网络连接后重试。", 1000);
+            gg(element, 'spinner-3').hide();
             return;
+        }
         var ask = a['questionAdEntity'];
         gg(e, 'q-title').innerHTML = ask['strQuestionTitle'];
         gg(e, 'q-content').innerHTML = ask['strQuestionContent'];
@@ -550,15 +560,21 @@ function showTab(id) {
         goTo('ask');
     }
 }
-;
 
+/*
+ * 滚动到指定元素位置
+ * @param {type} e
+ * @returns {undefined}
+ */
 function goTo(e) {
     var cx = g(e).offsetTop;
     g('wrap').scrollTo(cx, 0);
 }
 
 var currentdisplaydate; //正在显示的《一个》的发布日期。
-
+/*
+ * 清空缓存内容
+ */
 function clearCache() {
     var _theme = localStorage.getItem("theme");
     var _fontsize = localStorage.getItem('fontsize');

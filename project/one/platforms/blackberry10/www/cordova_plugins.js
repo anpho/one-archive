@@ -43,17 +43,17 @@ module.exports = [
         ]
     },
     {
-        "file": "plugins/community.curl/www/client.js",
-        "id": "community.curl.client",
-        "clobbers": [
-            "community.curl"
-        ]
-    },
-    {
         "file": "plugins/com.blackberry.ui.contextmenu/www/client.js",
         "id": "com.blackberry.ui.contextmenu.client",
         "clobbers": [
             "blackberry.ui.contextmenu"
+        ]
+    },
+    {
+        "file": "plugins/com.blackberry.community.curl/www/client.js",
+        "id": "com.blackberry.community.curl.client",
+        "clobbers": [
+            "community.curl"
         ]
     }
 ]

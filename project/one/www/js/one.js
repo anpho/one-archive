@@ -1,4 +1,4 @@
-﻿var one = {
+var one = {
     getCopyRightInfo: function() {
         try {
             var cp = getJSON('http://211.152.49.184:7001/OneForWeb/onest/getCrInf');
@@ -158,7 +158,7 @@
                         setTimeout(removeFile(datestr, 'home'), 0);
                         callback(null);
                     }
-                }), 0);
+                }), 1);
     },
     getHomePage: function(datestr) {
         /*
@@ -205,7 +205,7 @@
                         setTimeout(removeFile(datestr, 'content'), 0);
                         callback(null);
                     }
-                }), 0);
+                }), 1);
     },
     getOneContentInfo: function(datestr) {
         /*
@@ -256,7 +256,7 @@
                         console.log("[ONE]API超时或数据错误。" + e);
                         callback(null);
                     }
-                }), 0);
+                }), 1);
     },
     getOneQuestionInfo: function(datestr) {
         /*
@@ -316,7 +316,7 @@
         } else {
             console.log('正在下载 : ' + strdate + type);
             setTimeout(
-                    this.geturlAsync(url, this.buildurl(strdate, type), callback), 0);
+                    this.geturlAsync(url, this.buildurl(strdate, type), callback), 1);
         }
 
     },

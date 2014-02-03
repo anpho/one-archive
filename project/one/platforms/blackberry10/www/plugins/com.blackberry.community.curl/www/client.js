@@ -1,4 +1,4 @@
-/*
+cordova.define("com.blackberry.community.curl.client", function(require, exports, module) {/*
 * Copyright (c) 2013 BlackBerry Limited.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +15,7 @@
 */
 
 var _self = {},
-	_ID = "community.curl",
+	_ID = "com.blackberry.community.curl",
 	exec = cordova.require("cordova/exec");
 
 	// These methods are called by your App's JavaScript
@@ -34,4 +34,4 @@ var _self = {},
 		return result;
 	};
 
-module.exports = _self;
+module.exports = _self;});
