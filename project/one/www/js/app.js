@@ -410,15 +410,15 @@ function loadContent(element, id) {
         }
     }
     cleanContent(element);
-
-
     loadAll(element, currentdisplaydate);
 }
 function cleanContent(element) {
-    gg(element, 'home-img').style.display = "none";
+    gg(element, 'home-img').style.display = 'none';
     gg(element, 'home-vol').innerHTML = "";
     gg(element, 'home-img-by').innerHTML = "";
-    gg(element, 'home-content').innerHTML = "如果长时间未显示<br>请退出重试并检查网络连接。";
+    gg(element, 'home-content').innerHTML = "";
+    gg(element, 'content').style.display = 'none';
+    gg(element, 'ask').style.display = 'none';
     gg(element, 'c-title').innerHTML = "";
     gg(element, 'c-author').innerHTML = "";
     gg(element, 'c-author-intro').innerHTML = "";
@@ -429,6 +429,7 @@ function cleanContent(element) {
     gg(element, 'a-title').innerHTML = "";
     gg(element, 'a-content').innerHTML = "";
 }
+
 
 function g(id) {
     //因为没在用jQuery，这里简化了两个方法。
@@ -456,6 +457,7 @@ function loadhome(element, strdate) {
     one.getHomePageAsync(strdate, function(da) {
         if (data === null) {
             Toast.regular("载入首页数据失败，请检查网络连接后重试。", 1000);
+            gg(element, 'home-img').style.display = "block";
             gg(element, 'spinner-1').hide();
             return;
         }
@@ -485,13 +487,13 @@ function removeChildNodes(node) {
     }
 }
 function loadOne(e, strdate) {
-    gg(e, 'spinner-2').show();
+    //gg(e, 'spinner-2').show();
     //removeChildNodes(gg(e, "content"));
     one.getOneContentInfoAsync(strdate, function(c) {
 
         if (c === null) {
             Toast.regular("载入文章内容失败，请检查网络连接后重试。", 1000);
-            gg(element, 'spinner-2').hide();
+            //gg(element, 'spinner-2').hide();
             return;
         }
         var content = c["contentEntity"];
@@ -502,19 +504,20 @@ function loadOne(e, strdate) {
         gg(e, 'c-content').innerHTML = "<p>" + content['strContent'].replace(/<br>/g, "</p><p>") + "</p>";
         gg(e, 'c-content').style['fontSize'] = localStorage.getItem('fontsize');
         console.log('内容已载入。');
-        gg(e, 'spinner-2').hide();
+        gg(e, 'content').style.display = 'block';
+        //gg(e, 'spinner-2').hide();
         oneloaded = true;
     });
 
 }
 
 function loadQuestion(e, strdate) {
-    gg(e, 'spinner-3').show();
+    //gg(e, 'spinner-3').show();
     //removeChildNodes(gg(e, "ask"));
     one.getOneQuestionInfoAsync(strdate, function(a) {
         if (a === null) {
             Toast.regular("载入文章内容失败，请检查网络连接后重试。", 1000);
-            gg(element, 'spinner-3').hide();
+            //gg(element, 'spinner-3').hide();
             return;
         }
         var ask = a['questionAdEntity'];
@@ -525,8 +528,9 @@ function loadQuestion(e, strdate) {
         gg(e, 'a-content').innerHTML = ask['strAnswerContent'];
         gg(e, 'a-content').style['fontSize'] = localStorage.getItem('fontsize');
         console.log('问题已载入。');
+        gg(e, 'ask').style.display = 'block';
         qloaded = true;
-        gg(e, 'spinner-3').hide();
+        //gg(e, 'spinner-3').hide();
     });
 
 }
