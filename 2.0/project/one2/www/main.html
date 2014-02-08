@@ -20,15 +20,19 @@
     </div>
     <div style="clear:both;height:1px;display:block"></div>
     <div id="content">
-        <div class="ctitle"><span style="font-size: 120%;" id="c-title"></span>-<span id="c-author"></span></div>
-        <div style="font-size:80%;opacity: 0.8" id="c-brief"></div>
-        <hr style="opacity:0.8"/>
-        <div style='text-indent:1.8em' id="c-content"></div>
-        <div style="font-size:80%;font-style: italic" id="c-author-intro"></div>
+        <div class="ctitle"><span id="c-title"></span>/<span id="c-author"></span></div>
+        <div id="c-brief"></div>
+        <hr style="opacity:0.8;width:95%"/>
+        <div id="c-content"></div>
+        <div id="c-author-intro"></div>
     </div>
+
     <div id="ask" >
+        <div style="clear:both;height:1px;display:block;background-color: #01A7E7"></div>
+        <div id="qimg">问</div>
         <div id="q-title"></div>
         <div id="q-content"></div>
+        <div id="qimg">答</div>
         <div id="a-title"></div>
         <div id="a-content"></div>
     </div>
@@ -46,40 +50,60 @@
         <div data-bb-type="menu-item" data-bb-img="img/ic_settings.png" data-bb-pin="right" onclick="bb.pushScreen('settings.html', 'settings')">设置</div>
     </div>
     <style>
+        #qimg{
+            text-align: center;
+            width:200px;
+            height:64px;
+            line-height: 64px;
+            margin: 10px auto;
+            background-color: #01A7E7;
+            color:#fff;
+            border-radius: 20px;
+            display: block;
+        }
         #content{
-            
+
         }
         #c-title{
-            
+            font-size: 120%;
+            padding-left: 10px;
         }
         #c-author{
-            
+            font-size: 90%;
+            padding-left: 10px;
         }
         #c-brief{
-            
+            font-size:80%;
+            opacity: 0.5;
+            padding-top: 50px;
+            padding-left: 20px;
+            padding-right:20px;
         }
         #c-content{
-            
+            text-indent: 1.6em;
+            padding: 5px;
         }
         #c-author-intro{
-            
+            font-size:80%;font-style: italic
         }
         #ask{
-            
+
         }
         #q-title{
-            
+            margin: 5px;
+            font-style:  italic;
         }
         #q-content{
-            
+            margin: 5px;
         }
         #a-title{
-            
+            font-style:  italic;
+            margin: 5px;
         }
         #a-content{
-            
+            margin: 5px;
         }
-        
+
         .imgwrapper {
             height:540px;
             position: relative;
@@ -100,13 +124,14 @@
             width:100%;
         }
         .bottomwrapper {
+            position: relative;
             width: 100%;
-            height: 114px;
+            height: 180px;
         }
         .citawrapper {
             display: table;
             height: 180px;
-            width: 564px;
+            width: 100%;
             background-color: #e2e2e2;
             margin-right: 156px;
         }
@@ -117,12 +142,14 @@
             height: 180px;
             line-height: 1.1;
             text-align: left;
-            padding:0px 10px 0px 10px ;
+            padding-right:156px;
             vertical-align: middle;
             width: 100%;
         }
         .pubdatewrapper {
-            float: right;
+            position: absolute;
+            bottom:0px;
+            right:0px;
             width: 156px;
             height: 180px;
             text-align: center;
@@ -149,7 +176,9 @@
             line-height: 24px;
         }
         .ctitle {
-            
+            background-color: #01A7E7;
+            height:64px;
+            line-height: 64px;
         }
     </style>
 </div>

@@ -415,6 +415,8 @@ function loadContent(element, id) {
 function cleanContent(element) {
     gg(element, 'home-img').style.display = 'none';
     gg(element, 'home-vol').innerHTML = "";
+    gg(element,'home-pbdate').innerHTML="";
+    gg(element,'home-title').innerHTML='';
     gg(element, 'home-img-by').innerHTML = "";
     gg(element, 'home-content').innerHTML = "";
     gg(element, 'content').style.display = 'none';
