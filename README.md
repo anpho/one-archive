@@ -1,15 +1,13 @@
 《一个》app for BlackBerry 10
 ====
 
-### 注意：库已重建，请重新FORK本项目。
-
-自2014年1月起，这个app将 **全面开源，保持免费** ，并**由众多黑莓爱好者共同开发**。
+自2014年1月起，这个app将 **全面开源，保持免费** 。
 
 最新版本请由 [这里](https://github.com/anpho/one/tree/master/dist) 下载（选择版本后点选RAW），自行安装。
 
 可由 [BlackBerry World](https://appworld.blackberry.com/webstore/content/45960893) 直接下载安装。
 
-<img src="https://github.com/anpho/one/raw/master/screenshot/RANK20140121.png"/>
+<img src="https://github.com/anpho/one/raw/master/screenshot/RANK20140121.png" width='360' height='360'/>
 
 <hr>
 
