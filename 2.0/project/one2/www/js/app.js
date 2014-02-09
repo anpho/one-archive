@@ -56,6 +56,7 @@ var app = {
                 }
             }
             if (id === 'settings') {
+                window.removeEventListener('orientationchange', onRotate);
                 loadSettings(element, id);
             }
 
@@ -73,6 +74,7 @@ var app = {
                 });
             }
             if (id === 'menu') {
+                window.removeEventListener('orientationchange', onRotate);
                 loadContent(element, id);
                 Hammer(gg(element, 'wrap')).on('swiperight', function(ev) {
                     if (ev.gesture.distance > 200) {
@@ -116,6 +118,7 @@ var app = {
 
             }
             if (id === 'cached') {
+                window.removeEventListener('orientationchange', onRotate);
                 loadCachedMagsAsync(element);
                 Hammer(gg(element, 'cca')).on('swiperight', function() {
                     bb.popScreen();
@@ -131,6 +134,7 @@ var app = {
             document.body.style['background-color'] = darkScreenColor;
             document.body.style['color'] = '#E6E6E6';
         }
+        navigator.splashscreen.hide();
         bb.pushScreen('main.html', 'menu');
     }
 };
@@ -214,12 +218,24 @@ function refreshTheme() {
     }
 }
 
+function onRotate() {
+    if (window.innerWidth === 720) {
+        g('newList').style.margin = '0px';
+    } else if (window.innerWidth === 768) {
+        g('newList').style.margin = '0px 20px';
+    } else if (window.innerWidth === 1280) {
+        g('newList').style.margin = '0px 85px';
+    }
+}
+var listenerAdded = false;
+var token;
 
 function loadAvailableMagsAsync(element) {
+    gg(element, 'spinner-4').show();
+    if (!listenerAdded)
+        token = window.addEventListener('orientationchange', onRotate, false);
     findCachedMagsAsync(function(cached) {
         findAvailableMagsAsync(function(available) {
-            gg(element, 'spinner-4').hide();
-            var historylist = gg(element, "historyList");
             var data;
             if (available) {
                 data = removeDuplicatesInPlace(cached.concat(available)).sort(function(a, b) {
@@ -234,23 +250,53 @@ function loadAvailableMagsAsync(element) {
             } else {
                 data = cached;
             }
-            var items = [];
-            var item;
+            //new
+            var wrapper = gg(element, 'newList');
+            wrapper.style.display = 'none';
+
             for (var i = 0; i < data.length; i++) {
-                item = document.createElement('div');
-                item.setAttribute('data-bb-type', 'item');
-                item.setAttribute('data-bb-title', data[i]["strdate"] + "  " + data[i]["title"]);
-                item.setAttribute('data-mrk-date', data[i]["strdate"]);
-                item.innerHTML = data[i]["status"];
-                item.onclick = function() {
-                    displaySelected();
-                };
-                items.push(item);
+                console.log(data[i]);
+                var sd = data[i]['strdate'].concat("");
+                var mag = document.createElement('div');
+                mag.className = 'item';
+                var label = document.createElement('div');
+                label.className = 'label';
+                label.innerHTML = sd + " " + data[i]["status"]
+                var img = new Image();
+
+                img.id = 'i' + sd;
+                img.src = 'img/welcome.png';
+                getTitleImg(img, sd);
+                mag.appendChild(img);
+                mag.appendChild(label);
+                mag.setAttribute('strdate', sd);
+                mag.onclick = function() {
+                    currentdisplaydate = this.getAttribute("strdate");
+                    sessionStorage.setItem('show', currentdisplaydate);
+                    oneloaded = false;
+                    homeloaded = false;
+                    qloaded = false;
+                    bb.pushScreen('main.html', 'menu');
+                }
+                wrapper.appendChild(mag);
             }
-            historylist.refresh(items);
+            //end new
+            gg(element, 'spinner-4').hide();
+            wrapper.style.display = 'block';
+            onRotate();
         });
     });
-
+}
+function getTitleImg(obj, strdate) {
+    one.getHomePageAsync(strdate, function(da) {
+        var d = da['hpEntity'];
+        if (d) {
+            cache.get(d['strOriginalImgUrl'], strdate, function(u) {
+                console.log("设置图片：" + u);
+                obj.src = u;
+            });
+        }
+    });
 }
 function loadCachedMagsAsync(element) {
     /*
@@ -415,8 +461,8 @@ function loadContent(element, id) {
 function cleanContent(element) {
     gg(element, 'home-img').style.display = 'none';
     gg(element, 'home-vol').innerHTML = "";
-    gg(element,'home-pbdate').innerHTML="";
-    gg(element,'home-title').innerHTML='';
+    gg(element, 'home-pbdate').innerHTML = "";
+    gg(element, 'home-title').innerHTML = '';
     gg(element, 'home-img-by').innerHTML = "";
     gg(element, 'home-content').innerHTML = "";
     gg(element, 'content').style.display = 'none';
@@ -465,8 +511,8 @@ function loadhome(element, strdate) {
         }
         var data = da["hpEntity"];
         localStorage.setItem(strdate + 'title', data['strHpTitle']);
-        gg(element, 'home-title').innerHTML = strdate.substr(0,7);
-        gg(element, 'home-pbdate').innerHTML = strdate.substr(8,2);
+        gg(element, 'home-title').innerHTML = strdate.substr(0, 7);
+        gg(element, 'home-pbdate').innerHTML = strdate.substr(8, 2);
         gg(element, 'home-vol').innerHTML = data['strHpTitle'];
         gg(element, 'home-img-by').innerHTML = data['strAuthor'].replace(/&/g, ' ');
         gg(element, 'home-content').innerHTML = data['strContent'];
@@ -474,7 +520,10 @@ function loadhome(element, strdate) {
         imgurl = data['strOriginalImgUrl'];
         console.log('主页已载入。');
         homeloaded = true;
-        gg(element,'ab').hide();
+
+        if (window.innerHeight < 800) {
+            gg(element, 'ab').hide();
+        }
         cache.get(imgurl, currentdisplaydate, function(u) {
             console.log("设置图片：" + u);
             g('home-img').src = u;
@@ -611,26 +660,34 @@ function tabswitcher() {
     } else {
         bb.actionBar.highlightAction(g('a3'));
     }
+    if (window.innerHeight < 800) {
+        //向下滚动时隐掉ACTIONBAR，向上滚动时显示
+        if (ruler.scrollTop < 5) {
+            showActionBar = false;
+            setTimeout(function() {
+                if (!showActionBar)
+                    g('ab').hide();
+            }, 333);
+        } else if (ruler.scrollTop > lastpos) {
+            showActionBar = false;
+            setTimeout(function() {
+                if (!showActionBar)
+                    g('ab').hide();
+            }, 333);
+        } else {
+            showActionBar = true;
+            setTimeout(function() {
+                if (showActionBar)
+                    g('ab').show();
+            }, 333);
 
-    //向下滚动时隐掉ACTIONBAR，向上滚动时显示
-    if (ruler.scrollTop < 5) {
-        setTimeout(function() {
-            if (showActionBar)
-                g('ab').hide();
-        }, 300);
-    } else if (ruler.scrollTop > lastpos) {
-        showActionBar = false;
-        setTimeout(function() {
-            if (!showActionBar)
-                g('ab').hide();
-        }, 300);
+        }
     } else {
         showActionBar = true;
         setTimeout(function() {
             if (showActionBar)
                 g('ab').show();
-        }, 300);
-
+        }, 333);
     }
     lastpos = ruler.scrollTop;
 }

@@ -1,5 +1,5 @@
-﻿<div data-bb-type="screen" id="cal">
-
+<!DOCTYPE html>
+<div data-bb-type="screen" id="cal">
     <div data-bb-type="round-panel">
         <div data-bb-type="panel-header">可阅读的内容</div>
     </div>
@@ -7,10 +7,49 @@
         <div data-bb-type="item" data-bb-title="缓存管理" onclick="bb.pushScreen('cached.html', 'cached')">管理已下载的内容</div>
     </div>
     <div id="spinner-4" class="center" data-bb-type="activity-indicator" data-bb-size="medium"></div>
+    <div id="neww">
+        <div id="newList">
 
-    <div id="historyList" data-bb-type="image-list" data-bb-images="none" data-bb-style="arrowlist">
+        </div>
     </div>
-
     <div data-bb-type="action-bar" data-bb-back-caption="返回" >
     </div>
+    <style>
+        #neww{
+            text-align: center;
+        }
+        #newList .item{
+            width:340px;
+            height:255px;
+            float:left;
+            display:inline-block;
+            position: relative;
+            margin:10px;
+            overflow: hidden;
+            -webkit-box-shadow:2px 2px 10px #292929;
+        }
+        #newList .item img{
+            width:100%;
+        }
+        #newList .item .label{
+            width:100%;
+            position: absolute;
+            bottom:0px;
+            height: 48px;
+            text-align: right;
+            background: #FFF;
+            opacity: 0.7;
+            color:black;
+            line-height: 48px;
+            font-size: 32px;
+        }
+        #newList div:first-child {
+            width:700px;
+            height:525px;
+        }
+        #newList {
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
 </div>

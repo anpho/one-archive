@@ -1,7 +1,8 @@
+<!DOCTYPE html>
 <div data-bb-type="screen" id="wrap" onscroll="tabswitcher()" style="-webkit-user-select:text" >
     <div id="home" >
         <div class='imgwrapper nomargin'> 
-            <img id="home-img" width="720" height="540" style="width:100%"> 
+            <img id="home-img" style='width:100%'> 
             <div class='imgfooter nomargin' id="home-img-by"></div>
             <div id="spinner-1" data-bb-type="activity-indicator" data-bb-size="medium" style="position: absolute;top:50px;right:50px"></div>
         </div>
@@ -44,10 +45,9 @@
     </div>
     <div data-bb-type="menu">
         <div data-bb-type="menu-item" data-bb-img="img/ic_info.png" onclick="bb.pushScreen('about.html', 'about')">关于</div>
-        <div data-bb-type="menu-item" data-bb-img="img/ic_feedback.png" onclick="blackberry.invoke.invoke({uri: 'https://github.com/anpho/one/issues'}, null, null)">提交bug</div>
         <div data-bb-type="menu-item" data-bb-img="img/ic_email.png" onclick="Invoke.email('anphorea@gmail.com', '《一个》反馈', '')">联系作者</div>
-        <div data-bb-type="menu-item" data-bb-img="img/ic_browser.png" onclick="Invoke.blackberryWorld.app('45960893')">去评分</div>
-        <div data-bb-type="menu-item" data-bb-img="img/ic_settings.png" data-bb-pin="right" onclick="bb.pushScreen('settings.html', 'settings')">设置</div>
+        <div data-bb-type="menu-item" data-bb-img="img/ic_browser.png" onclick="Invoke.blackberryWorld.app('45960893')">撰写评论</div>
+        <div data-bb-type="menu-item" data-bb-img="img/ic_settings.png" data-bb-pin="right" onclick="bb.pushScreen('settings.html', 'settings')">主题设置</div>
     </div>
     <style>
         #qimg{
@@ -74,14 +74,14 @@
         }
         #c-brief{
             font-size:80%;
-            opacity: 0.5;
+            opacity: 0.7;
             padding-top: 50px;
             padding-left: 20px;
             padding-right:20px;
         }
         #c-content{
             text-indent: 1.6em;
-            padding: 5px;
+            margin: 20px;
         }
         #c-author-intro{
             font-size:80%;font-style: italic
@@ -107,6 +107,7 @@
         .imgwrapper {
             height:540px;
             position: relative;
+            overflow: hidden;;
         }
         .nomargin {
             margin: 0px;
@@ -116,7 +117,7 @@
             line-height: 48px;
             font-size: 36px;
             text-align: center;
-            background-color: #DDD;
+            background-color: #FFF;
             color: #000;
             opacity: 0.7;
             position: absolute;
