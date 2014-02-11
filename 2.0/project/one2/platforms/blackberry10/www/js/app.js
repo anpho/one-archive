@@ -59,7 +59,9 @@ var app = {
                 window.removeEventListener('orientationchange', onRotate);
                 loadSettings(element, id);
             }
-
+            if (id === 'menu') {
+                
+            }
 
         };
 
@@ -502,6 +504,7 @@ function loadhome(element, strdate) {
     //载入封面
     //removeChildNodes(gg(element, "home"));
     gg(element, 'spinner-1').show();
+
     one.getHomePageAsync(strdate, function(da) {
         if (data === null) {
             Toast.regular("载入首页数据失败，请检查网络连接后重试。", 1000);
@@ -517,6 +520,7 @@ function loadhome(element, strdate) {
         gg(element, 'home-img-by').innerHTML = data['strAuthor'].replace(/&/g, ' ');
         gg(element, 'home-content').innerHTML = data['strContent'];
         gg(element, 'home-content').style['fontSize'] = localStorage.getItem('fontsize');
+
         imgurl = data['strOriginalImgUrl'];
         console.log('主页已载入。');
         homeloaded = true;
