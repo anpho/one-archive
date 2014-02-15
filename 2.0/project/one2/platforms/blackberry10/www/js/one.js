@@ -11,10 +11,12 @@ var one = {
         setTimeout(function() {
             var cp;
             try {
-                cp = getJSON('http://211.152.49.184:7001/OneForWeb/one/getHpAdMultiinfo');
-                if (cp["result"] === "SUCCESS") {
-                    callback(cp);
-                }
+                getJSON('http://211.152.49.184:7001/OneForWeb/one/getHpAdMultiinfo', function(cp) {
+                    if (cp["result"] === "SUCCESS") {
+                        callback(cp);
+                    }
+                });
+
             } catch (e) {
                 callback(null);
             }

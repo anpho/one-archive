@@ -50,6 +50,13 @@ module.exports = [
         ]
     },
     {
+        "file": "plugins/org.apache.cordova.splashscreen/www/splashscreen.js",
+        "id": "org.apache.cordova.splashscreen.SplashScreen",
+        "clobbers": [
+            "navigator.splashscreen"
+        ]
+    },
+    {
         "file": "plugins/com.blackberry.community.curl/www/client.js",
         "id": "com.blackberry.community.curl.client",
         "clobbers": [
@@ -57,10 +64,10 @@ module.exports = [
         ]
     },
     {
-        "file": "plugins/org.apache.cordova.splashscreen/www/splashscreen.js",
-        "id": "org.apache.cordova.splashscreen.SplashScreen",
+        "file": "plugins/com.blackberry.system/www/client.js",
+        "id": "com.blackberry.system.client",
         "clobbers": [
-            "navigator.splashscreen"
+            "blackberry.system"
         ]
     }
 ]

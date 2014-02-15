@@ -24,6 +24,7 @@ var app = {
         console.log('收到事件: ' + id);
         app.bbuistart();
     },
+    lang: "zh-CN",
     bbuistart: function() {
 
         // 确保只执行一次
@@ -48,6 +49,8 @@ var app = {
 
         // 在DOM显示之前的配置
         config.onscreenready = function(element, id) {
+            app.lang = blackberry.system.language;
+            i18n.process(element, app.lang);
             console.log('载入页面: ' + id);
             if (darkColoring) {
                 var screen = element.querySelector('[data-bb-type=screen]');
@@ -60,7 +63,7 @@ var app = {
                 loadSettings(element, id);
             }
             if (id === 'menu') {
-                
+
             }
 
         };
@@ -146,7 +149,7 @@ function goNext() {
     d.setDate(d.getDate() + 1);
     var today = new Date();
     if (today.format('yyyy-MM-dd') < d.format('yyyy-MM-dd')) {
-        Toast.regular("没有之后的内容", 1000)
+        Toast.regular(trans("没有之后的内容"), 1000)
         return;
     } else {
         currentdisplaydate = d.format('yyyy-MM-dd');
@@ -161,7 +164,7 @@ function goPrev() {
     var fday = new Date();
     fday.setDate(fday.getDate() - 10);
     if (fday.format('yyyy-MM-dd') >= d.format('yyyy-MM-dd')) {
-        Toast.regular("没有之前的内容", 1000)
+        Toast.regular(trans("没有之前的内容"), 1000)
         return;
     } else {
         currentdisplaydate = d.format('yyyy-MM-dd');
@@ -170,7 +173,6 @@ function goPrev() {
     }
 }
 function loadSettings(element, id) {
-    // 读取配置数据
     // 读取配置数据
     var fonts = element.getElementById('drop');
     var size = localStorage.getItem("fontsize");
@@ -185,6 +187,22 @@ function loadSettings(element, id) {
             }
         }
     }
+
+    // 读取lang数据
+    var langdrop = element.getElementById('langdrop');
+    var _lang = localStorage.getItem("lang");
+
+    if (_lang == null) {
+        langdrop.options[0].setAttribute('selected', 'true');
+    } else {
+        for (var i = 0; i < 2; i++) {
+            if (langdrop.options[i].value == _lang) {
+                langdrop.options[i].setAttribute('selected', 'true');
+                break;
+            }
+        }
+    }
+
 
     var togglebutton = element.getElementById('themeToggle');
     var theme = localStorage.getItem("theme");
@@ -421,7 +439,9 @@ var removeDuplicatesInPlace = function(arr) {
     /*
      * 删除数组中的重复元素
      */
-    var i, j, cur;
+    var i,
+            j,
+            cur;
     for (i = arr.length - 1; i >= 0; i--) {
         cur = arr[i];
         for (j = i - 1; j >= 0; j--) {
@@ -435,11 +455,13 @@ var removeDuplicatesInPlace = function(arr) {
     return arr;
 };
 
-function getJSON(URL) {
+function getJSON(URL, callback) {
     //URL 参数要以 "http://" 开始。
     try {
-        var result = community.curl.get(URL);
-        return JSON.parse(result);
+        var data = community.curl.get(URL);
+        if (callback)
+            callback(JSON.parse(data));
+        return JSON.parse(data);
     } catch (e) {
         console.log('获取数据出错，将返回NULL并删除下载错误的文件。');
         return null;
@@ -489,15 +511,28 @@ function g(id) {
 function gg(doc, id) {
     return doc.getElementById(id);
 }
-
+var displaylang = app.lang;
 function loadAll(element, strdate) {
     //载入所有内容
+    var _lang = localStorage.getItem("lang");
 
+    if (_lang == null || _lang === 'zh-CN') {
+        displaylang = 'zh-CN';
+    } else {
+        displaylang = 'zh-TW'
+    }
     //载入封面
     loadhome(element, strdate);
     loadOne(element, strdate);
     loadQuestion(element, strdate);
 
+}
+function trans(text) {
+    if (displaylang === 'zh-TW') {
+        return Traditionalized(text)
+    } else {
+        return Simplized(text)
+    }
 }
 
 function loadhome(element, strdate) {
@@ -507,7 +542,7 @@ function loadhome(element, strdate) {
 
     one.getHomePageAsync(strdate, function(da) {
         if (data === null) {
-            Toast.regular("载入首页数据失败，请检查网络连接后重试。", 1000);
+            Toast.regular(trans("载入首页数据失败，请检查网络连接后重试。"), 1000);
             gg(element, 'home-img').style.display = "block";
             gg(element, 'spinner-1').hide();
             return;
@@ -517,8 +552,8 @@ function loadhome(element, strdate) {
         gg(element, 'home-title').innerHTML = strdate.substr(0, 7);
         gg(element, 'home-pbdate').innerHTML = strdate.substr(8, 2);
         gg(element, 'home-vol').innerHTML = data['strHpTitle'];
-        gg(element, 'home-img-by').innerHTML = data['strAuthor'].replace(/&/g, ' ');
-        gg(element, 'home-content').innerHTML = data['strContent'];
+        gg(element, 'home-img-by').innerHTML = trans(data['strAuthor'].replace(/&/g, ' '));
+        gg(element, 'home-content').innerHTML = trans(data['strContent']);
         gg(element, 'home-content').style['fontSize'] = localStorage.getItem('fontsize');
 
         imgurl = data['strOriginalImgUrl'];
@@ -536,7 +571,10 @@ function loadhome(element, strdate) {
         });
     });
 }
-var homeloaded, oneloaded, qloaded, imgurl;
+var homeloaded,
+        oneloaded,
+        qloaded,
+        imgurl;
 function removeChildNodes(node) {
     var children = node.childNodes;
     for (i = 0; i < children.length; i++) {
@@ -549,16 +587,16 @@ function loadOne(e, strdate) {
     one.getOneContentInfoAsync(strdate, function(c) {
 
         if (c === null) {
-            Toast.regular("载入文章内容失败，请检查网络连接后重试。", 1000);
+            Toast.regular(trans("载入文章内容失败，请检查网络连接后重试。"), 1000);
             //gg(element, 'spinner-2').hide();
             return;
         }
         var content = c["contentEntity"];
-        gg(e, 'c-brief').innerHTML = content['sGW'];
-        gg(e, 'c-title').innerHTML = content['strContTitle'];
-        gg(e, 'c-author-intro').innerHTML = content['strContAuthorIntroduce'];
-        gg(e, 'c-author').innerHTML = content['strContAuthor'];
-        gg(e, 'c-content').innerHTML = "<p>" + content['strContent'].replace(/<br>/g, "</p><p>") + "</p>";
+        gg(e, 'c-brief').innerHTML = trans(content['sGW']);
+        gg(e, 'c-title').innerHTML = trans(content['strContTitle']);
+        gg(e, 'c-author-intro').innerHTML = trans(content['strContAuthorIntroduce']);
+        gg(e, 'c-author').innerHTML = trans(content['strContAuthor']);
+        gg(e, 'c-content').innerHTML = trans("<p>" + content['strContent'].replace(/<br>/g, "</p><p>") + "</p>");
         gg(e, 'c-content').style['fontSize'] = localStorage.getItem('fontsize');
         console.log('内容已载入。');
         gg(e, 'content').style.display = 'block';
@@ -573,16 +611,16 @@ function loadQuestion(e, strdate) {
     //removeChildNodes(gg(e, "ask"));
     one.getOneQuestionInfoAsync(strdate, function(a) {
         if (a === null) {
-            Toast.regular("载入文章内容失败，请检查网络连接后重试。", 1000);
+            Toast.regular(trans("载入文章内容失败，请检查网络连接后重试。"), 1000);
             //gg(element, 'spinner-3').hide();
             return;
         }
         var ask = a['questionAdEntity'];
-        gg(e, 'q-title').innerHTML = ask['strQuestionTitle'];
-        gg(e, 'q-content').innerHTML = ask['strQuestionContent'];
+        gg(e, 'q-title').innerHTML = trans(ask['strQuestionTitle']);
+        gg(e, 'q-content').innerHTML = trans(ask['strQuestionContent']);
         gg(e, 'q-content').style['fontSize'] = localStorage.getItem('fontsize');
-        gg(e, 'a-title').innerHTML = ask['strAnswerTitle'];
-        gg(e, 'a-content').innerHTML = ask['strAnswerContent'];
+        gg(e, 'a-title').innerHTML = trans(ask['strAnswerTitle']);
+        gg(e, 'a-content').innerHTML = trans(ask['strAnswerContent']);
         gg(e, 'a-content').style['fontSize'] = localStorage.getItem('fontsize');
         console.log('问题已载入。');
         gg(e, 'ask').style.display = 'block';
@@ -642,7 +680,7 @@ function clearCache() {
     localStorage.clear();
     localStorage.setItem("theme", _theme);
     localStorage.setItem('fontsize', _fontsize);
-    Toast.regular("缓存已清除", 1000);
+    Toast.regular(trans("缓存已清除"), 1000);
     loadAvailableMags(document, 'reload');
 }
 
@@ -650,6 +688,10 @@ function saveFont(f) {
     //字体大小
     var size = f.value;
     localStorage.setItem("fontsize", size);
+}
+function saveLang(f) {
+    var lang = f.value;
+    localStorage.setItem("lang", lang);
 }
 var lastpos = 0;
 var showActionBar = true;
@@ -704,7 +746,7 @@ function shareText() {
     if (selectedItem) {
         Invoke.shareText(selectedItem);
     } else {
-        Toast.regular("您未选择要分享的内容", 1000);
+        Toast.regular(trans("您未选择要分享的内容"), 1000);
     }
 }
 
