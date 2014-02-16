@@ -168,3 +168,16 @@
     margin-left: auto;
     margin-right: auto;
 }
+
+@media (width:720px)and(height:720px){
+    //Q10
+}
+@media (width:720px)and(height:1280px){
+    //Z30
+}
+@media (width:768px)and(height:1280px){
+    //z10
+}
+@media (width:1280px){
+    //z10&z30 landscape
+}
