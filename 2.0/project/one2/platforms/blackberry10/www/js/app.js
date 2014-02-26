@@ -187,7 +187,7 @@ function loadSettings(element, id) {
             }
         }
     }
-
+    /*
     // 读取lang数据
     var langdrop = element.getElementById('langdrop');
     var _lang = localStorage.getItem("lang");
@@ -202,7 +202,7 @@ function loadSettings(element, id) {
             }
         }
     }
-
+    */
 
     var togglebutton = element.getElementById('themeToggle');
     var theme = localStorage.getItem("theme");
