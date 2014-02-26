@@ -30,23 +30,24 @@
 
     <div id="ask" >
         <div style="clear:both;height:1px;display:block;background-color: #01A7E7"></div>
-        <div id="qimg">问</div>
+        <div id="qimg" i18n="true">`ask`</div>
         <div id="q-title"></div>
         <div id="q-content"></div>
-        <div id="qimg">答</div>
+        <div style="clear:both;height:1px;display:block;background-color: transparent"></div>
+        <div id="qimg" i18n="true">`ans`</div>
         <div id="a-title"></div>
         <div id="a-content"></div>
     </div>
     <div data-bb-type="action-bar" id="ab">
-        <div data-bb-type="action" id="a1" data-bb-style="tab" data-bb-img="img/ic_view_image.png" data-bb-selected = "true"  onclick="showTab('home')">首页</div>
-        <div data-bb-type="action" id="a2" data-bb-style="tab" data-bb-img="img/ic_notes.png" onclick="showTab('content')">内容</div>
-        <div data-bb-type="action" id="a3" data-bb-style="tab" data-bb-img="img/ic_help.png" onclick="showTab('question')">问题</div>
-        <div data-bb-type="action" data-bb-style="button" data-bb-img="img/ic_history.png" onclick="bb.pushScreen('calendar.html', 'showCalendar')">往期内容</div>
+        <div data-bb-type="action" id="a1" data-bb-style="tab" data-bb-img="img/ic_view_image.png" data-bb-selected = "true"  onclick="showTab('home')" i18n="true">`hp`</div>
+        <div data-bb-type="action" id="a2" data-bb-style="tab" data-bb-img="img/ic_notes.png" onclick="showTab('content')" i18n="true">`ct`</div>
+        <div data-bb-type="action" id="a3" data-bb-style="tab" data-bb-img="img/ic_help.png" onclick="showTab('question')" i18n="true">`qu`</div>
+        <div data-bb-type="action" data-bb-style="button" data-bb-img="img/ic_history.png" onclick="bb.pushScreen('calendar.html', 'showCalendar')" i18n="true">`history`</div>
     </div>
     <div data-bb-type="menu">
-        <div data-bb-type="menu-item" data-bb-img="img/ic_info.png" onclick="if(displaylang === 'zh-TW'){bb.pushScreen('about_tw.html', 'about')}else{bb.pushScreen('about.html', 'about')}">关于</div>
-        <div data-bb-type="menu-item" data-bb-img="img/ic_email.png" onclick="Invoke.email('anphorea@gmail.com', '《一个》反馈', '')">联系作者</div>
-        <div data-bb-type="menu-item" data-bb-img="img/ic_browser.png" onclick="Invoke.blackberryWorld.app('45960893')">撰写评论</div>
-        <div data-bb-type="menu-item" data-bb-img="img/ic_settings.png" data-bb-pin="right" onclick="bb.pushScreen('settings.html', 'settings')">主题设置</div>
+        <div data-bb-type="menu-item" data-bb-img="img/ic_info.png" onclick="if(displaylang === 'zh-TW'){bb.pushScreen('about_tw.html', 'about')}else{bb.pushScreen('about.html', 'about')}" i18n="true">`about`</div>
+        <div data-bb-type="menu-item" data-bb-img="img/ic_email.png" onclick="Invoke.email('anphorea@gmail.com', '《一个》反馈', '')" i18n="true">`author`</div>
+        <div data-bb-type="menu-item" data-bb-img="img/ic_browser.png" onclick="Invoke.blackberryWorld.app('45960893')" i18n="true">`rate`</div>
+        <div data-bb-type="menu-item" data-bb-img="img/ic_settings.png" data-bb-pin="right" onclick="bb.pushScreen('settings.html', 'settings')" i18n="true">`theme`</div>
     </div>
 </div>

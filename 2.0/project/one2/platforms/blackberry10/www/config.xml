@@ -9,6 +9,7 @@
     <feature name="com.blackberry.jpps" />
     <feature name="com.blackberry.system" value="com.blackberry.system" />
     <feature name="com.blackberry.ui.contextmenu" value="com.blackberry.ui.contextmenu" />
+    <feature name="com.blackberry.ui.dialog" value="com.blackberry.ui.dialog" />
     <feature name="com.blackberry.ui.toast" value="com.blackberry.ui.toast" />
     <feature name="com.blackberry.utils" />
     <feature name="SplashScreen" value="SplashScreen" />

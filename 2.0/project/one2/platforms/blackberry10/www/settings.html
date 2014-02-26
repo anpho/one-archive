@@ -1,20 +1,20 @@
 <div data-bb-type="screen" id="sse">
     <div data-bb-type="action-bar" data-bb-back-caption="Back" onclick="refreshTheme()"></div>
     <div data-bb-type="round-panel">
-        <div data-bb-type="panel-header">主题设置</div>
+        <div data-bb-type="panel-header" i18n="true">`theme`</div>
         <table width="90%" >
             <tr>
                 <td>
-                    <div data-bb-type="label">&nbsp&nbsp&nbsp应用主题:</div>
+                    <div data-bb-type="label" i18n="true">&nbsp&nbsp&nbsp`applytheme`:</div>
                 </td>
                 <td width="100px">
-                    <div data-bb-type="toggle" id="themeToggle" data-bb-checked="true" data-bb-on="黑色" data-bb-off="白色" onchange="saveSettings(this)"></div>
+                    <div data-bb-type="toggle" i18n="true" id="themeToggle" data-bb-checked="true" data-bb-on="亮色" data-bb-off="暗色" onchange="saveSettings(this)"></div>
                 </td>
             </tr>
         </table>
-        <div data-bb-type="panel-header">文字设置</div>	
+        <div data-bb-type="panel-header" i18n="true">`font`</div>	
         <div>
-            <select data-bb-style="stretch" data-bb-label="选用字体大小:" onchange="saveFont(this)" id="drop">
+            <select data-bb-style="stretch" i18n="true" data-bb-label="`size`:" onchange="saveFont(this)" id="drop">
                 <option value="70%">小号</option>
                 <option value="80%">较小</option>
                 <option value="100%">中号(默认)</option>
@@ -22,13 +22,5 @@
                 <option value="150%">大号</option>
             </select>
         </div>
-        <div data-bb-type="panel-header">内容显示语言（实验性功能）</div>	
-        <div>
-            <select data-bb-style="stretch" data-bb-label="显示为:" onchange="saveLang(this)" id="langdrop">
-                <option value="zh-CN">简体中文</option>
-                <option value="zh-TW">繁体中文</option>
-            </select>
-        </div>
-        
     </div>			
 </div>

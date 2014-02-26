@@ -353,16 +353,26 @@ function loadCachedMagsAsync(element) {
             }), 0);
 }
 function deleteSelected() {
-    var selected = g('cachedmags').selected;
-    console.log('[ONE]删除已缓存的内容 : ' + selected.getAttribute("data-mrk-date"));
-    var d = selected.getAttribute("data-mrk-date");
     try {
-        localStorage.removeItem(d.concat('title'));
-        removeByDate(d);
+        blackberry.ui.dialog.standardAskAsync(i18n.get('sure2del', app.lang), blackberry.ui.dialog.D_OK_CANCEL, function(selection) {
+            if (selection.return === 'Ok') {
+                var selected = g('cachedmags').selected;
+                console.log('[ONE]删除已缓存的内容 : ' + selected.getAttribute("data-mrk-date"));
+                var d = selected.getAttribute("data-mrk-date");
+                try {
+                    localStorage.removeItem(d.concat('title'));
+                    removeByDate(d);
+                } catch (e) {
+                    console.log(e);
+                }
+                loadCachedMagsAsync(document);
+            }
+        }, {
+            title: i18n.get('deldialog', app.lang)
+        });
     } catch (e) {
-        console.log(e);
+        alert("Exception in standardDialog: " + e);
     }
-    loadCachedMagsAsync(document);
 }
 function findCachedMagsAsync(callback) {
     /*
@@ -511,16 +521,8 @@ function g(id) {
 function gg(doc, id) {
     return doc.getElementById(id);
 }
-var displaylang = app.lang;
 function loadAll(element, strdate) {
     //载入所有内容
-    var _lang = localStorage.getItem("lang");
-
-    if (_lang == null || _lang === 'zh-CN') {
-        displaylang = 'zh-CN';
-    } else {
-        displaylang = 'zh-TW'
-    }
     //载入封面
     loadhome(element, strdate);
     loadOne(element, strdate);
@@ -528,7 +530,7 @@ function loadAll(element, strdate) {
 
 }
 function trans(text) {
-    if (displaylang === 'zh-TW') {
+    if (app.lang === 'zh-TW') {
         return Traditionalized(text)
     } else {
         return Simplized(text)

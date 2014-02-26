@@ -1,9 +1,10 @@
 #qimg{
     text-align: center;
-    width:200px;
+    width:100px;
     height:64px;
     line-height: 64px;
-    margin: 10px auto;
+    margin: 10px;
+    float:left;
     background-color: #01A7E7;
     color:#fff;
     border-radius: 20px;
@@ -39,18 +40,22 @@
 
 }
 #q-title{
-    margin: 5px;
+    margin: 20px;
     font-style:  italic;
 }
 #q-content{
-    margin: 5px;
+    clear:both;
+    text-indent: 1.6em;
+    margin: 20px;
 }
 #a-title{
     font-style:  italic;
-    margin: 5px;
+    margin: 20px;
 }
 #a-content{
-    margin: 5px;
+    clear:both;
+    text-indent: 1.6em;
+    margin: 20px;
 }
 
 .imgwrapper {

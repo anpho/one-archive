@@ -69,6 +69,13 @@ module.exports = [
         "clobbers": [
             "blackberry.system"
         ]
+    },
+    {
+        "file": "plugins/com.blackberry.ui.dialog/www/client.js",
+        "id": "com.blackberry.ui.dialog.client",
+        "clobbers": [
+            "blackberry.ui.dialog"
+        ]
     }
 ]
 });
