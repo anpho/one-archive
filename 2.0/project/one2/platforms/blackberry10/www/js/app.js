@@ -43,7 +43,7 @@ var app = {
             config = {
                 controlsDark: false,
                 listsDark: false,
-                coloredTitleBar: true
+                coloredTitleBar: false
             };
         }
 
@@ -59,7 +59,6 @@ var app = {
                 }
             }
             if (id === 'settings') {
-                window.removeEventListener('orientationchange', onRotate);
                 loadSettings(element, id);
             }
             if (id === 'menu') {
@@ -79,7 +78,6 @@ var app = {
                 });
             }
             if (id === 'menu') {
-                window.removeEventListener('orientationchange', onRotate);
                 loadContent(element, id);
                 Hammer(gg(element, 'wrap')).on('swiperight', function(ev) {
                     if (ev.gesture.distance > 200) {
@@ -123,7 +121,6 @@ var app = {
 
             }
             if (id === 'cached') {
-                window.removeEventListener('orientationchange', onRotate);
                 loadCachedMagsAsync(element);
                 Hammer(gg(element, 'cca')).on('swiperight', function() {
                     bb.popScreen();
@@ -133,43 +130,85 @@ var app = {
         };
 
         bb.init(config);
-
-        // 因为BBUI 0.9.6本身没有对黑暗主题的支持，这里需要手动将背景设置为黑色。
         if (darkColoring) {
             document.body.style['background-color'] = darkScreenColor;
             document.body.style['color'] = '#E6E6E6';
         }
-        navigator.splashscreen.hide();
         bb.pushScreen('main.html', 'menu');
+        navigator.splashscreen.hide();
     }
 };
+function fillAvailableMags(callback) {
+    console.log('获取可用期数')
+    findCachedMagsAsync(function(cached) {
+        findAvailableMagsAsync(function(available) {
+            if (available) {
+                availableMags = removeDuplicatesInPlace(cached.concat(available)).sort(function(a, b) {
+                    if (a["strdate"] > b["strdate"]) {
+                        return -1;
+                    } else if (a["strdate"] === b["strdate"]) {
+                        return 0;
+                    } else {
+                        return 1;
+                    }
+                });
+            } else {
+                availableMags = cached;
+            }
+            console.log(availableMags);
+            callback();
+        })
+    })
+}
+var availableMags = [];
 function goNext() {
-    //Next Day
-    var d = new Date(currentdisplaydate);
-    d.setDate(d.getDate() + 1);
-    var today = new Date();
-    if (today.format('yyyy-MM-dd') < d.format('yyyy-MM-dd')) {
-        Toast.regular(trans("没有之后的内容"), 1000)
-        return;
+    if (availableMags.length === 0) {
+        fillAvailableMags(function(data) {
+            goNextEx();
+        });
     } else {
-        currentdisplaydate = d.format('yyyy-MM-dd');
-        //Toast.regular("正在载入" + currentdisplaydate + "的内容", 1000);
-        g('wrap').scrollTo(0, 0);
-        loadContent(document, '');
+        goNextEx();
+    }
+}
+function goNextEx() {
+    for (var i = 0; i < availableMags.length; i++) {
+        if (availableMags[i]['strdate'] === currentdisplaydate) {
+            if ((i + 1) >= availableMags.length) {
+                Toast.regular(trans("没有之后的内容"), 1000)
+                break;
+            } else {
+                currentdisplaydate = availableMags[i + 1]['strdate'];
+                Toast.regular(trans("正在载入") + currentdisplaydate + trans("的内容"), 1000);
+                g('wrap').scrollTo(0, 0);
+                loadContent(document, '');
+                break;
+            }
+        }
     }
 }
 function goPrev() {
-    var d = new Date(currentdisplaydate);
-    d.setDate(d.getDate() - 1);
-    var fday = new Date();
-    fday.setDate(fday.getDate() - 10);
-    if (fday.format('yyyy-MM-dd') >= d.format('yyyy-MM-dd')) {
-        Toast.regular(trans("没有之前的内容"), 1000)
-        return;
+    if (availableMags.length === 0) {
+        fillAvailableMags(function(data) {
+            goPrevEx();
+        });
     } else {
-        currentdisplaydate = d.format('yyyy-MM-dd');
-        g('wrap').scrollTo(0, 0);
-        loadContent(document, '');
+        goPrevEx();
+    }
+}
+function goPrevEx() {
+    for (var i = 0; i < availableMags.length; i++) {
+        if (availableMags[i]['strdate'] === currentdisplaydate) {
+            if ((i - 1) < 0) {
+                Toast.regular(trans("没有之前的内容"), 1000)
+                break;
+            } else {
+                currentdisplaydate = availableMags[i - 1]['strdate'];
+                Toast.regular(trans("正在载入") + currentdisplaydate + trans("的内容"), 1000);
+                g('wrap').scrollTo(0, 0);
+                loadContent(document, '');
+                break;
+            }
+        }
     }
 }
 function loadSettings(element, id) {
@@ -188,21 +227,21 @@ function loadSettings(element, id) {
         }
     }
     /*
-    // 读取lang数据
-    var langdrop = element.getElementById('langdrop');
-    var _lang = localStorage.getItem("lang");
-
-    if (_lang == null) {
-        langdrop.options[0].setAttribute('selected', 'true');
-    } else {
-        for (var i = 0; i < 2; i++) {
-            if (langdrop.options[i].value == _lang) {
-                langdrop.options[i].setAttribute('selected', 'true');
-                break;
-            }
-        }
-    }
-    */
+     // 读取lang数据
+     var langdrop = element.getElementById('langdrop');
+     var _lang = localStorage.getItem("lang");
+     
+     if (_lang == null) {
+     langdrop.options[0].setAttribute('selected', 'true');
+     } else {
+     for (var i = 0; i < 2; i++) {
+     if (langdrop.options[i].value == _lang) {
+     langdrop.options[i].setAttribute('selected', 'true');
+     break;
+     }
+     }
+     }
+     */
 
     var togglebutton = element.getElementById('themeToggle');
     var theme = localStorage.getItem("theme");
@@ -238,83 +277,57 @@ function refreshTheme() {
     }
 }
 
-function onRotate() {
-    if (window.innerWidth === 720) {
-        g('newList').style.margin = '0px';
-    } else if (window.innerWidth === 768) {
-        g('newList').style.margin = '0px 20px';
-    } else if (window.innerWidth === 1280) {
-        g('newList').style.margin = '0px 85px';
-    }
-}
 var listenerAdded = false;
 var token;
 
 function loadAvailableMagsAsync(element) {
     gg(element, 'spinner-4').show();
-    if (!listenerAdded)
-        token = window.addEventListener('orientationchange', onRotate, false);
-    findCachedMagsAsync(function(cached) {
-        findAvailableMagsAsync(function(available) {
-            var data;
-            if (available) {
-                data = removeDuplicatesInPlace(cached.concat(available)).sort(function(a, b) {
-                    if (a["strdate"] > b["strdate"]) {
-                        return -1;
-                    } else if (a["strdate"] === b["strdate"]) {
-                        return 0;
-                    } else {
-                        return 1;
-                    }
-                });
-            } else {
-                data = cached;
-            }
-            //new
-            var wrapper = gg(element, 'newList');
-            wrapper.style.display = 'none';
+    fillAvailableMags(function() {
+        //new
+        var wrapper = gg(element, 'newList');
+        wrapper.style.display = 'none';
 
-            for (var i = 0; i < data.length; i++) {
-                console.log(data[i]);
-                var sd = data[i]['strdate'].concat("");
-                var mag = document.createElement('div');
-                mag.className = 'item';
-                var label = document.createElement('div');
-                label.className = 'label';
-                label.innerHTML = sd + " " + data[i]["status"]
-                var img = new Image();
+        for (var i = 0; i < availableMags.length; i++) {
+            console.log(availableMags[i]);
+            var sd = availableMags[i]['strdate'].concat("");
+            var mag = document.createElement('div');
+            mag.className = 'item';
+            var label = document.createElement('div');
+            label.className = 'label';
+            label.innerHTML = sd + " " + availableMags[i]["status"]
+            var img = new Image();
 
-                img.id = 'i' + sd;
-                img.src = 'img/welcome.png';
-                getTitleImg(img, sd);
-                mag.appendChild(img);
-                mag.appendChild(label);
-                mag.setAttribute('strdate', sd);
-                mag.onclick = function() {
-                    currentdisplaydate = this.getAttribute("strdate");
-                    sessionStorage.setItem('show', currentdisplaydate);
-                    oneloaded = false;
-                    homeloaded = false;
-                    qloaded = false;
-                    bb.pushScreen('main.html', 'menu');
-                }
-                wrapper.appendChild(mag);
+            img.id = 'i' + sd;
+            img.src = 'img/welcome.png';
+            getTitleImg(img, sd);
+            mag.appendChild(img);
+            mag.appendChild(label);
+            mag.setAttribute('strdate', sd);
+            mag.onclick = function() {
+                currentdisplaydate = this.getAttribute("strdate");
+                sessionStorage.setItem('show', currentdisplaydate);
+                oneloaded = false;
+                homeloaded = false;
+                qloaded = false;
+                bb.pushScreen('main.html', 'menu');
             }
-            //end new
-            gg(element, 'spinner-4').hide();
-            wrapper.style.display = 'block';
-            onRotate();
-        });
+            wrapper.appendChild(mag);
+        }
+        //end new
+        gg(element, 'spinner-4').hide();
+        wrapper.style.display = 'block';
     });
 }
 function getTitleImg(obj, strdate) {
     one.getHomePageAsync(strdate, function(da) {
-        var d = da['hpEntity'];
-        if (d) {
-            cache.get(d['strOriginalImgUrl'], strdate, function(u) {
-                console.log("设置图片：" + u);
-                obj.src = u;
-            });
+        if (da) {
+            var d = da['hpEntity'];
+            if (d) {
+                cache.get(d['strOriginalImgUrl'], strdate, function(u) {
+                    console.log("设置图片：" + u);
+                    obj.src = u;
+                });
+            }
         }
     });
 }
@@ -414,22 +427,20 @@ function findAvailableMagsAsync(callback) {
         result.push(dataitem)
     }
     callback(result);
-    /*
-     one.getHpAdMultiInfoAsync(function(data) {
-     var result = [];
-     if (data && (data["result"] === "SUCCESS")) {
-     var hplist = data["hpAdMulitEntity"]["lstEntHp"];
-     for (var i = 0; i < hplist.length; i++) {
-     var dataitem = {};
-     dataitem["title"] = hplist[i]["strHpTitle"];
-     dataitem["strdate"] = hplist[i]["strMarketTime"];
-     dataitem["status"] = "可下载";
-     result.push(dataitem);
-     }
-     callback(result);
-     }
-     })
-     */
+//        
+//    one.getHpAdMultiInfoAsync(function(data) {
+//        if (data) {
+//            var array = data['hpAdMulitEntity']['lstEntHp'];
+//            for (var i = 0; i < array.length; i++) {
+//                var dataitem = {};
+//                dataitem['title'] = array[i]['strHpTitle'];
+//                dataitem['strdate'] = array[i]['strMarketTime'];
+//                dataitem['status'] = '可下载';
+//                result.push(dataitem)
+//            }
+//        }
+//
+//    })
 }
 
 function displaySelected() {
@@ -479,18 +490,25 @@ function getJSON(URL, callback) {
 }
 
 function loadContent(element, id) {
+    cleanContent(element);
     //载入内容，strdate是要显示的日期，此处显示当前日期。
     if (!currentdisplaydate) {
         if (sessionStorage.getItem('show')) {
             currentdisplaydate = sessionStorage.getItem('show');
+            loadAll(element, currentdisplaydate);
         } else {
-            var d = new Date();
-            currentdisplaydate = d.format('yyyy-MM-dd');
-            sessionStorage.setItem('show', currentdisplaydate);
+            fillAvailableMags(function() {
+                currentdisplaydate = availableMags[0]['strdate'];
+                sessionStorage.setItem('show', currentdisplaydate);
+                loadAll(element, currentdisplaydate);
+            })
         }
+    } else {
+        sessionStorage.setItem('show', currentdisplaydate);
+        loadAll(element, currentdisplaydate);
     }
-    cleanContent(element);
-    loadAll(element, currentdisplaydate);
+
+
 }
 function cleanContent(element) {
     gg(element, 'home-img').style.display = 'none';
@@ -551,12 +569,28 @@ function loadhome(element, strdate) {
         }
         var data = da["hpEntity"];
         localStorage.setItem(strdate + 'title', data['strHpTitle']);
+        gg(element, 'openinbrowser').onclick = function() {
+            blackberry.ui.dialog.standardAskAsync(trans('在浏览器中打开本期杂志？'), blackberry.ui.dialog.D_OK_CANCEL, function(selection) {
+                if (selection.return === 'Ok') {
+                    blackberry.invoke.invoke({
+                        uri: data['sWebLk']
+                    },
+                    function() {
+                        console.log('Browser Opened: ' + data['sWebLk'])
+                    }, function() {
+                        console.error('Browser Not Opened: ' + data['sWebLk'])
+                    });
+                }
+            }, {
+                title: trans('确认')
+            });
+        };
         gg(element, 'home-title').innerHTML = strdate.substr(0, 7);
         gg(element, 'home-pbdate').innerHTML = strdate.substr(8, 2);
         gg(element, 'home-vol').innerHTML = data['strHpTitle'];
         gg(element, 'home-img-by').innerHTML = trans(data['strAuthor'].replace(/&/g, ' '));
         gg(element, 'home-content').innerHTML = trans(data['strContent']);
-        gg(element, 'home-content').style['fontSize'] = localStorage.getItem('fontsize');
+        //gg(element, 'home-content').style['fontSize'] = localStorage.getItem('fontsize');
 
         imgurl = data['strOriginalImgUrl'];
         console.log('主页已载入。');

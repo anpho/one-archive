@@ -8,19 +8,23 @@ var one = {
         }
     },
     getHpAdMultiInfoAsync: function(callback) {
-        setTimeout(function() {
-            var cp;
+        var datestr = new Date().toTimeString();
+        this.getJSONAsync(datestr, 'hpmulti', 'http://211.152.49.184:7001/OneForWeb/one/getHpAdMultiinfo', function(u) {
             try {
-                getJSON('http://211.152.49.184:7001/OneForWeb/one/getHpAdMultiinfo', function(cp) {
-                    if (cp["result"] === "SUCCESS") {
-                        callback(cp);
-                    }
-                });
-
+                var cp = getJSON(u);
+                if (cp['result'] === "SUCCESS") {
+                    callback(cp);
+                } else {
+                    setTimeout(removeFile(datestr, 'hpmulti'), 0);
+                    callback(null);
+                }
             } catch (e) {
+                console.log("[ONE]获取HPMULTI失败");
+                console.log(e);
+                setTimeout(removeFile(datestr, 'hpmulti'), 0);
                 callback(null);
             }
-        }, 0);
+        });
     },
     getHpAdMultiinfo: function() {
         //获取5天的广告与首页数据
@@ -363,7 +367,10 @@ function removeFile(datestr, type) {
     console.log('删除文件 >> ' + path);
     window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
     window.requestFileSystem(window.PERSISTENT, 5 * 1024 * 1024, function(fs) {
-        fs.root.getFile(path, {create: false}, function(fileEntry) {
+        fs.root.getFile(path, {
+            create: false
+        },
+        function(fileEntry) {
             fileEntry.remove(function() {
                 console.log('文件已删除。');
             }, function(ex) {
@@ -383,7 +390,10 @@ function removeByDate(datestr) {
     console.log('删除文件 >> ' + path);
     window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
     window.requestFileSystem(window.PERSISTENT, 5 * 1024 * 1024, function(fs) {
-        fs.root.getFile(path + "home.json", {create: false}, function(fileEntry) {
+        fs.root.getFile(path + "home.json", {
+            create: false
+        },
+        function(fileEntry) {
             fileEntry.remove(function() {
                 console.log(path + 'home.json文件已删除。');
             }, function(ex) {
@@ -392,7 +402,10 @@ function removeByDate(datestr) {
         }, function(ex) {
             console.log(ex);
         });
-        fs.root.getFile(path + "content.json", {create: false}, function(fileEntry) {
+        fs.root.getFile(path + "content.json", {
+            create: false
+        },
+        function(fileEntry) {
             fileEntry.remove(function() {
                 console.log(path + 'content.json文件已删除。');
             }, function(ex) {
@@ -401,7 +414,10 @@ function removeByDate(datestr) {
         }, function(ex) {
             console.log(ex);
         });
-        fs.root.getFile(path + "question.json", {create: false}, function(fileEntry) {
+        fs.root.getFile(path + "question.json", {
+            create: false
+        },
+        function(fileEntry) {
             fileEntry.remove(function() {
                 console.log(path + 'question.json文件已删除。');
             }, function(ex) {
@@ -410,7 +426,10 @@ function removeByDate(datestr) {
         }, function(ex) {
             console.log(ex);
         });
-        fs.root.getFile(path + ".jpg", {create: false}, function(fileEntry) {
+        fs.root.getFile(path + ".jpg", {
+            create: false
+        },
+        function(fileEntry) {
             fileEntry.remove(function() {
                 console.log(path + '.jpg 文件已删除。');
             }, function(ex) {

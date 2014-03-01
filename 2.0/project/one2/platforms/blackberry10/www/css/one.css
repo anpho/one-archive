@@ -66,6 +66,17 @@
 .nomargin {
     margin: 0px;
 }
+.openinbrowser{
+    height:64px;
+    width:64px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    opacity: 0.5;
+    background: url("../img/ic_browser.png") no-repeat;
+    -webkit-filter: brightness(1%);
+    background-size: contain;
+}
 .imgfooter {
     height: 48px;
     line-height: 48px;
@@ -81,7 +92,7 @@
 .bottomwrapper {
     position: relative;
     width: 100%;
-    height: 180px;
+    min-height: 180px;
 }
 .citawrapper {
     display: table;
@@ -174,15 +185,18 @@
     margin-right: auto;
 }
 
-@media (width:720px)and(height:720px){
-    //Q10
+@media screen and (width:720px){
+    #newList{
+        margin:0px;;
+    }
 }
-@media (width:720px)and(height:1280px){
-    //Z30
+@media screen and (width:768px){
+    #newList{
+        margin:0px 20px;;
+    }
 }
-@media (width:768px)and(height:1280px){
-    //z10
-}
-@media (width:1280px){
-    //z10&z30 landscape
+@media screen and (width:1280px){
+    #newList{
+        margin:0px 85px;;
+    }
 }

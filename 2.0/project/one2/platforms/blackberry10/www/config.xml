@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="one" version="2.1.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:rim="http://www.blackberry.com/ns/widgets">
+<widget id="one" version="2.1.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:rim="http://www.blackberry.com/ns/widgets">
     <feature name="com.blackberry.app" value="com.blackberry.app" />
     <feature name="com.blackberry.community.curl" value="com.blackberry.community.curl" />
     <feature name="com.blackberry.invoke" value="com.blackberry.invoke" />
@@ -29,5 +29,7 @@
     <preference name="AutoHideSplashScreen" value="false" />
     <rim:splash src="img/splash-1280x768.png" />
     <rim:splash src="img/splash-1280x720.png" />
+    <rim:splash src="img/splash-768x1280.png" />
+    <rim:splash src="img/splash-720x1280.png" />
     <rim:splash src="img/splash-720x720.png" />
 </widget>
