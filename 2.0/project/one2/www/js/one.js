@@ -19,8 +19,8 @@ var one = {
                     callback(null);
                 }
             } catch (e) {
-                console.log("[ONE]获取HPMULTI失败");
-                console.log(e);
+                console.error("[ONE]获取HPMULTI失败");
+                console.error(e);
                 setTimeout(removeFile(datestr, 'hpmulti'), 0);
                 callback(null);
             }
@@ -160,7 +160,7 @@ var one = {
                             callback(null);
                         }
                     } catch (e) {
-                        console.log("[ONE]获取首页数据出错" + e);
+                        console.error("[ONE]获取首页数据出错" + e);
                         setTimeout(removeFile(datestr, 'home'), 0);
                         callback(null);
                     }
@@ -206,8 +206,8 @@ var one = {
                             callback(null);
                         }
                     } catch (e) {
-                        console.log("[ONE]获取内容数据失败");
-                        console.log(e);
+                        console.error("[ONE]获取内容数据失败");
+                        console.error(e);
                         setTimeout(removeFile(datestr, 'content'), 0);
                         callback(null);
                     }
@@ -253,13 +253,13 @@ var one = {
                         if (cp['result'] === "SUCCESS") {
                             callback(cp);
                         } else {
-                            console.log('[ONE]获取问题的API返回了FAIL，删除下载错误的文件。');
+                            console.error('[ONE]获取问题的API返回了FAIL，删除下载错误的文件。');
                             setTimeout(removeFile(datestr, 'question'), 0);
                             callback(null);
                         }
                     } catch (e) {
                         setTimeout(removeFile(datestr, 'question'), 0);
-                        console.log("[ONE]API超时或数据错误。" + e);
+                        console.error("[ONE]API超时或数据错误。" + e);
                         callback(null);
                     }
                 }), 1);
@@ -341,11 +341,11 @@ var one = {
                         callback("file://" + result.fullPath);
                     },
                     function(result) {
-                        console.log("下载失败。");
-                        console.log("Error code: " + result.code);
-                        console.log("HTTP status: " + result.http_status);
-                        console.log("Source: " + result.source);
-                        console.log("Target: " + result.target);
+                        console.error("下载失败。");
+                        console.error("Error code: " + result.code);
+                        console.error("HTTP status: " + result.http_status);
+                        console.error("Source: " + result.source);
+                        console.error("Target: " + result.target);
                         callback(url);
                     });
         }
@@ -364,81 +364,151 @@ function removeFile(datestr, type) {
      * 所以，在回调后，进行检测，如果发现存下了FAIL的数据或者其他错误数据，就把这种数据删除。
      */
     var path = blackberry.io.home + "/" + datestr + type + ".json";
-    console.log('删除文件 >> ' + path);
-    window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
-    window.requestFileSystem(window.PERSISTENT, 5 * 1024 * 1024, function(fs) {
-        fs.root.getFile(path, {
+    if (global_fs) {
+        global_fs.root.getFile(path, {
             create: false
         },
         function(fileEntry) {
             fileEntry.remove(function() {
                 console.log('文件已删除。');
             }, function(ex) {
-                console.log(ex);
+                console.error(ex);
             });
         }, function(ex) {
-            console.log(ex);
+            console.error(ex);
         });
-    }, function(f) {
-        console.log(f);
-    });
+    } else {
+        window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
+        window.requestFileSystem(window.PERSISTENT, 5 * 1024 * 1024, function(fs) {
+            global_fs = fs;
+            global_fs.root.getFile(path, {
+                create: false
+            },
+            function(fileEntry) {
+                fileEntry.remove(function() {
+                    console.log('文件已删除。');
+                }, function(ex) {
+                    console.error(ex);
+                });
+            }, function(ex) {
+                console.error(ex);
+            });
+        }, function(f) {
+            console.error(f);
+        });
+    }
+    console.log('删除文件 >> ' + path);
+
 
 }
-
+var global_fs = null;
 function removeByDate(datestr) {
     var path = blackberry.io.home + "/" + datestr;
     console.log('删除文件 >> ' + path);
-    window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
-    window.requestFileSystem(window.PERSISTENT, 5 * 1024 * 1024, function(fs) {
-        fs.root.getFile(path + "home.json", {
+    if (global_fs) {
+        global_fs.root.getFile(path + "home.json", {
             create: false
         },
         function(fileEntry) {
             fileEntry.remove(function() {
                 console.log(path + 'home.json文件已删除。');
             }, function(ex) {
-                console.log(ex);
+                console.error(ex);
             });
         }, function(ex) {
-            console.log(ex);
+            console.error(ex);
         });
-        fs.root.getFile(path + "content.json", {
+        global_fs.root.getFile(path + "content.json", {
             create: false
         },
         function(fileEntry) {
             fileEntry.remove(function() {
                 console.log(path + 'content.json文件已删除。');
             }, function(ex) {
-                console.log(ex);
+                console.error(ex);
             });
         }, function(ex) {
-            console.log(ex);
+            console.error(ex);
         });
-        fs.root.getFile(path + "question.json", {
+        global_fs.root.getFile(path + "question.json", {
             create: false
         },
         function(fileEntry) {
             fileEntry.remove(function() {
                 console.log(path + 'question.json文件已删除。');
             }, function(ex) {
-                console.log(ex);
+                console.error(ex);
             });
         }, function(ex) {
-            console.log(ex);
+            console.error(ex);
         });
-        fs.root.getFile(path + ".jpg", {
+        global_fs.root.getFile(path + ".jpg", {
             create: false
         },
         function(fileEntry) {
             fileEntry.remove(function() {
                 console.log(path + '.jpg 文件已删除。');
             }, function(ex) {
-                console.log(ex);
+                console.error(ex);
             });
         }, function(ex) {
-            console.log(ex);
+            console.error(ex);
         });
-    }, function(f) {
-        console.log(f);
-    });
+    } else {
+        window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
+        window.requestFileSystem(window.PERSISTENT, 5 * 1024 * 1024, function(fs) {
+            global_fs = fs;
+            global_fs.root.getFile(path + "home.json", {
+                create: false
+            },
+            function(fileEntry) {
+                fileEntry.remove(function() {
+                    console.log(path + 'home.json文件已删除。');
+                }, function(ex) {
+                    console.error(ex);
+                });
+            }, function(ex) {
+                console.error(ex);
+            });
+            global_fs.root.getFile(path + "content.json", {
+                create: false
+            },
+            function(fileEntry) {
+                fileEntry.remove(function() {
+                    console.log(path + 'content.json文件已删除。');
+                }, function(ex) {
+                    console.error(ex);
+                });
+            }, function(ex) {
+                console.error(ex);
+            });
+            global_fs.root.getFile(path + "question.json", {
+                create: false
+            },
+            function(fileEntry) {
+                fileEntry.remove(function() {
+                    console.log(path + 'question.json文件已删除。');
+                }, function(ex) {
+                    console.error(ex);
+                });
+            }, function(ex) {
+                console.error(ex);
+            });
+            global_fs.root.getFile(path + ".jpg", {
+                create: false
+            },
+            function(fileEntry) {
+                fileEntry.remove(function() {
+                    console.log(path + '.jpg 文件已删除。');
+                }, function(ex) {
+                    console.error(ex);
+                });
+            }, function(ex) {
+                console.error(ex);
+            });
+        }, function(f) {
+            console.error(f);
+        });
+    }
+
 }

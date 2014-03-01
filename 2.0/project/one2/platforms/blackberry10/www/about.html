@@ -6,7 +6,10 @@
         }
     </style>
 
-    <div data-bb-type="action-bar" data-bb-back-caption="Back"></div>
+    <div data-bb-type="action-bar" data-bb-back-caption="Back">
+        <div data-bb-type="action" data-bb-style="button" data-bb-img="img/logo.png"  onclick="openInBrowser('http://www.wufazhuce.com')">官方网站</div>
+        <div data-bb-type="action" data-bb-style="button" data-bb-img="img/ic_browser.png"  onclick="Invoke.blackberryWorld.app('45960893')">撰写评论</div>
+    </div>
     <div data-bb-type="round-panel">
         <div data-bb-type="panel-header" id="cpright">关于</div>
         <span class="grey">出品人/监制：</span><span>韩寒</span><br /><br />
@@ -86,4 +89,6 @@
             <div data-bb-type="button" data-bb-style="stretch" onclick="blackberry.invoke.invoke({uri: 'https://github.com/anpho/one/issues/milestones'}, null, null);">@Github</div>
         </div>
     </div>
+    <div style="text-align: center"><img id="bfb" style="width:60%"></div>
+    
 </div>

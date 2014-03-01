@@ -64,6 +64,14 @@ var app = {
             if (id === 'menu') {
 
             }
+            if (id === 'about') {
+                if (darkColoring) {
+                    gg(element, 'bfb').src = 'img/BFB2.png';
+                } else {
+                    gg(element, 'bfb').src = 'img/BFB1.png';
+                }
+
+            }
 
         };
 
@@ -164,10 +172,10 @@ var availableMags = [];
 function goNext() {
     if (availableMags.length === 0) {
         fillAvailableMags(function(data) {
-            goNextEx();
+            goPrevEx();
         });
     } else {
-        goNextEx();
+        goPrevEx();
     }
 }
 function goNextEx() {
@@ -189,10 +197,10 @@ function goNextEx() {
 function goPrev() {
     if (availableMags.length === 0) {
         fillAvailableMags(function(data) {
-            goPrevEx();
+            goNextEx();
         });
     } else {
-        goPrevEx();
+        goNextEx();
     }
 }
 function goPrevEx() {
@@ -572,14 +580,7 @@ function loadhome(element, strdate) {
         gg(element, 'openinbrowser').onclick = function() {
             blackberry.ui.dialog.standardAskAsync(trans('在浏览器中打开本期杂志？'), blackberry.ui.dialog.D_OK_CANCEL, function(selection) {
                 if (selection.return === 'Ok') {
-                    blackberry.invoke.invoke({
-                        uri: data['sWebLk']
-                    },
-                    function() {
-                        console.log('Browser Opened: ' + data['sWebLk'])
-                    }, function() {
-                        console.error('Browser Not Opened: ' + data['sWebLk'])
-                    });
+                    openInBrowser(data['sWebLk']);
                 }
             }, {
                 title: trans('确认')
@@ -611,6 +612,16 @@ var homeloaded,
         oneloaded,
         qloaded,
         imgurl;
+function openInBrowser(url) {
+    blackberry.invoke.invoke({
+        uri: url
+    },
+    function() {
+        console.log('Browser Opened: ' + url)
+    }, function() {
+        console.error('Browser Not Opened: ' + url)
+    });
+}
 function removeChildNodes(node) {
     var children = node.childNodes;
     for (i = 0; i < children.length; i++) {
