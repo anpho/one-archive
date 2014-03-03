@@ -1,25 +1,13 @@
 var app = {
-    // Application Constructor
     initialize: function() {
         this.bindEvents();
     },
-    // Bind Event Listeners
-    //
-    // Bind any events that are required on startup. Common events are:
-    // 'load', 'deviceready', 'offline', and 'online'.
     bindEvents: function() {
         document.addEventListener('deviceready', this.onDeviceReady, false);
-        //window.addEventListener('oncontextmenu', app.onContextMenu);
     },
-    // deviceready Event Handler
-    //
-    // The scope of 'this' is the event. In order to call the 'receivedEvent'
-    // function, we must explicity call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-        //app.checkPlugin();
         app.receivedEvent('deviceready');
     },
-    // Update DOM on a Received Event
     receivedEvent: function(id) {
         console.log('收到事件: ' + id);
         app.bbuistart();
@@ -132,7 +120,7 @@ var app = {
                 loadCachedMagsAsync(element);
                 Hammer(gg(element, 'cca')).on('swiperight', function() {
                     bb.popScreen();
-                })
+                });
             }
 
         };
@@ -147,7 +135,7 @@ var app = {
     }
 };
 function fillAvailableMags(callback) {
-    console.log('获取可用期数')
+    console.log('获取可用期数');
     findCachedMagsAsync(function(cached) {
         findAvailableMagsAsync(function(available) {
             if (available) {
@@ -165,8 +153,8 @@ function fillAvailableMags(callback) {
             }
             console.log(availableMags);
             callback();
-        })
-    })
+        });
+    });
 }
 var availableMags = [];
 function goNext() {
@@ -182,7 +170,7 @@ function goNextEx() {
     for (var i = 0; i < availableMags.length; i++) {
         if (availableMags[i]['strdate'] === currentdisplaydate) {
             if ((i + 1) >= availableMags.length) {
-                Toast.regular(trans("没有之后的内容"), 1000)
+                Toast.regular(trans("没有之后的内容"), 1000);
                 break;
             } else {
                 currentdisplaydate = availableMags[i + 1]['strdate'];
@@ -207,7 +195,7 @@ function goPrevEx() {
     for (var i = 0; i < availableMags.length; i++) {
         if (availableMags[i]['strdate'] === currentdisplaydate) {
             if ((i - 1) < 0) {
-                Toast.regular(trans("没有之前的内容"), 1000)
+                Toast.regular(trans("没有之前的内容"), 1000);
                 break;
             } else {
                 currentdisplaydate = availableMags[i - 1]['strdate'];
@@ -224,33 +212,16 @@ function loadSettings(element, id) {
     var fonts = element.getElementById('drop');
     var size = localStorage.getItem("fontsize");
 
-    if (size == null) {
+    if (size === null) {
         fonts.options[2].setAttribute('selected', 'true');
     } else {
         for (var i = 0; i < 5; i++) {
-            if (fonts.options[i].value == size) {
+            if (fonts.options[i].value === size) {
                 fonts.options[i].setAttribute('selected', 'true');
                 break;
             }
         }
     }
-    /*
-     // 读取lang数据
-     var langdrop = element.getElementById('langdrop');
-     var _lang = localStorage.getItem("lang");
-     
-     if (_lang == null) {
-     langdrop.options[0].setAttribute('selected', 'true');
-     } else {
-     for (var i = 0; i < 2; i++) {
-     if (langdrop.options[i].value == _lang) {
-     langdrop.options[i].setAttribute('selected', 'true');
-     break;
-     }
-     }
-     }
-     */
-
     var togglebutton = element.getElementById('themeToggle');
     var theme = localStorage.getItem("theme");
 
@@ -302,12 +273,12 @@ function loadAvailableMagsAsync(element) {
             mag.className = 'item';
             var label = document.createElement('div');
             label.className = 'label';
-            label.innerHTML = sd + " " + availableMags[i]["status"]
+            label.innerHTML = sd + " " + availableMags[i]["status"];
             var img = new Image();
 
             img.id = 'i' + sd;
             img.src = 'img/welcome.png';
-            getTitleImg(img, sd);
+            getTitleImg(img.id, sd);
             mag.appendChild(img);
             mag.appendChild(label);
             mag.setAttribute('strdate', sd);
@@ -331,11 +302,17 @@ function getTitleImg(obj, strdate) {
         if (da) {
             var d = da['hpEntity'];
             if (d) {
-                cache.get(d['strOriginalImgUrl'], strdate, function(u) {
+                cache.get(d['strOriginalImgUrl'], strdate, obj, function(u, id) {
                     console.log("设置图片：" + u);
-                    obj.src = u;
+                    var o = document.getElementById(id);
+                    if (o)
+                        o.src = u;
                 });
+            } else {
+                console.error(d);
             }
+        } else {
+            console.error(da);
         }
     });
 }
@@ -432,23 +409,9 @@ function findAvailableMagsAsync(callback) {
         dataitem['title'] = "";
         dataitem['strdate'] = d.format('yyyy-MM-dd');
         dataitem['status'] = "可下载";
-        result.push(dataitem)
+        result.push(dataitem);
     }
     callback(result);
-//        
-//    one.getHpAdMultiInfoAsync(function(data) {
-//        if (data) {
-//            var array = data['hpAdMulitEntity']['lstEntHp'];
-//            for (var i = 0; i < array.length; i++) {
-//                var dataitem = {};
-//                dataitem['title'] = array[i]['strHpTitle'];
-//                dataitem['strdate'] = array[i]['strMarketTime'];
-//                dataitem['status'] = '可下载';
-//                result.push(dataitem)
-//            }
-//        }
-//
-//    })
 }
 
 function displaySelected() {
@@ -484,19 +447,6 @@ var removeDuplicatesInPlace = function(arr) {
     return arr;
 };
 
-function getJSON(URL, callback) {
-    //URL 参数要以 "http://" 开始。
-    try {
-        var data = community.curl.get(URL);
-        if (callback)
-            callback(JSON.parse(data));
-        return JSON.parse(data);
-    } catch (e) {
-        console.log('获取数据出错，将返回NULL并删除下载错误的文件。');
-        return null;
-    }
-}
-
 function loadContent(element, id) {
     cleanContent(element);
     //载入内容，strdate是要显示的日期，此处显示当前日期。
@@ -509,7 +459,7 @@ function loadContent(element, id) {
                 currentdisplaydate = availableMags[0]['strdate'];
                 sessionStorage.setItem('show', currentdisplaydate);
                 loadAll(element, currentdisplaydate);
-            })
+            });
         }
     } else {
         sessionStorage.setItem('show', currentdisplaydate);
@@ -557,9 +507,9 @@ function loadAll(element, strdate) {
 }
 function trans(text) {
     if (app.lang === 'zh-TW') {
-        return Traditionalized(text)
+        return Traditionalized(text);
     } else {
-        return Simplized(text)
+        return text;
     }
 }
 
@@ -600,11 +550,13 @@ function loadhome(element, strdate) {
         if (window.innerHeight < 800) {
             gg(element, 'ab').hide();
         }
-        cache.get(imgurl, currentdisplaydate, function(u) {
+        cache.get(imgurl, currentdisplaydate, 'home-img', function(u, id) {
             console.log("设置图片：" + u);
-            g('home-img').src = u;
-            g('home-img').style.display = "block";
-            gg(element, 'spinner-1').hide();
+            if (g(id)) {
+                g(id).src = u;
+                g(id).style.display = "block";
+                gg(element, 'spinner-1').hide();
+            }
         });
     });
 }
@@ -617,9 +569,9 @@ function openInBrowser(url) {
         uri: url
     },
     function() {
-        console.log('Browser Opened: ' + url)
+        console.log('Browser Opened: ' + url);
     }, function() {
-        console.error('Browser Not Opened: ' + url)
+        console.error('Browser Not Opened: ' + url);
     });
 }
 function removeChildNodes(node) {
@@ -658,7 +610,7 @@ function loadQuestion(e, strdate) {
     //removeChildNodes(gg(e, "ask"));
     one.getOneQuestionInfoAsync(strdate, function(a) {
         if (a === null) {
-            Toast.regular(trans("载入文章内容失败，请检查网络连接后重试。"), 1000);
+            Toast.regular(trans("载入问题内容失败，请检查网络连接后重试。"), 1000);
             //gg(element, 'spinner-3').hide();
             return;
         }
@@ -672,7 +624,6 @@ function loadQuestion(e, strdate) {
         console.log('问题已载入。');
         gg(e, 'ask').style.display = 'block';
         qloaded = true;
-        //gg(e, 'spinner-3').hide();
     });
 
 }
@@ -754,7 +705,6 @@ function tabswitcher() {
         bb.actionBar.highlightAction(g('a3'));
     }
     if (window.innerHeight < 800) {
-        //向下滚动时隐掉ACTIONBAR，向上滚动时显示
         if (ruler.scrollTop < 5) {
             showActionBar = false;
             setTimeout(function() {
@@ -783,34 +733,4 @@ function tabswitcher() {
         }, 333);
     }
     lastpos = ruler.scrollTop;
-}
-///////////////////////////////////////////文字选择与共享////////////////////////////////////////////////
-
-
-
-function shareText() {
-    var selectedItem = getSelText();
-    if (selectedItem) {
-        Invoke.shareText(selectedItem);
-    } else {
-        Toast.regular(trans("您未选择要分享的内容"), 1000);
-    }
-}
-
-function getSelText()
-{
-    if (window.getSelection)
-    {
-        return window.getSelection();
-    }
-    else if (document.getSelection)
-    {
-        return  document.getSelection();
-    }
-    else if (document.selection)
-    {
-        return  document.selection.createRange().text;
-    }
-    else
-        return "";
 }

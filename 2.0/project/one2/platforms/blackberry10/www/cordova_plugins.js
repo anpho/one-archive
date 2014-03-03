@@ -57,13 +57,6 @@ module.exports = [
         ]
     },
     {
-        "file": "plugins/com.blackberry.community.curl/www/client.js",
-        "id": "com.blackberry.community.curl.client",
-        "clobbers": [
-            "community.curl"
-        ]
-    },
-    {
         "file": "plugins/com.blackberry.system/www/client.js",
         "id": "com.blackberry.system.client",
         "clobbers": [
