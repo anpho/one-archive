@@ -130,6 +130,7 @@ var app = {
             document.body.style['background-color'] = darkScreenColor;
             document.body.style['color'] = '#E6E6E6';
         }
+        //$.ajaxSettings.timeOut=1;
         bb.pushScreen('main.html', 'menu');
         navigator.splashscreen.hide();
     }
@@ -401,17 +402,23 @@ function findCachedMagsAsync(callback) {
 }
 
 function findAvailableMagsAsync(callback) {
-    var result = [];
-    for (var i = 0; i < 10; i++) {
-        var d = new Date();
-        d.setDate(d.getDate() - i);
-        var dataitem = {};
-        dataitem['title'] = "";
-        dataitem['strdate'] = d.format('yyyy-MM-dd');
-        dataitem['status'] = "可下载";
-        result.push(dataitem);
-    }
-    callback(result);
+    $.getJSON('http://211.152.49.184:7001/OneForWeb/one/getMobileDispDays').done(function(c) {
+        var days = parseInt(c.mobileDispCtrlDays);
+        var result = [];
+        for (var i = 0; i < days; i++) {
+            var d = new Date();
+            d.setDate(d.getDate() - i);
+            var dataitem = {};
+            dataitem['title'] = "";
+            dataitem['strdate'] = d.format('yyyy-MM-dd');
+            dataitem['status'] = "可下载";
+            result.push(dataitem);
+        }
+        callback(result);
+    }).fail(function(c) {
+        callback([]);
+    })
+
 }
 
 function displaySelected() {

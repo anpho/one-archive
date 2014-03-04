@@ -3,13 +3,16 @@ var one = {
         var datestr = new Date().toTimeString();
         this.getJSONAsync(datestr, 'hpmulti', 'http://211.152.49.184:7001/OneForWeb/one/getHpAdMultiinfo', function(u) {
             try {
-                $.getJSON(u, function(cp) {
+                $.getJSON(u).done(function(cp) {
                     if (cp['result'] === "SUCCESS") {
                         callback(cp);
                     } else {
                         setTimeout(removeFile(datestr, 'hpmulti'), 0);
                         callback(null);
                     }
+                }).fail(function(c) {
+                    setTimeout(removeFile(datestr, 'hpmulti'), 0);
+                    callback(null);
                 })
             } catch (e) {
                 console.error("[ONE]获取HPMULTI失败");
@@ -22,13 +25,16 @@ var one = {
     getHomePageAsync: function(datestr, callback) {
         this.getJSONAsync(datestr, 'home', 'http://211.152.49.184:7001/OneForWeb/one/getHpinfo?strDate=' + datestr, function(u) {
             try {
-                $.getJSON(u, function(cp) {
+                $.getJSON(u).done(function(cp) {
                     if (cp['result'] === "SUCCESS") {
                         callback(cp);
                     } else {
                         setTimeout(removeFile(datestr, 'home'), 1);
                         callback(null);
                     }
+                }).fail(function(c) {
+                    setTimeout(removeFile(datestr, 'home'), 1);
+                    callback(null);
                 });
             } catch (e) {
                 console.error("[ONE]获取首页数据出错" + e);
@@ -41,13 +47,16 @@ var one = {
 
         this.getJSONAsync(datestr, 'content', 'http://211.152.49.184:7001/OneForWeb/one/getOneContentInfo?strDate=' + datestr, function(u) {
             try {
-                $.getJSON(u, function(cp) {
+                $.getJSON(u).done(function(cp) {
                     if (cp['result'] === "SUCCESS") {
                         callback(cp);
                     } else {
                         setTimeout(removeFile(datestr, 'content'), 0);
                         callback(null);
                     }
+                }).fail(function(c) {
+                    setTimeout(removeFile(datestr, 'content'), 0);
+                    callback(null);
                 });
 
             } catch (e) {
@@ -61,7 +70,7 @@ var one = {
     getOneQuestionInfoAsync: function(datestr, callback) {
         this.getJSONAsync(datestr, 'question', 'http://211.152.49.184:7001/OneForWeb/one/getOneQuestionInfo?strDate=' + datestr, function(u) {
             try {
-                $.getJSON(u, function(cp) {
+                $.getJSON(u).done(function(cp) {
                     if (cp['result'] === "SUCCESS") {
                         callback(cp);
                     } else {
@@ -69,6 +78,10 @@ var one = {
                         setTimeout(removeFile(datestr, 'question'), 0);
                         callback(null);
                     }
+                }).fail(function(c) {
+                    console.error('[ONE]获取问题的API返回了FAIL，删除下载错误的文件。');
+                    setTimeout(removeFile(datestr, 'question'), 0);
+                    callback(null);
                 });
             } catch (e) {
                 setTimeout(removeFile(datestr, 'question'), 0);
