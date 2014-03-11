@@ -1,9 +1,10 @@
-<?xml version='1.0' encoding='utf-8'?>
+﻿<?xml version='1.0' encoding='utf-8'?>
 <widget id="one" version="2.1.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>ONE</name>
     <description>
         ONE Unofficial App.
     </description>
+    <name xml:lang="zh-CN">一个</name>
     <author email="anphorea@gmail.com" href="http://about.me/anpho">
         anpho
     </author>

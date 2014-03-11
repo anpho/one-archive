@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+/* globals Buffer */
+
 var fs = require('fs'),
     path = require('path'),
     wrench = require('wrench'),
@@ -103,6 +105,13 @@ _self = {
         return myString === "true" ? true : myString === "false" ? false : defaultVal;
     },
 
+    homedir: function () {
+        if (_self.isWindows()) {
+            return process.env.USERPROFILE;
+        } 
+        return process.env.HOME;
+    },
+
     parseUri : function (str) {
         var i, uri = {},
             key = [ "source", "scheme", "authority", "userInfo", "user", "password", "host", "port", "relative", "path", "directory", "file", "query", "anchor" ],
@@ -140,7 +149,7 @@ _self = {
             } else if (data.length >= 3 && data[0] === 0xEF && data[1] === 0xBB && data[2] === 0xBF) {
                 s = data.toString("utf8", 3);
             } else {
-                s = data.toString("ascii");
+                s = data.toString("utf8");
             }
         }
 
@@ -162,12 +171,14 @@ _self = {
         var msg = data.toString().replace(/[\n\r]/g, '');
 
         if (msg) {
-            if (msg.toLowerCase().indexOf("error: ") >= 0) {
-                logger.error(msg.substring(7));
-            } else if (msg.toLowerCase().indexOf("warn: ") >= 0) {
-                logger.warn(msg.substring(6));
-            } else if (msg.toLowerCase().indexOf("info: ") >= 0) {
-                logger.info(msg.substring(6));
+            if (msg.indexOf("[ERROR] ") >= 0) {
+                logger.error(msg.substring(8).trim());
+            } else if (msg.indexOf("[WARN] ") >= 0) {
+                logger.warn(msg.substring(7).trim());
+            } else if (msg.indexOf("[INFO] ") >= 0) {
+                logger.info(msg.substring(8).trim());
+            } else if (msg.indexOf("[BUILD] ") >= 0) {
+                logger.info(msg.substring(8).trim());
             } else {
                 logger.info(msg);
             }
@@ -178,7 +189,7 @@ _self = {
         if (require('os').type().toLowerCase().indexOf("windows") >= 0) {
             return "\"" + str + "\"";
         } else {
-            return str.replace(/(["\s'$`\\])/g,'\\$1');
+            return str.replace(/(["\s'$`\\])/g, '\\$1');
         }
     }
 

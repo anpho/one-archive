@@ -1,4 +1,4 @@
-cordova.define("com.blackberry.app.client", function(require, exports, module) {/*
+cordova.define("com.blackberry.app.client", function(require, exports, module) { /*
  Licensed to the Apache Software Foundation (ASF) under one
  or more contributor license agreements.  See the NOTICE file
  distributed with this work for additional information
@@ -169,4 +169,5 @@ Object.defineProperty(_self, "unlockOrientation", {"value": unlockOrientation, "
 Object.defineProperty(_self, "rotate", {"value": rotate, "writable": false});
 
 module.exports = _self;
+
 });

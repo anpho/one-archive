@@ -1,4 +1,4 @@
-cordova.define("com.blackberry.ui.contextmenu.client", function(require, exports, module) {/*
+cordova.define("com.blackberry.ui.contextmenu.client", function(require, exports, module) { /*
  Licensed to the Apache Software Foundation (ASF) under one
  or more contributor license agreements.  See the NOTICE file
  distributed with this work for additional information
@@ -130,4 +130,5 @@ defineReadOnlyActions("VIEW_IMAGE", "ViewImage");
 defineReadOnlyActions("INSPECT_ELEMENT", "InspectElement");
 
 module.exports = contextmenu;
+
 });

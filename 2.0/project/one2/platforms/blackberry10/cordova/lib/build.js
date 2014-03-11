@@ -21,7 +21,7 @@ var path = require("path"),
     command = require("commander"),
     os = require("os"),
     utils = require("./utils"),
-    signingUtils = require("./signing-utils"),
+    signingHelper = require("./signing-helper"),
     bbProperties = utils.getProperties(),
     bbwpArgv = [
         process.argv[0],
@@ -45,15 +45,16 @@ function copyArgIfExists(arg) {
 }
 
 command
-    .usage('[--debug] [--release] [--query] [-k | --keystorepass] [-b | --buildId <number>] [-p | --params <json>] [-ll | --loglevel <level>]')
+    .usage('[--debug | --release] [--query] [-k | --keystorepass] [-b <number> | --buildId <number>] [-p <json> | --params <json>] [-l <level> | --loglevel <level>] [--web-inspector] [--no-signing]')
     .option('--debug', 'build in debug mode.')
     .option('--release', 'build in release mode. This will sign the resulting bar.')
     .option('--query', 'query on the commandline when a password is needed')
     .option('-k, --keystorepass <password>', 'signing key password')
     .option('-b, --buildId <num>', 'specifies the build number for signing (typically incremented from previous signing).')
-    .option('-d, --web-inspector', 'enables webinspector. Enabled by default in debug mode.).')
     .option('-p, --params <params JSON file>', 'specifies additional parameters to pass to downstream tools.')
-    .option('-ll, --loglevel <loglevel>', 'set the logging level (error, warn, verbose)');
+    .option('-l, --loglevel <loglevel>', 'set the logging level (error, warn, verbose)')
+    .option('--web-inspector', 'enables webinspector. Enabled by default in debug mode.).')
+    .option('--no-signing', 'when building in release mode, this will skip signing');
 
 try {
     command.parse(process.argv);
@@ -64,42 +65,44 @@ try {
         exit(ERROR_VALUE);
     }
 
-    signingUtils.warn();
+    signingHelper.warn();
 
     utils.series(
         [
-            function clean (done) {
+            function clean(done) {
                 var cmd = utils.isWindows() ? "clean" : "./clean",
                     args = [],
                     opts = { "cwd": path.normalize(__dirname + "/..") };
 
                 utils.exec(cmd, args, opts, done);
             },
-            function releaseBuild (allDone) {
+            function releaseBuild(allDone) {
                 var childTasks = [],
                     keystorepass = session.getKeyStorePass(command),
                     err;
 
                 if (command.release) {
                     copyArgIfExists("buildId");
-                    //Note: Packager refers to signing password as "password" not "keystorepass"
-                    bbwpArgv.push("--password");
-                    if (keystorepass) {
-                        bbwpArgv.push(keystorepass);
-                    } else if (command.query) {
-                        childTasks.push(utils.prompt.bind(this, {description: "Please enter your keystore password: ", hidden: true}));
-                        childTasks.push(function (password, done) {
-                            bbwpArgv.push(password);
-                            done();
-                        });
-                    } else {
-                        err = "No signing password provided. Please enter a value for 'keystorepass' in %HOME%/.cordova/blackberry10.json or use --keystorepass via command-line";
+                    if (command.signing) {
+                        //Note: Packager refers to signing password as "password" not "keystorepass"
+                        bbwpArgv.push("--password");
+                        if (keystorepass) {
+                            bbwpArgv.push(keystorepass);
+                        } else if (command.query) {
+                            childTasks.push(utils.prompt.bind(this, {description: "Please enter your keystore password: ", hidden: true}));
+                            childTasks.push(function (password, done) {
+                                bbwpArgv.push(password);
+                                done();
+                            });
+                        } else {
+                            err = "No signing password provided. Please enter a value for 'keystorepass' in " + pkgrUtils.homedir() + "/.cordova/blackberry10.json or use --keystorepass via command-line";
+                        }
                     }
                 }
 
-                async.waterfall(childTasks, function (error) { allDone(error || err);});
+                async.waterfall(childTasks, function (error) { allDone(error || err); });
             },
-            function build (done) {
+            function build(done) {
                 //enable webinspector in debug mode or if --webinspector was provided
                 if (!command.release || command.webInspector) {
                     bbwpArgv.push("-d");

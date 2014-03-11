@@ -100,9 +100,9 @@ function generateDeployTokenOptions(targetIp, targetPassword) {
 }
 
 function execNativeScript(script, options, callback) {
-    var script = path.join(process.env.CORDOVA_BBTOOLS, script);
+    var fullPath = path.join(process.env.CORDOVA_BBTOOLS, script);
 
-    utils.exec(script, options, {
+    utils.exec(fullPath, options, {
         "cwd" : workingDir,
         "env" : process.env
     }, callback);
@@ -138,7 +138,7 @@ self.createToken = function (projectProperties, target, keystorepass, callback) 
             callback(-1);
         }
     } else if (!keystorepass) {
-        logger.warn(localize.translate("WARN_NO_SIGNING_PASSWORD_PROVIDED"));
+        logger.warn(localize.translate("WARN_NO_SIGNING_PASSWORD_PROVIDED", pkgrUtils.homedir()));
         if (callback && typeof callback === "function") {
             callback(-1);
         }

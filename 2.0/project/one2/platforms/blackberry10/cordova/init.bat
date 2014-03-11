@@ -61,6 +61,8 @@ if exist "%LOCAL_BBTOOLS_BINARY%" (
     )
 )
 
+:end
+
 set FOUNDJAVA=
 for %%e in (%PATHEXT%) do (
   for %%X in (java%%e) do (
@@ -69,13 +71,18 @@ for %%e in (%PATHEXT%) do (
     )
   )
 )
-if not exist "%CORDOVA_NODE%\node.exe" (
-  echo node cannot be found on the path. Aborting.
-  exit /b 2
+
+if not exist "%LOCAL_NODE_BINARY%" (
+  if not exist "%CORDOVA_NODE%\node.exe" (
+    echo node cannot be found on the path. Aborting.
+    exit /b 2
+  )
 )
-if not exist "%CORDOVA_NODE%\npm" (
-  echo npm cannot be found on the path. Aborting.
-  exit /b 2
+if exist "%~dp0..\package.json" (
+  if not exist "%CORDOVA_NODE%\npm" (
+    echo npm cannot be found on the path. Aborting.
+    exit /b 2
+  )
 )
 if not defined FOUNDJAVA (
   echo java cannot be found on the path. Aborting.
@@ -99,7 +106,5 @@ if not exist "%CORDOVA_BBTOOLS%\blackberry-debugtokenrequest.bat" (
 )
 
 "%CORDOVA_NODE%\node" "%~dp0\check_reqs.js" %*
-
-:end
 
 exit /b 0

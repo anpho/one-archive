@@ -1,4 +1,4 @@
-cordova.define("com.blackberry.invoke.client", function(require, exports, module) {/*
+cordova.define("com.blackberry.invoke.client", function(require, exports, module) { /*
   Licensed to the Apache Software Foundation (ASF) under one
   or more contributor license agreements.  See the NOTICE file
   distributed with this work for additional information
@@ -135,4 +135,5 @@ defineReadOnlyField(_self, "FILE_TRANSFER_COPY_RW", 'COPY_RW');
 defineReadOnlyField(_self, "FILE_TRANSFER_LINK", 'LINK');
 
 module.exports = _self;
+
 });

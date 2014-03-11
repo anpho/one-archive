@@ -26,16 +26,18 @@ var fs = require("fs"),
     async = require("async"),
     session = require("./session"),
     properties = utils.getProperties(),
-    workingdir = path.normalize(__dirname + "/..");
+    workingdir = path.normalize(__dirname + "/.."),
+    _self;
 
 //Options looking for are: (Device | Emulator, query, devicepass). Calls back with:  (error || options object, target object)
 function getTargetName(options, done) {
-    var ipFinder = options.device ? targetUtils.findConnectedDevice : targetUtils.findConnectedSimulator,
-        targetType = options.device ? "device" : "emulator";
+    var ipFinder = options.emulator ? targetUtils.findConnectedSimulator : targetUtils.findConnectedDevice,
+        targetType = options.emulator ? "emulator" : "device";
 
     if (options.target) {
         done(null, options, options.target);
-    } else if (options.device || options.emulator) {
+    } else {
+        
         if (options.device && options.emulator) {
             localize.translate("WARN_RUN_DEVICE_OVERRIDES_EMULATOR");
         }
@@ -44,14 +46,13 @@ function getTargetName(options, done) {
         {
             ip: function (done) {
                 ipFinder(function (ip) {
-                   done(ip ? null : "No connected BlackBerry 10 " + targetType + " found", ip);
+                    done(ip ? null : "No connected BlackBerry 10 " + targetType + " found", ip);
                 });
             },
             devicePass: function (done) {
                 if (!options.devicepass && options.devicepass !== "") {
                     if (options.query) {
-                        var description = options.device ? "Please enter your " + targetType +  " password: " : "Please enter your " + targetType +  " password (For no password press Enter): ";
-                        utils.prompt({description: description, hidden: true}, done);
+                        utils.prompt({description: getPasswordPrompt(targetType), hidden: true}, done);
                     } else if (!options.emulator) {
                         done("Please provide device password using --devicepass");
                     } else {
@@ -70,8 +71,6 @@ function getTargetName(options, done) {
                 _self.checkDeviceInfo(options, results.ip, targetType, results.devicePass, done);
             }
         });
-    } else {
-        done(null, options, properties.defaultTarget);
     }
 }
 
@@ -98,7 +97,7 @@ function validateTarget(options, targetName, allDone) {
                     });
                 });
             } else {
-                err = "IP is not defined in target \"" + target + "\"";
+                err = "IP is not defined in target \"" + deployTarget.name + "\"";
             }
         }
 
@@ -108,8 +107,7 @@ function validateTarget(options, targetName, allDone) {
             } else {
                 if (options.query) {
                     runTasks.push(function (done) {
-                        var description = options.device ? "Please enter your " + deployTarget.type +  " password: " : "Please enter your " + deployTarget.type +  " password (For no password press Enter): ";
-                        utils.prompt({description: description, hidden: true}, function (e, devicePass) {
+                        utils.prompt({description: getPasswordPrompt(deployTarget.type), hidden: true}, function (e, devicePass) {
                             deployTarget.password = devicePass;
                             done(e);
                         });
@@ -122,7 +120,7 @@ function validateTarget(options, targetName, allDone) {
 
         if (!deployTarget.pin) {
             runTasks.push(function (done) {
-                targetUtils.getDeviceInfo.bind(deployTarget.ip, deployTarget.devicePass, function (err, result) {
+                targetUtils.getDeviceInfo(deployTarget.ip, deployTarget.password, function (err, result) {
                     deployTarget.pin = result.pin;
                     done(err);
                 });
@@ -142,8 +140,8 @@ function validateTarget(options, targetName, allDone) {
 function handleDebugToken(options, deployTarget, allDone) {
     options.keystorepass = session.getKeyStorePass(options);
 
-    // if target has no pin, skip the debug token feature
-    if (deployTarget.pin && !options.emulator) {
+    // deploy debug token for device debug builds only
+    if (deployTarget.pin && !options.emulator && options.build && !options.release) {
         async.waterfall(
             [
                 debugTokenHelper.checkDebugToken.bind(this, deployTarget.pin),
@@ -182,7 +180,7 @@ function handleDebugToken(options, deployTarget, allDone) {
     }
 }
 
-function generateDeployOptions(options, deployTarget, uninstall) {
+function generateDeployOptions(options, deployTarget) {
     var deployOptions = [],
         barPath = pkgrUtils.escapeStringForShell(
             path.normalize(__dirname + "/../../build/" +
@@ -199,20 +197,14 @@ function generateDeployOptions(options, deployTarget, uninstall) {
 
     deployOptions.push("-package");
     deployOptions.push(barPath);
+    deployOptions.push("-uninstallApp");
+    deployOptions.push("-installApp");
 
-    if (uninstall) {
-        deployOptions.push("-uninstallApp");
-        return deployOptions;
-    } else {
-
-        deployOptions.push("-installApp");
-
-        if (options.launch) {
-            deployOptions.push("-launchApp");
-        }
-
-        return deployOptions;
+    if (options.launch) {
+        deployOptions.push("-launchApp");
     }
+
+    return deployOptions;
 }
 
 function execNativeDeploy(deployOptions, callback) {
@@ -222,6 +214,15 @@ function execNativeDeploy(deployOptions, callback) {
         "cwd": workingdir,
         "env": process.env
     }, callback);
+}
+
+function getPasswordPrompt(targetType) {
+    var prompt = "Please enter your " + targetType + " password";
+    if (targetType === "emulator") {
+        prompt += " (For no password press ENTER)";
+    }
+    prompt += ": ";
+    return prompt;
 }
 
 _self = {
@@ -235,16 +236,11 @@ _self = {
             ], callback
         );
     },
-    //options looking for are: (launch) Function returns (error || null)
-    deployToTarget : function (options, deployTarget, callback) {
-        execNativeDeploy(generateDeployOptions(options, deployTarget, false));
-    },
 
-    //options looking for are: (uninstall) Function returns (error || null)
-    uninstall : function (options, deployTarget, allDone) {
+    //Function returns (error || null)
+    install : function (options, deployTarget, allDone) {
         var script = path.join(process.env.CORDOVA_BBTOOLS, "blackberry-deploy"),
             args = [
-                "-listInstalledApps",
                 "-device",
                 deployTarget.ip
             ],
@@ -252,34 +248,18 @@ _self = {
             installedAppsOutput,
             runTasks = [];
 
-        if (options.uninstall) {
-            if (deployTarget.password) {
-                args.push("-password", deployTarget.password);
-            }
-            runTasks = [
-                utils.exec.bind(this, script, args, { "cwd": projectRootDir, _customOptions: {silent: true}}),
-                function listInstalledAppsOutput (stdout, stderr, done) {
-                    installedAppsOutput = stdout;
-                    fs.readFile(path.join(__dirname + "/../../www/", "config.xml"), done);
-                },
-                function configXMLOutput (result, done) {
-                    var parser = new xml2js.Parser();
-                    parser.parseString(result, done);
-                },
-                function parsedConfigXMLOutput (result, done) {
-                    if (installedAppsOutput.indexOf(result['@'].id) !== -1) {
-                        var deployOptions = generateDeployOptions(options, deployTarget, true);
-                        execNativeDeploy(deployOptions, done);
-                    } else {
-                        done();
-                    }
-                }
-            ];
+        if (deployTarget.password) {
+            args.push("-password", deployTarget.password);
         }
+        runTasks = [
+            function uninstallInstallLaunchApp(result, done) {
+                var deployOptions = generateDeployOptions(options, deployTarget);
+                execNativeDeploy(deployOptions, done);
+            }
+        ];
 
         async.waterfall(runTasks,
             function (err, results) {
-                //Absorb error for uninstallation
                 allDone(null, deployTarget);
             }
         );
@@ -287,15 +267,14 @@ _self = {
 
     //Function returns (error || deployTarget)
     checkBuild : function (deployTarget, allDone) {
-        barPath = path.normalize(__dirname + "/../../build/" +
+        var barPath = path.normalize(__dirname + "/../../build/" +
                 (deployTarget.type === "device" ? "device" : "simulator") +
                 "/" + utils.genBarName() + ".bar");
         if (fs.existsSync(barPath)) {
             allDone(null, deployTarget);
         } else {
-            allDone(err = "No build file exists, please run: build [--debug] [--release] [-k | --keystorepass] [-b | --buildId <number>] [-p | --params <json>] [-ll | --loglevel <level>] ");
+            allDone("No build file exists, please run: build [--debug | --release] [-k | --keystorepass] [-b | --buildId <number>] [-p | --params <json>] [-l | --loglevel <level>] ");
         }
-
     },
 
     //No options needed within function Function returns (error || options, targetName)

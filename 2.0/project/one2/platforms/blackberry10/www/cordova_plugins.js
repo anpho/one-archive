@@ -70,5 +70,22 @@ module.exports = [
             "blackberry.ui.dialog"
         ]
     }
-]
+];
+module.exports.metadata = 
+// TOP OF METADATA
+{
+    "com.blackberry.app": "1.0.0",
+    "com.blackberry.invoke": "1.0.0",
+    "com.blackberry.invoke.card": "1.0.0",
+    "com.blackberry.io": "1.0.0",
+    "com.blackberry.io.filetransfer": "1.0.0",
+    "com.blackberry.ui.toast": "1.0.0",
+    "com.blackberry.ui.contextmenu": "1.0.0",
+    "org.apache.cordova.splashscreen": "0.2.6",
+    "com.blackberry.system": "1.0.0",
+    "com.blackberry.ui.dialog": "1.0.0",
+    "com.blackberry.utils": "1.0.0",
+    "com.blackberry.jpps": "1.0.0"
+}
+// BOTTOM OF METADATA
 });

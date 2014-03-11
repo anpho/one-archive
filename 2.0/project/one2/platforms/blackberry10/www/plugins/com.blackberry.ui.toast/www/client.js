@@ -1,4 +1,4 @@
-cordova.define("com.blackberry.ui.toast.client", function(require, exports, module) {/*
+cordova.define("com.blackberry.ui.toast.client", function(require, exports, module) { /*
  Licensed to the Apache Software Foundation (ASF) under one
  or more contributor license agreements.  See the NOTICE file
  distributed with this work for additional information
@@ -45,4 +45,5 @@ toast.show = function (message, options) {
 };
 
 module.exports = toast;
+
 });
