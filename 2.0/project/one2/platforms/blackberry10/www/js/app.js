@@ -476,6 +476,7 @@ function loadContent(element, id) {
 
 }
 function cleanContent(element) {
+    gg(element, 'home').style.display = 'none';
     gg(element, 'home-img').style.display = 'none';
     gg(element, 'home-vol').innerHTML = "";
     gg(element, 'home-pbdate').innerHTML = "";
@@ -552,6 +553,7 @@ function loadhome(element, strdate) {
 
         imgurl = data['strOriginalImgUrl'];
         console.log('主页已载入。');
+        gg(element, 'home').style.display = 'block';
         homeloaded = true;
 
         if (window.innerHeight < 800) {

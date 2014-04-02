@@ -1,11 +1,10 @@
-<!DOCTYPE html>
-<div data-bb-type="screen" id="wrap" onscroll="tabswitcher()" style="-webkit-user-select:text" >
+<div data-bb-type="screen" id="wrap" onscroll="tabswitcher()">
+    <div id="spinner-1" data-bb-type="activity-indicator" data-bb-size="medium" style="position: absolute;top:50px;right:50px"></div>
     <div id="home" >
         <div class='imgwrapper nomargin'> 
             <img id="home-img" style='width:100%'> 
             <div class='imgfooter nomargin' id="home-img-by"></div>
             <div class="openinbrowser nomargin" id="openinbrowser"></div>
-            <div id="spinner-1" data-bb-type="activity-indicator" data-bb-size="medium" style="position: absolute;top:50px;right:50px"></div>
         </div>
         <div class='bottomwrapper nomargin'>
             <div class='pubdatewrapper nomargin' id="pubdatewrapper">
@@ -46,7 +45,11 @@
         <div data-bb-type="action" data-bb-style="button" data-bb-img="img/ic_history.png" onclick="bb.pushScreen('calendar.html', 'showCalendar')" i18n="true">`history`</div>
     </div>
     <div data-bb-type="menu">
-        <div data-bb-type="menu-item" data-bb-img="img/ic_info.png" onclick="if(app.lang === 'zh-TW'){bb.pushScreen('about_tw.html', 'about')}else{bb.pushScreen('about.html', 'about')}" i18n="true">`about`</div>
+        <div data-bb-type="menu-item" data-bb-img="img/ic_info.png" onclick="if (app.lang === 'zh-TW') {
+                    bb.pushScreen('about_tw.html', 'about')
+                } else {
+                    bb.pushScreen('about.html', 'about')
+                }" i18n="true">`about`</div>
         <div data-bb-type="menu-item" data-bb-img="img/ic_email.png" onclick="Invoke.email('anphorea@gmail.com', '《一个》反馈', '')" i18n="true">`author`</div>
         <div data-bb-type="menu-item" data-bb-img="img/ic_browser.png" onclick="Invoke.blackberryWorld.app('45960893')" i18n="true">`rate`</div>
         <div data-bb-type="menu-item" data-bb-img="img/ic_settings.png" data-bb-pin="right" onclick="bb.pushScreen('settings.html', 'settings')" i18n="true">`theme`</div>
