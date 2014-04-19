@@ -22,8 +22,6 @@ body, html {
 	font-family: "Slate Pro",Slate,"Myriad Pro",Helvetica;
 	font-size: 12pt;
 	overflow:visible;
-	user-select: none;
-	-webkit-user-select: none;
 }
 
 @-webkit-keyframes bbUI-fade-in 
@@ -142,6 +140,8 @@ body, html {
 }  
 
 .bb-slider {
+    	user-select: none;
+	-webkit-user-select: none;
 	margin: 1.8em;
 }
 
@@ -253,6 +253,8 @@ body, html {
 }
 
 .bb-toggle {
+    	user-select: none;
+	-webkit-user-select: none;
 	padding:20px;
 	height: 68px;
 	width: 210px;
@@ -419,6 +421,8 @@ body, html {
 
 .bb-progress
 {
+    	user-select: none;
+	-webkit-user-select: none;
 	/*margin: 1.8em;*/
 }
 
@@ -496,15 +500,21 @@ body, html {
 	display:none;
 	background-color:black;
 	opacity:0.25;
+        	user-select: none;
+	-webkit-user-select: none;
 }
 
 .bb-menu-bar-dark {
 	background-image: -webkit-gradient(linear, center top, center bottom, from(#323232), to(#272727));
 	border-bottom-color: #626262;
 	color: white;
+        	user-select: none;
+	-webkit-user-select: none;
 }
 
 .bb-menu-bar {
+    	user-select: none;
+	-webkit-user-select: none;
 	position: fixed;
 	left: 0px;
 	width: 100%;
@@ -623,6 +633,8 @@ body, html {
 }
 
 .bb-panel-header {
+    	user-select: none;
+	-webkit-user-select: none;
 	padding-top:2px;
 	padding-left: 10px; 
 	margin-bottom: 10px; 
@@ -852,6 +864,8 @@ body, html {
 }
 
 .bb-button {
+    	user-select: none;
+	-webkit-user-select: none;
 	border-style: solid;
 	text-align:center;
 	white-space:nowrap;
@@ -1062,6 +1076,8 @@ body, html {
 	border-bottom-style: solid;
 	font-size: 39pt;
 	z-index:1000;
+        	user-select: none;
+	-webkit-user-select: none;
 }
 
 .bb-title-bar-portrait,
@@ -1266,6 +1282,8 @@ body, html {
 }
 
 .bb-dropdown {
+    	user-select: none;
+	-webkit-user-select: none;
 	border-style: solid;
 	white-space:nowrap;
 	vertical-align: middle;
@@ -1467,17 +1485,23 @@ body, html {
    =================================================*/
 
 .bb-label-control-rows {
+    	user-select: none;
+	-webkit-user-select: none;
 	margin:0px;
 	padding:0px;
 	width:100%;
 }
 
 .bb-label-control-label-row {
+    	user-select: none;
+	-webkit-user-select: none;
 	vertical-align: text-bottom;
 	height:57px;
 }
 
 .bb-label-control-label {
+    	user-select: none;
+	-webkit-user-select: none;
 	position:relative;
 	top: 10px;
 	bottom:0px;
@@ -1687,6 +1711,8 @@ body, html {
 }
 
 .bb-image-list {
+    	user-select: none;
+	-webkit-user-select: none;
 	margin:0px;
 	padding:0px;	
 }
@@ -1854,6 +1880,8 @@ body, html {
 	margin-bottom: -3px;
 	padding-left: 10px;
 	padding-right: 10px;
+        	user-select: none;
+	-webkit-user-select: none;
 }
 
 .bb-bbm-bubble-right
@@ -1914,6 +1942,8 @@ body, html {
 	overflow:auto;
 }
 .bb-bbm-bubble-right .nogap {
+    	user-select: none;
+	-webkit-user-select: none;
 	margin-top: -3px;
 	margin-bottom: -3px;
 	padding-left: 10px;
@@ -1962,6 +1992,8 @@ body, html {
    
 .bb-pill-buttons {
 	padding-top:10px;
+        	user-select: none;
+	-webkit-user-select: none;
 }
 
 .bb-pill-buttons-container {
@@ -2053,6 +2085,8 @@ body, html {
 .bb-grid {
 	margin:0px;
 	padding:0px;	
+        	user-select: none;
+	-webkit-user-select: none;
 }
 
 .bb-grid-header {
@@ -2179,6 +2213,8 @@ body, html {
 }
 
 .bb-action-bar {
+    	user-select: none;
+	-webkit-user-select: none;
 	position: absolute;
 	bottom:0px;
 	right:0px;
@@ -2462,6 +2498,8 @@ body, html {
 }
 
 .bb-tab-overflow-menu {
+    	user-select: none;
+	-webkit-user-select: none;
 	position:absolute;
 	top: 0px;
 	bottom: 0px;
@@ -2487,6 +2525,8 @@ body, html {
 =================================================*/
  
 .bb-context-menu {
+    	user-select: none;
+	-webkit-user-select: none;
 	z-index: 1002;
 	position:fixed;
 	height: 100%;
@@ -3138,7 +3178,7 @@ body, html {
 	/* Action Bar */
 	.bb-action-bar-action-display {
 		font-size:16pt;
-		margin-top:5px;
+		margin-top:-5px;
 	}
 	
 	/* Input */

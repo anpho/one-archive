@@ -508,9 +508,15 @@ function gg(doc, id) {
 function loadAll(element, strdate) {
     //载入所有内容
     //载入封面
-    loadhome(element, strdate);
-    loadOne(element, strdate);
-    loadQuestion(element, strdate);
+    loadhome(element, strdate, function() {
+        loadOne(element, strdate, function() {
+            loadQuestion(element, strdate, function() {
+                tabswitcher();
+            });
+        });
+    });
+
+
 
 }
 function trans(text) {
@@ -521,7 +527,7 @@ function trans(text) {
     }
 }
 
-function loadhome(element, strdate) {
+function loadhome(element, strdate, signal) {
     //载入封面
     //removeChildNodes(gg(element, "home"));
     gg(element, 'spinner-1').show();
@@ -555,6 +561,9 @@ function loadhome(element, strdate) {
         console.log('主页已载入。');
         gg(element, 'home').style.display = 'block';
         homeloaded = true;
+        if (signal) {
+            signal();
+        }
 
         if (window.innerHeight < 800) {
             gg(element, 'ab').hide();
@@ -589,7 +598,7 @@ function removeChildNodes(node) {
         node.removeChild(children[i]);
     }
 }
-function loadOne(e, strdate) {
+function loadOne(e, strdate, signal) {
     //gg(e, 'spinner-2').show();
     //removeChildNodes(gg(e, "content"));
     one.getOneContentInfoAsync(strdate, function(c) {
@@ -610,11 +619,14 @@ function loadOne(e, strdate) {
         gg(e, 'content').style.display = 'block';
         //gg(e, 'spinner-2').hide();
         oneloaded = true;
+        if (signal) {
+            signal();
+        }
     });
 
 }
 
-function loadQuestion(e, strdate) {
+function loadQuestion(e, strdate, signal) {
     //gg(e, 'spinner-3').show();
     //removeChildNodes(gg(e, "ask"));
     one.getOneQuestionInfoAsync(strdate, function(a) {
@@ -633,6 +645,9 @@ function loadQuestion(e, strdate) {
         console.log('问题已载入。');
         gg(e, 'ask').style.display = 'block';
         qloaded = true;
+        if (signal) {
+            signal();
+        }
     });
 
 }

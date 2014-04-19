@@ -1,3 +1,10 @@
+
+img,.bb-action-bar,#newList .item img {
+    -webkit-animation: bbUI-fade-in 0.4s ease;
+}
+#wrap {
+    -webkit-overflow-scrolling : -blackberry-touch;
+}
 #qimg{
     text-align: center;
     width:64px;
@@ -33,6 +40,8 @@
 #c-content{
     text-indent: 1.6em;
     margin: 20px;
+    word-wrap: break-word;
+    word-break: break-all;
 }
 #c-author-intro{
     font-size:80%;font-style: italic
@@ -148,11 +157,12 @@
 }
 
 #neww{
+    -webkit-user-select: none;
     text-align: center;
 }
 #newList .item{
-    width:338px;
-    height:253px;
+    width:340px;
+    height:255px;
     float:left;
     display:inline-block;
     position: relative;
@@ -180,6 +190,7 @@
     height:525px;
 }
 #newList {
+    -webkit-user-select: none;
     margin-left: auto;
     margin-right: auto;
 }
