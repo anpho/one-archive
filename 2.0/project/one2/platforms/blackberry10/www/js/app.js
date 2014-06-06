@@ -402,7 +402,7 @@ function findCachedMagsAsync(callback) {
 }
 
 function findAvailableMagsAsync(callback) {
-    $.getJSON('http://211.152.49.184:7001/OneForWeb/one/getMobileDispDays').done(function(c) {
+    $.getJSON('http://bea.wufazhuce.com:7001/OneForWeb/one/getMobileDispDays').done(function(c) {
         var days = parseInt(c.mobileDispCtrlDays);
         var result = [];
         for (var i = 0; i < days; i++) {
@@ -494,6 +494,8 @@ function cleanContent(element) {
     gg(element, 'q-content').innerHTML = "";
     gg(element, 'a-title').innerHTML = "";
     gg(element, 'a-content').innerHTML = "";
+    gg(element, 'thing').style.display = 'none';
+
 }
 
 
@@ -511,7 +513,9 @@ function loadAll(element, strdate) {
     loadhome(element, strdate, function() {
         loadOne(element, strdate, function() {
             loadQuestion(element, strdate, function() {
-                tabswitcher();
+                loadThing(element, strdate, function() {
+                    tabswitcher();
+                });
             });
         });
     });
@@ -651,6 +655,33 @@ function loadQuestion(e, strdate, signal) {
     });
 
 }
+function loadThing(e, strdate, signal) {
+    one.getOneThingAsync(strdate, function(a) {
+        if (a === null) {
+            Toast.regular(trans("载入东西内容失败，请检查网络连接后重试。"), 1000);
+            return;
+        }
+        var t = a['entTg'];
+        gg(e, 'thing-title').innerHTML = trans(t['strTt']);
+        gg(e, 'thing-content').innerHTML = trans(t['strTc']);
+        //gg(e, 'thing-img').src = t['strBu'];
+        cache.get(t['strBu'], currentdisplaydate + "T", 'thing-img', function(u, id) {
+            console.log("设置图片：" + u);
+            if (g(id)) {
+                g(id).src = u;
+                g(id).style.display = "block";
+            }
+        });
+        gg(e, 'thing-img').onclick = function() {
+            openInBrowser(t['strWu']);
+        };
+        console.log('东西已载入。');
+        gg(e, 'thing').style.display = 'block';
+        if (signal) {
+            signal();
+        }
+    });
+}
 
 Date.prototype.format = function(format) {
     //对Date对象的扩展，实现日期格式化功能。
@@ -679,6 +710,8 @@ function showTab(id) {
         goTo('content');
     } else if (id === 'question') {
         goTo('ask');
+    } else if (id === 'thing') {
+        goTo('thing');
     }
 }
 
@@ -725,6 +758,8 @@ function tabswitcher() {
     } else if (ruler.scrollTop < g('ask').offsetTop)
     {
         bb.actionBar.highlightAction(g('a2'));
+    } else if ( ruler.scrollTop+window.innerHeight > g('thing').offsetTop) {
+        bb.actionBar.highlightAction(g('a4'));
     } else {
         bb.actionBar.highlightAction(g('a3'));
     }

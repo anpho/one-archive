@@ -4,14 +4,14 @@
     <feature name="com.blackberry.invoke" value="com.blackberry.invoke" />
     <feature name="com.blackberry.invoke.card" value="com.blackberry.invoke.card" />
     <feature name="com.blackberry.io" value="com.blackberry.io" />
+    <feature name="com.blackberry.utils" />
     <feature name="com.blackberry.io.filetransfer" value="com.blackberry.io.filetransfer" />
+    <feature name="com.blackberry.ui.toast" value="com.blackberry.ui.toast" />
+    <feature name="com.blackberry.ui.contextmenu" value="com.blackberry.ui.contextmenu" />
+    <feature name="SplashScreen" value="SplashScreen" />
     <feature name="com.blackberry.jpps" />
     <feature name="com.blackberry.system" value="com.blackberry.system" />
-    <feature name="com.blackberry.ui.contextmenu" value="com.blackberry.ui.contextmenu" />
     <feature name="com.blackberry.ui.dialog" value="com.blackberry.ui.dialog" />
-    <feature name="com.blackberry.ui.toast" value="com.blackberry.ui.toast" />
-    <feature name="com.blackberry.utils" />
-    <feature name="SplashScreen" value="SplashScreen" />
     <name>ONE</name>
     <description>
         ONE Unofficial App.

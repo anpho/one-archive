@@ -21,6 +21,24 @@ var _self,
     bb10_utils = require('./utils'),
     blackberryProperties = bb10_utils.getProperties();
 
+
+//fix older blackberry10.json files 
+//these may include 'simulator' type rather than 'emulator'
+function replaceSimulator(targets) {
+    var replace = false,
+        t;
+    for (t in targets) {
+        if (targets.hasOwnProperty(t) && targets[t].type === "simulator") {
+            targets[t].type = "emulator";
+            replace = true;
+        }
+    }
+    if (replace) {
+        blackberryProperties.targets = targets;
+        bb10_utils.writeToPropertiesFile(blackberryProperties);
+    }
+}
+
 _self = {
     getTargetList : function (type, pruneDisconnected, callback) {
         var targList = [],
@@ -47,6 +65,7 @@ _self = {
             t;
 
         if (targets) {
+            replaceSimulator(targets);
             for (t in targets) {
                 if (targets.hasOwnProperty(t) && targets[t].type === type) {
                     if (pruneDisconnected) {
@@ -167,7 +186,7 @@ _self = {
         // Firstly, check targets in the properties file
         if (targets) {
             for (t in targets) {
-                if (targets.hasOwnProperty(t) && targets[t].type === "simulator" && targets[t].ip) {
+                if (targets.hasOwnProperty(t) && targets[t].type === "emulator" && targets[t].ip) {
                     ipsToTest.push(targets[t].ip);
                 }
             }
@@ -175,7 +194,7 @@ _self = {
 
         // Secondly, check VMware dhcp.leases file
         if (bb10_utils.isWindows()) {
-            pathUserProfile = process.env['USERPROFILE'];
+            pathUserProfile = process.env.USERPROFILE;
             pathAllUserProfile = pathUserProfile.substr(0, pathUserProfile.lastIndexOf("\\") + 1) + "All Users";
             vmDhcpLeasesFiles = bb10_utils.readdirSyncRecursive(pathAllUserProfile).filter(function (file) {
                 return DHCP_LEASES_REGEX.test(file);
@@ -216,7 +235,7 @@ _self = {
 
         console.log("Searching for connected BlackBerry 10 Simulator (" + (index + 1) + "/" + ips.length + ")...");
         ip = ips[index];
-        _self.checkConnection(ip, "simulator", function (connection) {
+        _self.checkConnection(ip, "emulator", function (connection) {
             if (connection) {
                 callback(ip);
             } else {
@@ -236,16 +255,15 @@ _self = {
             };
 
         bb10_utils.exec(script, args, options, function (error, stdout, stderr) {
-            // error code 3 corresponds to a connected device, null or "Error: null" in stderr corresponds to connected simulator
-            var isSimConnected = (type === "simulator" && (
+            // error code 3 corresponds to connected device with password
+            // null or "Error: null" in stderr corresponds to connected simulator or device without password
+            var connected =
                     error === null ||
+                    (error && error.code === 3) ||
                     stderr.length === 0 ||
                     stderr.indexOf('Error: null') >= 0 ||
-                    stderr.indexOf('Error: Authentication failed') >= 0
-                )),
-                isDeviceConnected = (type === "device" && error && error.code === 3);
-
-            callback(isSimConnected || isDeviceConnected, ip);
+                    stderr.indexOf('Error: Authentication failed') >= 0;
+            callback(connected, ip);
         });
     },
 

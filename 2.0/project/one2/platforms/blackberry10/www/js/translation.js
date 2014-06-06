@@ -23,8 +23,9 @@ var qstr = {
         'qu': '问题',
         'history': '往期内容',
         'about': '关于',
-        'author': '联系作者',
-        'rate': '撰写评论'
+        'author': '反馈',
+        'rate': '撰写评论',
+        'th':"东西"
     },
     'zh-TW': {
         'deldialog': '是否確定要刪除該期雜誌？',
@@ -48,7 +49,8 @@ var qstr = {
         'qu': '問題',
         'history': '往期雜誌',
         'about': '關於',
-        'author': '聯繫作者',
-        'rate': '撰寫評論'
+        'author': '反饋',
+        'rate': '撰寫評論',
+        'th':"東西"
     }
 }

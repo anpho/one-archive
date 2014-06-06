@@ -1,1 +1,104 @@
-{"prepare_queue":{"installed":[],"uninstalled":[]},"config_munge":{"www/config.xml":{"/widget":{"<feature name=\"com.blackberry.app\" value=\"com.blackberry.app\" />":1,"<feature name=\"com.blackberry.invoke\" value=\"com.blackberry.invoke\" />":1,"<feature name=\"com.blackberry.invoke.card\" value=\"com.blackberry.invoke.card\" />":1,"<feature name=\"com.blackberry.io\" value=\"com.blackberry.io\" />":1,"<feature name=\"com.blackberry.utils\" />":1,"<feature name=\"com.blackberry.io.filetransfer\" value=\"com.blackberry.io.filetransfer\" />":1,"<feature name=\"com.blackberry.ui.toast\" value=\"com.blackberry.ui.toast\" />":1,"<feature name=\"com.blackberry.ui.contextmenu\" value=\"com.blackberry.ui.contextmenu\" />":1,"<feature name=\"SplashScreen\" value=\"SplashScreen\" />":1,"<feature name=\"com.blackberry.jpps\" />":1,"<feature name=\"com.blackberry.system\" value=\"com.blackberry.system\" />":1,"<feature name=\"com.blackberry.ui.dialog\" value=\"com.blackberry.ui.dialog\" />":1}}},"installed_plugins":{"com.blackberry.app":{"PACKAGE_NAME":"one"},"com.blackberry.invoke":{"PACKAGE_NAME":"one"},"com.blackberry.invoke.card":{"PACKAGE_NAME":"one"},"com.blackberry.io":{"PACKAGE_NAME":"one"},"com.blackberry.io.filetransfer":{"PACKAGE_NAME":"one"},"com.blackberry.ui.toast":{"PACKAGE_NAME":"one"},"com.blackberry.ui.contextmenu":{"PACKAGE_NAME":"one"},"org.apache.cordova.splashscreen":{"PACKAGE_NAME":"one"},"com.blackberry.system":{"PACKAGE_NAME":"one"},"com.blackberry.ui.dialog":{"PACKAGE_NAME":"one"}},"dependent_plugins":{"com.blackberry.utils":{"PACKAGE_NAME":"one"},"com.blackberry.jpps":{"PACKAGE_NAME":"one"}}}
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {
+            "www/config.xml": {
+                "parents": {
+                    "/widget": [
+                        {
+                            "xml": "<feature name=\"com.blackberry.app\" value=\"com.blackberry.app\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"com.blackberry.invoke\" value=\"com.blackberry.invoke\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"com.blackberry.invoke.card\" value=\"com.blackberry.invoke.card\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"com.blackberry.io\" value=\"com.blackberry.io\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"com.blackberry.utils\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"com.blackberry.io.filetransfer\" value=\"com.blackberry.io.filetransfer\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"com.blackberry.ui.toast\" value=\"com.blackberry.ui.toast\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"com.blackberry.ui.contextmenu\" value=\"com.blackberry.ui.contextmenu\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"SplashScreen\" value=\"SplashScreen\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"com.blackberry.jpps\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"com.blackberry.system\" value=\"com.blackberry.system\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"com.blackberry.ui.dialog\" value=\"com.blackberry.ui.dialog\" />",
+                            "count": 1
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "installed_plugins": {
+        "com.blackberry.app": {
+            "PACKAGE_NAME": "one"
+        },
+        "com.blackberry.invoke": {
+            "PACKAGE_NAME": "one"
+        },
+        "com.blackberry.invoke.card": {
+            "PACKAGE_NAME": "one"
+        },
+        "com.blackberry.io": {
+            "PACKAGE_NAME": "one"
+        },
+        "com.blackberry.io.filetransfer": {
+            "PACKAGE_NAME": "one"
+        },
+        "com.blackberry.ui.toast": {
+            "PACKAGE_NAME": "one"
+        },
+        "com.blackberry.ui.contextmenu": {
+            "PACKAGE_NAME": "one"
+        },
+        "org.apache.cordova.splashscreen": {
+            "PACKAGE_NAME": "one"
+        },
+        "com.blackberry.system": {
+            "PACKAGE_NAME": "one"
+        },
+        "com.blackberry.ui.dialog": {
+            "PACKAGE_NAME": "one"
+        }
+    },
+    "dependent_plugins": {
+        "com.blackberry.utils": {
+            "PACKAGE_NAME": "one"
+        },
+        "com.blackberry.jpps": {
+            "PACKAGE_NAME": "one"
+        }
+    }
+}

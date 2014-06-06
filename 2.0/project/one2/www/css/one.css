@@ -1,7 +1,11 @@
 
-img,.bb-action-bar,#newList .item img {
+.bb-action-bar,#newList .item img {
     -webkit-animation: bbUI-fade-in 0.4s ease;
 }
+img {
+    -webkit-animation: bbUI-fade-in 0.4s ease;
+}
+
 #wrap {
     -webkit-overflow-scrolling : -blackberry-touch;
 }
@@ -40,6 +44,12 @@ img,.bb-action-bar,#newList .item img {
 #c-content{
     text-indent: 1.6em;
     margin: 20px;
+    word-wrap: break-word;
+    word-break: break-all;
+}
+#thing-content{
+    font-size:0.9em;
+    text-indent: 1.4em;
     word-wrap: break-word;
     word-break: break-all;
 }

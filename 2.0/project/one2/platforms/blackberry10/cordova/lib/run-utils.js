@@ -53,8 +53,6 @@ function getTargetName(options, done) {
                 if (!options.devicepass && options.devicepass !== "") {
                     if (options.query) {
                         utils.prompt({description: getPasswordPrompt(targetType), hidden: true}, done);
-                    } else if (!options.emulator) {
-                        done("Please provide device password using --devicepass");
                     } else {
                         done("");
                     }
@@ -113,7 +111,7 @@ function validateTarget(options, targetName, allDone) {
                         });
                     });
                 } else if (!options.emulator) {
-                    err = "Please provide device password using --devicepass or add one to the target " + deployTarget.name + " defined at " + utils.getPropertiesFilePath();
+                    err = "No device password provided. You can omit --no-query, use --devicepass, or enter a value for 'password' to the target " + deployTarget.name + " defined at " + utils.getPropertiesFilePath();
                 }
             }
         }
@@ -150,7 +148,7 @@ function handleDebugToken(options, deployTarget, allDone) {
                     if (!options.keystorepass && options.query) {
                         utils.prompt({description: "Please enter your keystore password: ", hidden: true}, function (err, result) {
                             options.keystorepass = result;
-                            done(err, result);
+                            done(null, result);
                         });
                     } else {
                         done(null, options.keystorepass);
@@ -171,7 +169,7 @@ function handleDebugToken(options, deployTarget, allDone) {
                         allDone(code, deployTarget);
                     });
                 } else {
-                    allDone(err);
+                    allDone(null, deployTarget);
                 }
             }
         );
@@ -273,7 +271,7 @@ _self = {
         if (fs.existsSync(barPath)) {
             allDone(null, deployTarget);
         } else {
-            allDone("No build file exists, please run: build [--debug | --release] [-k | --keystorepass] [-b | --buildId <number>] [-p | --params <json>] [-l | --loglevel <level>] ");
+            allDone("No build file exists, please run: build [--debug | --release] [--keystorepass <password>] [--buildId <number>] [--params <json>] [--loglevel <level>] [--web-inspector] [--no-signing]");
         }
     },
 
@@ -284,7 +282,7 @@ _self = {
 
         targetUtils.getDeviceInfo(ip, devicePass, function (err, device) {
             if (!err) {
-                targetName = device.name + "-" + device.pin;
+                targetName = device.name.replace(/ /g, "-") + "-" + device.pin;
                 props.targets[targetName] = {
                     ip: ip,
                     pin: device.pin,

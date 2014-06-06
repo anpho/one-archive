@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 /*
- *  Copyright 2013 Research In Motion Limited.
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -18,9 +16,9 @@
 var path = require('path'),
     exit = require('exit'),
     fs = require('fs'),
-    utils = require('./utils'),
+    config = require('./config'),
     commander = require('commander'),
-    properties = utils.getProperties(),
+    properties = config.getProperties(),
     ERROR_VALUE = 2,
     NOTIMPLEMENTED_VALUE = 1,
     command,
@@ -39,7 +37,7 @@ function isValidType(type) {
         console.log(commander.helpInformation());
         exit(ERROR_VALUE);
     }
-    else if (!(type === 'device' || type === 'simulator')) {
+    else if (!(type === 'device' || type === 'emulator')) {
         result = false;
     }
     return result;
@@ -80,6 +78,9 @@ commander
         targetName = commander.args[0];
         ip = commander.args[1];
         type = commander.type ? commander.type : "device";
+        if (type === "simulator") {
+            type = "emulator";
+        }
         if (commander.password && typeof commander.password === 'string') {
             password = commander.password;
         }
@@ -104,6 +105,7 @@ commander
         if (properties.targets.hasOwnProperty(targetName)) {
             console.log("Overwriting target: " + targetName);
         }
+        targetName = targetName.replace(/ /g, "-");
         properties.targets[targetName] = {"ip": ip, "type": type, "password": password, "pin": pin};
     });
 
@@ -145,7 +147,7 @@ try {
         exit();
     }
 
-    utils.writeToPropertiesFile(properties);
+    config.writeProperties(properties);
 } catch (e) {
     console.log(e);
     exit();

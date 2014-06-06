@@ -1,7 +1,7 @@
 var one = {
     getHpAdMultiInfoAsync: function(callback) {
         var datestr = new Date().toTimeString();
-        this.getJSONAsync(datestr, 'hpmulti', 'http://211.152.49.184:7001/OneForWeb/one/getHpAdMultiinfo', function(u) {
+        this.getJSONAsync(datestr, 'hpmulti', 'http://bea.wufazhuce.com:7001/OneForWeb/one/getHpAdMultiinfo', function(u) {
             try {
                 $.getJSON(u).done(function(cp) {
                     if (cp['result'] === "SUCCESS") {
@@ -23,7 +23,7 @@ var one = {
         });
     },
     getHomePageAsync: function(datestr, callback) {
-        this.getJSONAsync(datestr, 'home', 'http://211.152.49.184:7001/OneForWeb/one/getHpinfo?strDate=' + datestr, function(u) {
+        this.getJSONAsync(datestr, 'home', 'http://bea.wufazhuce.com:7001/OneForWeb/one/getHpinfo?strDate=' + datestr, function(u) {
             try {
                 $.getJSON(u).done(function(cp) {
                     if (cp['result'] === "SUCCESS") {
@@ -45,7 +45,7 @@ var one = {
     },
     getOneContentInfoAsync: function(datestr, callback) {
 
-        this.getJSONAsync(datestr, 'content', 'http://211.152.49.184:7001/OneForWeb/one/getOneContentInfo?strDate=' + datestr, function(u) {
+        this.getJSONAsync(datestr, 'content', 'http://bea.wufazhuce.com:7001/OneForWeb/one/getOneContentInfo?strDate=' + datestr, function(u) {
             try {
                 $.getJSON(u).done(function(cp) {
                     if (cp['result'] === "SUCCESS") {
@@ -67,8 +67,32 @@ var one = {
             }
         });
     },
+    getOneThingAsync: function(datestr, callback) {
+        var strRow=4;
+        this.getJSONAsync(datestr, 'thing', 'http://bea.wufazhuce.com:7001/OneForWeb/one/o_f?strRow=5&strDate=' + datestr, function(u) {
+            try {
+                $.getJSON(u).done(function(cp) {
+                    if (cp['rs'] === "SUCCESS") {
+                        callback(cp);
+                    } else {
+                        setTimeout(removeFile(datestr, 'thing'), 0);
+                        callback(null);
+                    }
+                }).fail(function(c) {
+                    setTimeout(removeFile(datestr, 'thing'), 0);
+                    callback(null);
+                });
+
+            } catch (e) {
+                console.error("[ONE]获取东西数据失败");
+                console.error(e);
+                setTimeout(removeFile(datestr, 'thing'), 0);
+                callback(null);
+            }
+        });
+    },
     getOneQuestionInfoAsync: function(datestr, callback) {
-        this.getJSONAsync(datestr, 'question', 'http://211.152.49.184:7001/OneForWeb/one/getOneQuestionInfo?strDate=' + datestr, function(u) {
+        this.getJSONAsync(datestr, 'question', 'http://bea.wufazhuce.com:7001/OneForWeb/one/getOneQuestionInfo?strDate=' + datestr, function(u) {
             try {
                 $.getJSON(u).done(function(cp) {
                     if (cp['result'] === "SUCCESS") {
@@ -236,12 +260,36 @@ function removeByDate(datestr) {
         }, function(ex) {
             console.error(ex);
         });
+        global_fs.root.getFile(path + "thing.json", {
+            create: false
+        },
+        function(fileEntry) {
+            fileEntry.remove(function() {
+                console.log(path + 'thing.json文件已删除。');
+            }, function(ex) {
+                console.error(ex);
+            });
+        }, function(ex) {
+            console.error(ex);
+        });
         global_fs.root.getFile(path + ".jpg", {
             create: false
         },
         function(fileEntry) {
             fileEntry.remove(function() {
                 console.log(path + '.jpg 文件已删除。');
+            }, function(ex) {
+                console.error(ex);
+            });
+        }, function(ex) {
+            console.error(ex);
+        });
+        global_fs.root.getFile(path + "T.jpg", {
+            create: false
+        },
+        function(fileEntry) {
+            fileEntry.remove(function() {
+                console.log(path + 'T.jpg 文件已删除。');
             }, function(ex) {
                 console.error(ex);
             });
