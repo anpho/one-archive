@@ -30,8 +30,7 @@ var app = {
         } else {
             config = {
                 controlsDark: false,
-                listsDark: false,
-                coloredTitleBar: false
+                listsDark: false
             };
         }
 
@@ -48,7 +47,7 @@ var app = {
                     screen.style['background-color'] = darkScreenColor;
                     screen.style['color'] = '#E6E6E6';
                 }
-            }else{
+            } else {
                 var screen = element.querySelector('[data-bb-type=screen]');
                 if (screen) {
                     screen.style['color'] = '#121212';
