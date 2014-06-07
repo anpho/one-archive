@@ -40,10 +40,18 @@ var app = {
             app.lang = blackberry.system.language;
             i18n.process(element, app.lang);
             console.log('载入页面: ' + id);
+            bb.screen.controlColor = (darkColoring) ? 'dark' : 'light';
+            bb.screen.listColor = (darkColoring) ? 'dark' : 'light';
             if (darkColoring) {
                 var screen = element.querySelector('[data-bb-type=screen]');
                 if (screen) {
                     screen.style['background-color'] = darkScreenColor;
+                    screen.style['color'] = '#E6E6E6';
+                }
+            }else{
+                var screen = element.querySelector('[data-bb-type=screen]');
+                if (screen) {
+                    screen.style['color'] = '#121212';
                 }
             }
             if (id === 'settings') {
@@ -126,10 +134,6 @@ var app = {
         };
 
         bb.init(config);
-        if (darkColoring) {
-            document.body.style['background-color'] = darkScreenColor;
-            document.body.style['color'] = '#E6E6E6';
-        }
         //$.ajaxSettings.timeOut=1;
         bb.pushScreen('main.html', 'menu');
         navigator.splashscreen.hide();
@@ -240,9 +244,11 @@ function loadSettings(element, id) {
 function saveSettings(e) {
     if (e.checked) {
         console.log(">>使用黑色主题.");
+        darkColoring = true;
         localStorage.setItem("theme", "true");
     } else {
         console.log(">>使用亮色主题.");
+        darkColoring = false;
         localStorage.setItem("theme", "false");
     }
 }
@@ -758,7 +764,7 @@ function tabswitcher() {
     } else if (ruler.scrollTop < g('ask').offsetTop)
     {
         bb.actionBar.highlightAction(g('a2'));
-    } else if ( ruler.scrollTop+window.innerHeight > g('thing').offsetTop) {
+    } else if (ruler.scrollTop + window.innerHeight > g('thing').offsetTop) {
         bb.actionBar.highlightAction(g('a4'));
     } else {
         bb.actionBar.highlightAction(g('a3'));

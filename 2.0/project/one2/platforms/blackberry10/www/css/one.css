@@ -1,9 +1,6 @@
 
-.bb-action-bar,#newList .item img {
-    -webkit-animation: bbUI-fade-in 0.4s ease;
-}
-img {
-    -webkit-animation: bbUI-fade-in 0.4s ease;
+img,.bb-action-bar,#newList div {
+    -webkit-animation: bbUI-fade-in 0.3s ease;
 }
 
 #wrap {
@@ -219,4 +216,21 @@ img {
     #newList{
         margin:0px 85px;;
     }
+}
+
+
+
+.twocolumn {
+    display: table;
+    width: 100%;
+}
+.twocolumn>div:first-child {
+    display: inline-block;
+    line-height: 3em;
+    float: left;
+}
+.twocolumn>div:last-child {
+    display: inline-block;
+    line-height: 3em;
+    float: right;
 }
