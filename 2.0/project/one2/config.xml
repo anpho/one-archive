@@ -1,24 +1,20 @@
-﻿<?xml version='1.0' encoding='utf-8'?>
-<widget id="one" version="2.2.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>ONE</name>
-    <description>
-        ONE Unofficial App.
-    </description>
-    <name xml:lang="zh-CN">一个</name>
-    <author email="anphorea@gmail.com" href="http://about.me/anpho">
-        anpho
-    </author>
-    <content src="index.html" />
-    <icon src="img/logo.png" />
-    <access origin="*" />
-    <preference name="fullscreen" value="true" />
-    <preference name="webviewbounce" value="false" />
-    <preference name="WebSecurity" value="disable"/>
-    <preference name="AutoHideSplashScreen" value="false" />
-
-    <rim:splash src="img/splash-1280x768.png"/>
-    <rim:splash src="img/splash-1280x720.png"/>
-    <rim:splash src="img/splash-768x1280.png"/>
-    <rim:splash src="img/splash-720x1280.png"/>   
-    <rim:splash src="img/splash-720x720.png"/>
+<widget id="one" 
+  xmlns="http://www.w3.org/ns/widgets" 
+  xmlns:cdv="http://cordova.apache.org/ns/1.0" version="2.2.10">
+  <name>ONE</name>
+  <name xml:lang="zh-CN">一个</name>
+  <description>ONE Unofficial App.</description>
+  <rim:splash src="img/splash-1280x768.png"/>
+  <rim:splash src="img/splash-1280x720.png"/>
+  <rim:splash src="img/splash-768x1280.png"/>
+  <rim:splash src="img/splash-720x1280.png"/>
+  <rim:splash src="img/splash-720x720.png"/>
+  <content src="index.html"/>
+  <icon src="img/logo.png"/>
+  <access origin="*"/>
+  <preference name="fullscreen" value="true"/>
+  <preference name="webviewbounce" value="false"/>
+  <preference name="WebSecurity" value="disable"/>
+  <preference name="AutoHideSplashScreen" value="false"/>
+  <author email="anphorea@gmail.com" href="http://about.me/anpho">anpho</author>
 </widget>

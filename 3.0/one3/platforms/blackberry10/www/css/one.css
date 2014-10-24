@@ -1,0 +1,236 @@
+
+img,.bb-action-bar,#newList div {
+    -webkit-animation: bbUI-fade-in 0.3s ease;
+}
+
+#wrap {
+    -webkit-overflow-scrolling : -blackberry-touch;
+}
+#qimg{
+    text-align: center;
+    width:64px;
+    height:64px;
+    line-height: 64px;
+    margin: 10px;
+    float:left;
+    background-color: #01A7E7;
+    color:#fff;
+    border-radius: 32px;
+    display: block;
+}
+#content{
+    -webkit-user-select: text;
+    user-select:text;
+}
+#c-title{
+    font-size: 110%;
+    padding-left:10px;
+}
+#c-author{
+    font-size: 80%;
+    padding-left: 10px;
+    display: inline-block;
+}
+#c-brief{
+    font-size:80%;
+    opacity: 0.7;
+    padding-top: 50px;
+    padding-left: 20px;
+    padding-right:20px;
+}
+#c-content{
+    text-indent: 1.6em;
+    margin: 20px;
+    word-wrap: break-word;
+    word-break: break-all;
+}
+#thing-content{
+    font-size:0.9em;
+    text-indent: 1.4em;
+    word-wrap: break-word;
+    word-break: break-all;
+}
+#c-author-intro{
+    font-size:80%;font-style: italic
+}
+#ask{
+    -webkit-user-select: text;
+    user-select:text;
+}
+#q-title{
+    margin: 20px;
+    font-style:  italic;
+}
+#q-content{
+    clear:both;
+    text-indent: 1.6em;
+    margin: 20px;
+}
+#a-title{
+    font-style:  italic;
+    margin: 20px;
+}
+#a-content{
+    clear:both;
+    text-indent: 1.6em;
+    margin: 20px;
+}
+
+.imgwrapper {
+    height:540px;
+    position: relative;
+    overflow: hidden;;
+}
+.nomargin {
+    margin: 0px;
+}
+.openinbrowser{
+    height:64px;
+    width:64px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    opacity: 0.5;
+    background: url("../img/ic_browser.png") no-repeat;
+    -webkit-filter: brightness(1%);
+    background-size: contain;
+}
+.imgfooter {
+    height: 48px;
+    line-height: 48px;
+    font-size: 36px;
+    text-align: center;
+    background-color: #FFF;
+    color: #000;
+    opacity: 0.7;
+    position: absolute;
+    bottom: 0px;
+    width:100%;
+}
+.bottomwrapper {
+    position: relative;
+    width: 100%;
+    min-height: 180px;
+}
+.citawrapper {
+    display: table;
+    height: 180px;
+    width: 100%;
+    background-color: rgba(255,255,255,0.2);
+    margin-right: 156px;
+}
+.cita {
+    display: table-cell;
+    font-size: 32px;
+    height: 180px;
+    line-height: 1.1;
+    text-align: left;
+    padding-right:156px;
+    vertical-align: middle;
+    width: 100%;
+    -webkit-user-select: text;
+    user-select:text;
+}
+.pubdatewrapper {
+    position: absolute;
+    bottom:0px;
+    right:0px;
+    width: 156px;
+    height: 180px;
+    text-align: center;
+    background-color: rgba(255,255,255,0.1);
+    text-shadow: 1px 1px #eee;
+}
+.pubdate {
+    padding: 30px;
+}
+.pdtop {
+    font-size: 24px;
+    line-height: 24px;
+}
+.pddate {
+    font-size: 72px;
+    font-weight: bolder;
+    line-height: 72px;
+}
+.pdbottom {
+    font-size: 24px;
+    line-height: 24px;
+}
+.ctitle {
+    background-color: rgba(1,167,231,0.6);
+    line-height: 64px;
+    word-break: break-all;
+}
+
+#neww{
+    -webkit-user-select: none;
+    text-align: center;
+}
+#newList .item{
+    width:340px;
+    height:255px;
+    float:left;
+    display:inline-block;
+    position: relative;
+    margin:10px;
+    overflow: hidden;
+    -webkit-box-shadow:2px 2px 10px #292929;
+}
+#newList .item img{
+    width:100%;
+}
+#newList .item .label{
+    width:100%;
+    position: absolute;
+    bottom:0px;
+    height: 48px;
+    text-align: right;
+    background: #FFF;
+    opacity: 0.7;
+    color:black;
+    line-height: 48px;
+    font-size: 32px;
+}
+#newList div:first-child {
+    width:700px;
+    height:525px;
+}
+#newList {
+    -webkit-user-select: none;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media screen and (width:720px){
+    #newList{
+        margin:0px;;
+    }
+}
+@media screen and (width:768px){
+    #newList{
+        margin:0px 20px;;
+    }
+}
+@media screen and (width:1280px){
+    #newList{
+        margin:0px 85px;;
+    }
+}
+
+
+
+.twocolumn {
+    display: table;
+    width: 100%;
+}
+.twocolumn>div:first-child {
+    display: inline-block;
+    line-height: 3em;
+    float: left;
+}
+.twocolumn>div:last-child {
+    display: inline-block;
+    line-height: 3em;
+    float: right;
+}
